@@ -2,17 +2,42 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Enums\DueStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\Family;
+use App\Models\Notice;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Member app home.
+ * Member app home: what the family owes, the next event and the latest notices.
  */
 class HomeController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        return view('member.home', ['user' => $request->user()]);
+        $family = self::family($request);
+
+        return view('member.home', [
+            'user' => $request->user(),
+            'family' => $family,
+            'dues' => $family->dues()->where('status', DueStatus::Due->value)->get(),
+            'lastPayment' => $family->payments()->first(),
+            'nextEvent' => Event::query()->published()->upcoming()->first(),
+            'notices' => Notice::query()->forMembers()->limit(3)->get(),
+        ]);
+    }
+
+    /**
+     * The signed-in member's family (the "member" middleware guarantees there is one).
+     */
+    public static function family(Request $request): Family
+    {
+        $user = $request->user();
+        abort_unless($user instanceof User && $user->family !== null, 403);
+
+        return $user->family;
     }
 }

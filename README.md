@@ -15,7 +15,8 @@ design repository (`Design/mock`) is the reference for every screen, word and co
 
 Laravel 13 on PHP 8.4, PostgreSQL 17, Blade with Alpine.js and Tailwind CSS 4 (built with Vite),
 `spatie/laravel-permission` for roles, `spatie/laravel-medialibrary` for uploads,
-`spatie/laravel-activitylog` for the audit trail, Laravel Pint, Larastan and PHPUnit.
+`spatie/laravel-activitylog` for the audit trail, `bacon/bacon-qr-code` for QR codes, Laravel Pint,
+Larastan and PHPUnit.
 
 ## Requirements
 
@@ -156,3 +157,37 @@ Photos are uploaded with spatie/laravel-medialibrary to the `public` disk (JPG, 
 4 MB). Run `php artisan storage:link` once so they are served. Every committee role may look at the
 website screens; only the Admin and the Website editor may change or publish anything (policies in
 `app/Policies`, checked on every route).
+
+## Member app
+
+`/app` (sidebar on laptops, tab bar on phones): home with the family's dues, the next event and the
+latest notices; dues and statement; receipts with a printable receipt page; a member card for each
+person in the family with a gate QR on the back; events; notices (including members-only ones); and
+the family profile. Members only ever see their own family's records (`FamilyPolicy`,
+`PaymentPolicy`).
+
+QR codes are drawn on the server as SVG with `bacon/bacon-qr-code` 3.x. (`simplesoftwareio/simple-qrcode`
+was tried first, but it pins bacon 2.x, which raises deprecation warnings on PHP 8.4.) A card's QR
+holds the member number and an HMAC signature (`App\Support\QrCode`), so the future offline gate
+scanner can check it without a network.
+
+### Installing (PWA)
+
+Two web app manifests, `public/member.webmanifest` (member app and member sign-in) and
+`public/admin.webmanifest` (console and committee sign-in), each with its own icons in
+`public/icons`. `public/sw.js` serves pages network first with a cache fallback, so a page already
+opened still loads on a weak network; it is registered by the member and console layouts, and its
+cache is cleared when someone signs out.
+
+## Not built yet
+
+These are later milestones in [PLAN.md](PLAN.md) and have no routes yet: fees and khata (cash entry,
+UPI confirmation, the three books, reports), chanda book, passes and the offline gate scanner,
+catering orders and roster, nursery counter sales and stock, meetings, polls and web push, data
+import and deployment. Also left for later:
+
+- one-time codes by SMS (only the log driver exists until the club has a DLT-registered sender);
+- the committee's second sign-in step shown in the prototype;
+- paying dues in the app (the dues screen explains UPI and cash; the treasurer records payments);
+- the panjika calendar (placeholder page);
+- editing the gallery albums in the console (they are site settings seeded from the prototype).

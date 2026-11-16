@@ -93,6 +93,21 @@ Route::middleware('guest')->group(function () {
 Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(function () {
     Route::get('/', Member\HomeController::class)->name('home');
     Route::post('/logout', [MemberLoginController::class, 'destroy'])->name('logout');
+
+    Route::controller(Member\AccountController::class)->group(function () {
+        Route::get('/dues', 'dues')->name('dues');
+        Route::get('/receipts', 'receipts')->name('receipts.index');
+        Route::get('/receipts/{payment}', 'receipt')->name('receipts.show');
+        Route::get('/card', 'card')->name('card');
+        Route::get('/profile', 'profile')->name('profile');
+    });
+
+    Route::controller(Member\ClubController::class)->group(function () {
+        Route::get('/events', 'events')->name('events.index');
+        Route::get('/events/{event}', 'event')->name('events.show');
+        Route::get('/notices', 'notices')->name('notices.index');
+        Route::get('/notices/{notice}', 'notice')->name('notices.show');
+    });
 });
 
 /*
