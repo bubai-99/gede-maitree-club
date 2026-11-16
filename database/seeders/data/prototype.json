@@ -1,0 +1,1930 @@
+{
+ "club": {
+  "name": "Gede Maitree Club",
+  "nameBn": "গেদে মৈত্রী ক্লাব",
+  "para": "Netaji Para",
+  "paraBn": "নেতাজি পাড়া",
+  "estd": 2014,
+  "regNo": "S-0027153 / 2022-23",
+  "address": "14/2 Netaji Subhas Road, Netaji Para, Kolkata 700 084",
+  "addressBn": "১৪/২ নেতাজি সুভাষ রোড, নেতাজি পাড়া, কলকাতা ৭০০ ০৮৪",
+  "phone": "+91 98300 12345",
+  "whatsapp": "919830012345",
+  "upi": "maitriclub@sbi",
+  "monthlyFee": 100,
+  "admissionFee": 500
+ },
+ "events": [
+  {
+   "id": "blood",
+   "date": "2026-11-28",
+   "day": "28",
+   "mon": "Nov",
+   "monBn": "নভে",
+   "title": "Blood Donation Camp",
+   "titleBn": "রক্তদান শিবির",
+   "time": "9 am – 2 pm",
+   "place": "Club room",
+   "placeBn": "ক্লাব ঘর",
+   "kind": "service",
+   "pass": false,
+   "timeBn": "সকাল ৯টা – দুপুর ২টা"
+  },
+  {
+   "id": "sports",
+   "date": "2026-12-13",
+   "day": "13",
+   "mon": "Dec",
+   "monBn": "ডিসে",
+   "title": "Annual Sports Day",
+   "titleBn": "বার্ষিক ক্রীড়া",
+   "time": "7 am onwards",
+   "place": "Netaji Para ground",
+   "placeBn": "নেতাজি পাড়া মাঠ",
+   "kind": "sports",
+   "pass": true,
+   "timeBn": "সকাল ৭টা থেকে"
+  },
+  {
+   "id": "picnic",
+   "date": "2027-01-03",
+   "day": "03",
+   "mon": "Jan",
+   "monBn": "জানু",
+   "title": "Members’ Winter Picnic",
+   "titleBn": "শীতের পিকনিক",
+   "time": "Bus leaves 6:30 am",
+   "place": "Gadiara",
+   "placeBn": "গাদিয়াড়া",
+   "kind": "social",
+   "pass": true,
+   "timeBn": "বাস ছাড়বে সকাল ৬:৩০"
+  },
+  {
+   "id": "saraswati",
+   "date": "2027-02-11",
+   "day": "11",
+   "mon": "Feb",
+   "monBn": "ফেব্রু",
+   "title": "Saraswati Puja",
+   "titleBn": "সরস্বতী পূজা",
+   "time": "Pushpanjali 9:30 am",
+   "place": "Club pandal",
+   "placeBn": "ক্লাব প্যান্ডেল",
+   "kind": "puja",
+   "pass": false,
+   "timeBn": "পুষ্পাঞ্জলি সকাল ৯:৩০"
+  }
+ ],
+ "pastEvents": [
+  {
+   "title": "Durga Puja 2026",
+   "titleBn": "দুর্গাপূজা ২০২৬",
+   "when": "17–21 Oct",
+   "note": "4,200 bhog served · 61 volunteers",
+   "noteBn": "৪,২০০ জনকে ভোগ · ৬১ জন স্বেচ্ছাসেবক"
+  },
+  {
+   "title": "Kali Puja & Bhai Phonta",
+   "titleBn": "কালীপূজা ও ভাইফোঁটা",
+   "when": "8–10 Nov",
+   "note": "Green-crackers-only night",
+   "noteBn": "শুধু সবুজ বাজি"
+  }
+ ],
+ "committee": [
+  {
+   "role": "President",
+   "roleBn": "সভাপতি",
+   "name": "Ashok Chakraborty",
+   "nameBn": "অশোক চক্রবর্তী",
+   "since": 2023
+  },
+  {
+   "role": "Secretary",
+   "roleBn": "সম্পাদক",
+   "name": "Rajib Banerjee",
+   "nameBn": "রাজীব ব্যানার্জি",
+   "since": 2024
+  },
+  {
+   "role": "Treasurer",
+   "roleBn": "কোষাধ্যক্ষ",
+   "name": "Tapas Mondal",
+   "nameBn": "তাপস মণ্ডল",
+   "since": 2021
+  },
+  {
+   "role": "Puja in-charge",
+   "roleBn": "পূজা কমিটি",
+   "name": "Kakoli Sen",
+   "nameBn": "কাকলি সেন",
+   "since": 2025
+  },
+  {
+   "role": "Catering in-charge",
+   "roleBn": "ক্যাটারিং দায়িত্বে",
+   "name": "Debashis Pal",
+   "nameBn": "দেবাশিস পাল",
+   "since": 2022
+  },
+  {
+   "role": "Nursery in-charge",
+   "roleBn": "নার্সারি দায়িত্বে",
+   "name": "Sutapa Bose",
+   "nameBn": "সুতপা বসু",
+   "since": 2024
+  },
+  {
+   "role": "Sports secretary",
+   "roleBn": "ক্রীড়া সম্পাদক",
+   "name": "Arindam Dey",
+   "nameBn": "অরিন্দম দে",
+   "since": 2025
+  }
+ ],
+ "cateringPackages": [
+  {
+   "id": "team",
+   "name": "Serving team",
+   "nameBn": "পরিবেশন",
+   "rate": 35,
+   "min": 50,
+   "for": "You have the food and the plates",
+   "forBn": "খাবার ও থালা আপনার",
+   "menu": [
+    "Serving team in club uniform",
+    "One server for every 15 guests",
+    "A team leader on site",
+    "Water and salad rounds",
+    "Clearing between batches"
+   ],
+   "menuBn": [
+    "ক্লাবের পোশাকে পরিবেশনকারী দল",
+    "প্রতি ১৫ জন অতিথিতে একজন",
+    "জায়গায় একজন দলনেতা",
+    "জল ও স্যালাড পরিবেশন",
+    "প্রতি ব্যাচের পর পরিষ্কার"
+   ]
+  },
+  {
+   "id": "tableware",
+   "name": "Team + tableware",
+   "nameBn": "পরিবেশন ও থালা-গেলাস",
+   "rate": 60,
+   "min": 50,
+   "popular": true,
+   "for": "Annaprashan, pujas, birthdays",
+   "forBn": "অন্নপ্রাশন, পূজা, জন্মদিন",
+   "menu": [
+    "Everything in Serving team",
+    "Banana-leaf or paper plates",
+    "Glasses and bowls",
+    "Water jugs on every table",
+    "Wash-up after the event"
+   ],
+   "menuBn": [
+    "পরিবেশনের সব কিছু",
+    "কলাপাতা বা কাগজের থালা",
+    "গেলাস ও বাটি",
+    "প্রতি টেবিলে জলের জগ",
+    "অনুষ্ঠানের পর ধোয়ামোছা"
+   ]
+  },
+  {
+   "id": "full",
+   "name": "Full setup",
+   "nameBn": "সম্পূর্ণ ব্যবস্থা",
+   "rate": 95,
+   "min": 80,
+   "for": "Weddings, receptions, large gatherings",
+   "forBn": "বিয়ে, বউভাত, বড় অনুষ্ঠান",
+   "menu": [
+    "Everything in Team + tableware",
+    "Tables laid with covers",
+    "Buffet counters",
+    "Chafing dishes to keep food hot",
+    "Set up 2 hours before, packed away after"
+   ],
+   "menuBn": [
+    "পরিবেশন ও থালা-গেলাসের সব কিছু",
+    "ঢাকা দেওয়া টেবিল সাজানো",
+    "বুফে কাউন্টার",
+    "খাবার গরম রাখার চেফিং ডিশ",
+    "২ ঘণ্টা আগে সাজানো, পরে গুছিয়ে নেওয়া"
+   ]
+  }
+ ],
+ "plants": [
+  {
+   "id": "p1",
+   "name": "Hibiscus (Joba)",
+   "nameBn": "জবা",
+   "cat": "flowering",
+   "pot": "8\"",
+   "price": 120,
+   "stock": 34,
+   "icon": "flower-2",
+   "potBn": "৮ ইঞ্চি"
+  },
+  {
+   "id": "p2",
+   "name": "Night jasmine (Shiuli)",
+   "nameBn": "শিউলি",
+   "cat": "flowering",
+   "pot": "10\"",
+   "price": 180,
+   "stock": 12,
+   "icon": "flower",
+   "potBn": "১০ ইঞ্চি"
+  },
+  {
+   "id": "p3",
+   "name": "Rajanigandha",
+   "nameBn": "রজনীগন্ধা",
+   "cat": "flowering",
+   "pot": "Bulbs ×10",
+   "price": 90,
+   "stock": 60,
+   "icon": "flower",
+   "potBn": "১০টি কন্দ"
+  },
+  {
+   "id": "p4",
+   "name": "Marigold (Gada)",
+   "nameBn": "গাঁদা",
+   "cat": "seasonal",
+   "pot": "Seedling tray",
+   "price": 60,
+   "stock": 140,
+   "icon": "sun",
+   "potBn": "চারার ট্রে"
+  },
+  {
+   "id": "p5",
+   "name": "Dahlia",
+   "nameBn": "ডালিয়া",
+   "cat": "seasonal",
+   "pot": "10\"",
+   "price": 150,
+   "stock": 26,
+   "icon": "flower-2",
+   "isNew": true,
+   "potBn": "১০ ইঞ্চি"
+  },
+  {
+   "id": "p6",
+   "name": "Chrysanthemum",
+   "nameBn": "চন্দ্রমল্লিকা",
+   "cat": "seasonal",
+   "pot": "8\"",
+   "price": 130,
+   "stock": 4,
+   "icon": "flower",
+   "isNew": true,
+   "potBn": "৮ ইঞ্চি"
+  },
+  {
+   "id": "p7",
+   "name": "Tulsi",
+   "nameBn": "তুলসী",
+   "cat": "medicinal",
+   "pot": "6\"",
+   "price": 50,
+   "stock": 48,
+   "icon": "leaf",
+   "potBn": "৬ ইঞ্চি"
+  },
+  {
+   "id": "p8",
+   "name": "Aloe vera",
+   "nameBn": "ঘৃতকুমারী",
+   "cat": "medicinal",
+   "pot": "6\"",
+   "price": 70,
+   "stock": 30,
+   "icon": "sprout",
+   "potBn": "৬ ইঞ্চি"
+  },
+  {
+   "id": "p9",
+   "name": "Lemon (Kagzi)",
+   "nameBn": "কাগজি লেবু",
+   "cat": "fruit",
+   "pot": "12\"",
+   "price": 260,
+   "stock": 9,
+   "icon": "citrus",
+   "potBn": "১২ ইঞ্চি"
+  },
+  {
+   "id": "p10",
+   "name": "Guava (grafted)",
+   "nameBn": "পেয়ারা (কলম)",
+   "cat": "fruit",
+   "pot": "12\"",
+   "price": 320,
+   "stock": 7,
+   "icon": "apple",
+   "potBn": "১২ ইঞ্চি"
+  },
+  {
+   "id": "p11",
+   "name": "Money plant",
+   "nameBn": "মানি প্ল্যান্ট",
+   "cat": "indoor",
+   "pot": "6\"",
+   "price": 80,
+   "stock": 52,
+   "icon": "leaf",
+   "potBn": "৬ ইঞ্চি"
+  },
+  {
+   "id": "p12",
+   "name": "Snake plant",
+   "nameBn": "স্নেক প্ল্যান্ট",
+   "cat": "indoor",
+   "pot": "8\"",
+   "price": 220,
+   "stock": 3,
+   "icon": "sprout",
+   "potBn": "৮ ইঞ্চি"
+  },
+  {
+   "id": "p13",
+   "name": "Bougainvillea",
+   "nameBn": "বাগানবিলাস",
+   "cat": "flowering",
+   "pot": "10\"",
+   "price": 200,
+   "stock": 18,
+   "icon": "flower-2",
+   "potBn": "১০ ইঞ্চি"
+  },
+  {
+   "id": "p14",
+   "name": "Curry leaf",
+   "nameBn": "কারিপাতা",
+   "cat": "medicinal",
+   "pot": "8\"",
+   "price": 110,
+   "stock": 0,
+   "icon": "leaf",
+   "potBn": "৮ ইঞ্চি"
+  }
+ ],
+ "plantCats": {
+  "all": {
+   "en": "All",
+   "bn": "সব"
+  },
+  "seasonal": {
+   "en": "Winter seasonal",
+   "bn": "শীতের ফুল"
+  },
+  "flowering": {
+   "en": "Flowering",
+   "bn": "ফুলের গাছ"
+  },
+  "fruit": {
+   "en": "Fruit",
+   "bn": "ফলের গাছ"
+  },
+  "medicinal": {
+   "en": "Medicinal",
+   "bn": "ঔষধি"
+  },
+  "indoor": {
+   "en": "Indoor",
+   "bn": "ঘরের গাছ"
+  }
+ },
+ "notices": [
+  {
+   "id": "n1",
+   "date": "12 Nov",
+   "pinned": true,
+   "tag": "Meeting",
+   "tagBn": "সভা",
+   "title": "Committee meeting — Saraswati Puja planning",
+   "titleBn": "কমিটি সভা — সরস্বতী পূজার প্রস্তুতি",
+   "body": "Sunday 16 Nov, 6 pm at the club room. Budget and volunteer list will be finalised.",
+   "bodyBn": "রবিবার ১৬ নভেম্বর, সন্ধ্যা ৬টা, ক্লাব ঘরে। বাজেট ও স্বেচ্ছাসেবক তালিকা চূড়ান্ত হবে।"
+  },
+  {
+   "id": "n2",
+   "date": "10 Nov",
+   "tag": "Sports",
+   "tagBn": "খেলা",
+   "title": "Sports Day entries open",
+   "titleBn": "বার্ষিক ক্রীড়ার নাম জমা শুরু",
+   "body": "Register children and adults in the app before 7 Dec. Sack race is back.",
+   "bodyBn": "৭ ডিসেম্বরের আগে অ্যাপে নাম দিন। এবার বস্তা দৌড় ফিরছে।"
+  },
+  {
+   "id": "n3",
+   "date": "06 Nov",
+   "tag": "Nursery",
+   "tagBn": "নার্সারি",
+   "title": "Winter flowers have arrived",
+   "titleBn": "শীতের ফুলের চারা এসে গেছে",
+   "body": "Dahlia and chrysanthemum in stock. Members get 10% off at the counter.",
+   "bodyBn": "ডালিয়া ও চন্দ্রমল্লিকা এসেছে। সদস্যদের জন্য ১০% ছাড়।"
+  },
+  {
+   "id": "n4",
+   "date": "28 Oct",
+   "tag": "Accounts",
+   "tagBn": "হিসাব",
+   "title": "Durga Puja 2026 accounts published",
+   "titleBn": "দুর্গাপূজা ২০২৬-এর হিসাব প্রকাশিত",
+   "body": "Full income and expenditure is available in the app under Notices.",
+   "bodyBn": "সম্পূর্ণ আয়-ব্যয়ের হিসাব অ্যাপে দেখা যাবে।"
+  }
+ ],
+ "chanda": {
+  "event": "Saraswati Puja 2027",
+  "eventBn": "সরস্বতী পূজা ২০২৭",
+  "target": 85000,
+  "budget": [
+   {
+    "head": "Idol",
+    "headBn": "প্রতিমা",
+    "amount": 18000
+   },
+   {
+    "head": "Pandal & lights",
+    "headBn": "প্যান্ডেল ও আলো",
+    "amount": 24000
+   },
+   {
+    "head": "Bhog (600 plates)",
+    "headBn": "ভোগ (৬০০ প্লেট)",
+    "amount": 21000
+   },
+   {
+    "head": "Purohit & puja items",
+    "headBn": "পুরোহিত ও পূজার সামগ্রী",
+    "amount": 8500
+   },
+   {
+    "head": "Cultural evening",
+    "headBn": "সাংস্কৃতিক সন্ধ্যা",
+    "amount": 9500
+   },
+   {
+    "head": "Misc. & contingency",
+    "headBn": "বিবিধ",
+    "amount": 4000
+   }
+  ],
+  "areas": [
+   {
+    "lane": "Lane 1",
+    "laneBn": "১ নং গলি",
+    "volunteer": "Bapi Halder",
+    "target": 15000,
+    "got": 11200,
+    "houses": 48,
+    "visited": 37
+   },
+   {
+    "lane": "Lane 2",
+    "laneBn": "২ নং গলি",
+    "volunteer": "Moumita Kar",
+    "target": 15000,
+    "got": 14100,
+    "houses": 44,
+    "visited": 42
+   },
+   {
+    "lane": "Lane 3",
+    "laneBn": "৩ নং গলি",
+    "volunteer": "Manas Kundu",
+    "target": 12000,
+    "got": 5400,
+    "houses": 39,
+    "visited": 16
+   },
+   {
+    "lane": "Pukur Par",
+    "laneBn": "পুকুর পাড়",
+    "volunteer": "Tumpa Guha",
+    "target": 10000,
+    "got": 8650,
+    "houses": 31,
+    "visited": 27
+   },
+   {
+    "lane": "School Road",
+    "laneBn": "স্কুল রোড",
+    "volunteer": "Sanjay Nandi",
+    "target": 13000,
+    "got": 6100,
+    "houses": 52,
+    "visited": 20
+   }
+  ],
+  "sponsors": [
+   {
+    "name": "Bose Hardware",
+    "nameBn": "বোস হার্ডওয়্যার",
+    "amount": 10000,
+    "gives": "Gate banner",
+    "givesBn": "গেট ব্যানার",
+    "status": "paid"
+   },
+   {
+    "name": "Annapurna Sweets",
+    "nameBn": "অন্নপূর্ণা মিষ্টান্ন",
+    "amount": 5000,
+    "gives": "Bhog counter board",
+    "givesBn": "ভোগ কাউন্টার বোর্ড",
+    "status": "promised"
+   },
+   {
+    "name": "Dr. N. Dutta Clinic",
+    "nameBn": "ডাঃ এন. দত্ত ক্লিনিক",
+    "amount": 3000,
+    "gives": "Stage mention",
+    "givesBn": "মঞ্চে ঘোষণা",
+    "status": "paid"
+   }
+  ]
+ },
+ "books": {
+  "club": {
+   "en": "Club",
+   "bn": "ক্লাব",
+   "income": 41250,
+   "expense": 23980,
+   "prefix": "MC"
+  },
+  "catering": {
+   "en": "Catering",
+   "bn": "ক্যাটারিং",
+   "income": 96400,
+   "expense": 61850,
+   "prefix": "CT"
+  },
+  "nursery": {
+   "en": "Nursery",
+   "bn": "নার্সারি",
+   "income": 18940,
+   "expense": 9120,
+   "prefix": "NS"
+  }
+ },
+ "eventInfo": {
+  "blood": {
+   "photo": "blood",
+   "timeBn": "সকাল ৯টা – দুপুর ২টা",
+   "who": "open",
+   "contact": "Secretary",
+   "about": "Our yearly camp with the district hospital blood bank. Anyone aged 18 to 65 who weighs over 45 kg can give. It takes about 40 minutes, and every donor gets a donor card and refreshments.",
+   "aboutBn": "জেলা হাসপাতালের ব্লাড ব্যাংকের সঙ্গে আমাদের বার্ষিক শিবির। ১৮ থেকে ৬৫ বছর বয়সী, ৪৫ কেজির বেশি ওজনের যে কেউ রক্ত দিতে পারেন। প্রায় ৪০ মিনিট লাগে। প্রত্যেক দাতা ডোনার কার্ড ও জলখাবার পাবেন।",
+   "schedule": [
+    [
+     "9:00 am",
+     "৯:০০",
+     "Registration opens",
+     "নাম লেখানো শুরু"
+    ],
+    [
+     "9:30 am",
+     "৯:৩০",
+     "Doctor’s check-up and donation",
+     "ডাক্তারি পরীক্ষা ও রক্তদান"
+    ],
+    [
+     "1:30 pm",
+     "১:৩০",
+     "Last registration",
+     "শেষ নাম লেখানো"
+    ],
+    [
+     "2:00 pm",
+     "২:০০",
+     "Camp closes",
+     "শিবির শেষ"
+    ]
+   ],
+   "bring": [
+    [
+     "A photo ID",
+     "একটি ছবিসহ পরিচয়পত্র"
+    ],
+    [
+     "A light breakfast before you come",
+     "আসার আগে হালকা জলখাবার"
+    ],
+    [
+     "A list of any medicines you take",
+     "যে ওষুধ খান তার তালিকা"
+    ]
+   ]
+  },
+  "sports": {
+   "photo": "race",
+   "timeBn": "সকাল ৭টা থেকে",
+   "who": "pass",
+   "contact": "Sports secretary",
+   "about": "A full day of races and games on the para ground for children, adults and seniors. Entries close on 7 December in the member app. Non-members are welcome to watch from the boundary.",
+   "aboutBn": "পাড়ার মাঠে সারা দিন ছোট, বড় ও প্রবীণদের দৌড় আর খেলা। ৭ ডিসেম্বর পর্যন্ত সদস্য অ্যাপে নাম দেওয়া যাবে। সদস্য না হলেও মাঠের ধারে বসে দেখতে পারেন।",
+   "schedule": [
+    [
+     "7:00 am",
+     "৭:০০",
+     "Flag and march past",
+     "পতাকা উত্তোলন ও কুচকাওয়াজ"
+    ],
+    [
+     "7:30 am",
+     "৭:৩০",
+     "Under-8 and under-12 races",
+     "অনূর্ধ্ব-৮ ও অনূর্ধ্ব-১২ দৌড়"
+    ],
+    [
+     "10:00 am",
+     "১০:০০",
+     "Sack race, lemon-and-spoon",
+     "বস্তা দৌড়, চামচে লেবু"
+    ],
+    [
+     "12:00 pm",
+     "১২:০০",
+     "Tug of war, adults",
+     "দড়ি টানাটানি, বড়দের"
+    ],
+    [
+     "1:30 pm",
+     "১:৩০",
+     "Lunch and prizes",
+     "দুপুরের খাওয়া ও পুরস্কার"
+    ]
+   ],
+   "bring": [
+    [
+     "Your member pass (in the app)",
+     "সদস্য পাস (অ্যাপে)"
+    ],
+    [
+     "Sports shoes",
+     "খেলার জুতো"
+    ],
+    [
+     "A water bottle and a cap",
+     "জলের বোতল ও টুপি"
+    ]
+   ]
+  },
+  "picnic": {
+   "photo": "runners",
+   "timeBn": "বাস ছাড়বে সকাল ৬:৩০",
+   "who": "pass",
+   "contact": "Secretary",
+   "about": "The members’ winter picnic by the river at Gadiara. The bus leaves from the club gate and is back by 8 pm. Seats are limited, so book your family’s passes in the app by 20 December.",
+   "aboutBn": "গাদিয়াড়ায় নদীর ধারে সদস্যদের শীতের পিকনিক। বাস ছাড়বে ক্লাবের গেট থেকে, ফিরবে রাত ৮টার মধ্যে। আসন সীমিত, তাই ২০ ডিসেম্বরের মধ্যে অ্যাপে পরিবারের পাস নিন।",
+   "schedule": [
+    [
+     "6:30 am",
+     "৬:৩০",
+     "Bus leaves the club gate",
+     "ক্লাবের গেট থেকে বাস ছাড়বে"
+    ],
+    [
+     "10:00 am",
+     "১০:০০",
+     "Reach Gadiara, breakfast",
+     "গাদিয়াড়া পৌঁছে জলখাবার"
+    ],
+    [
+     "1:30 pm",
+     "১:৩০",
+     "Lunch",
+     "দুপুরের খাওয়া"
+    ],
+    [
+     "4:00 pm",
+     "৪:০০",
+     "Bus leaves for home",
+     "বাড়ির পথে বাস"
+    ],
+    [
+     "8:00 pm",
+     "৮:০০",
+     "Back at the club gate",
+     "ক্লাবের গেটে ফেরা"
+    ]
+   ],
+   "bring": [
+    [
+     "A pass for each person",
+     "প্রত্যেকের জন্য একটি পাস"
+    ],
+    [
+     "Warm clothes and a shawl",
+     "গরম জামা ও শাল"
+    ],
+    [
+     "Any medicines you need",
+     "দরকারি ওষুধ"
+    ]
+   ]
+  },
+  "saraswati": {
+   "photo": "pujaMorning",
+   "timeBn": "পুষ্পাঞ্জলি সকাল ৯:৩০",
+   "who": "open",
+   "contact": "Puja in-charge",
+   "about": "Saraswati Puja at the club pandal, open to everyone. Bring books and pens for the blessing. Bhog at noon needs a member pass; the cultural evening is for all.",
+   "aboutBn": "ক্লাব প্যান্ডেলে সরস্বতী পূজা, সবার জন্য খোলা। আশীর্বাদের জন্য বই-খাতা-কলম আনুন। দুপুরের ভোগে সদস্য পাস লাগবে, সাংস্কৃতিক সন্ধ্যা সবার জন্য।",
+   "schedule": [
+    [
+     "9:30 am",
+     "৯:৩০",
+     "Pushpanjali",
+     "পুষ্পাঞ্জলি"
+    ],
+    [
+     "12:30 pm",
+     "১২:৩০",
+     "Bhog (member pass)",
+     "ভোগ (সদস্য পাস)"
+    ],
+    [
+     "4:00 pm",
+     "৪:০০",
+     "Hate khori for little ones",
+     "ছোটদের হাতেখড়ি"
+    ],
+    [
+     "7:00 pm",
+     "৭:০০",
+     "Cultural evening",
+     "সাংস্কৃতিক সন্ধ্যা"
+    ]
+   ],
+   "bring": [
+    [
+     "Books and pens for the blessing",
+     "আশীর্বাদের জন্য বই ও কলম"
+    ],
+    [
+     "A member pass for bhog",
+     "ভোগের জন্য সদস্য পাস"
+    ]
+   ],
+   "chanda": true
+  }
+ },
+ "publicNotices": [
+  {
+   "id": "n1",
+   "date": "12 Nov",
+   "pinned": true,
+   "tag": "Meeting",
+   "tagBn": "সভা",
+   "title": "Committee meeting — Saraswati Puja planning",
+   "titleBn": "কমিটি সভা — সরস্বতী পূজার প্রস্তুতি",
+   "body": "Sunday 16 Nov, 6 pm at the club room. Budget and volunteer list will be finalised.",
+   "bodyBn": "রবিবার ১৬ নভেম্বর, সন্ধ্যা ৬টা, ক্লাব ঘরে। বাজেট ও স্বেচ্ছাসেবক তালিকা চূড়ান্ত হবে।",
+   "iso": "2026-11-12",
+   "more": "All members are welcome. The puja in-charge, Kakoli Sen, presents the draft budget and the lane-wise chanda plan. Volunteers for the pandal, bhog and the cultural evening will be listed.",
+   "moreBn": "সব সদস্য আমন্ত্রিত। পূজা কমিটির কাকলি সেন খসড়া বাজেট আর গলি ধরে চাঁদা তোলার পরিকল্পনা পেশ করবেন। প্যান্ডেল, ভোগ ও সাংস্কৃতিক সন্ধ্যার স্বেচ্ছাসেবকদের তালিকা হবে।",
+   "link": [
+    "#chanda",
+    "See the chanda drive",
+    "চাঁদা সংগ্রহ দেখুন"
+   ]
+  },
+  {
+   "id": "n5",
+   "date": "14 Nov",
+   "iso": "2026-11-14",
+   "tag": "Service",
+   "tagBn": "সেবা",
+   "title": "Donors wanted for 28 November",
+   "titleBn": "২৮ নভেম্বরের জন্য রক্তদাতা চাই",
+   "body": "We are aiming for 60 donors this year. Give your name at the club room, or just come on the day.",
+   "bodyBn": "এ বছর ৬০ জন দাতার লক্ষ্য। ক্লাব ঘরে নাম দিন, বা সেদিন সরাসরি চলে আসুন।",
+   "more": "Last year 58 people gave blood. If you have given in the last three months, please wait for the next camp.",
+   "moreBn": "গত বছর ৫৮ জন রক্ত দিয়েছিলেন। গত তিন মাসের মধ্যে রক্ত দিয়ে থাকলে পরের শিবিরের জন্য অপেক্ষা করুন।",
+   "link": [
+    "#event/blood",
+    "Camp details",
+    "শিবিরের বিস্তারিত"
+   ]
+  },
+  {
+   "id": "n2",
+   "date": "10 Nov",
+   "tag": "Sports",
+   "tagBn": "খেলা",
+   "title": "Sports Day entries open",
+   "titleBn": "বার্ষিক ক্রীড়ার নাম জমা শুরু",
+   "body": "Register children and adults in the app before 7 Dec. Sack race is back.",
+   "bodyBn": "৭ ডিসেম্বরের আগে অ্যাপে নাম দিন। এবার বস্তা দৌড় ফিরছে।",
+   "iso": "2026-11-10",
+   "more": "Races for under-8, under-12, adults and seniors. One entry per person per race. Entries close at 9 pm on 7 December. Non-members can watch from the boundary.",
+   "moreBn": "অনূর্ধ্ব-৮, অনূর্ধ্ব-১২, বড় ও প্রবীণদের দৌড়। প্রতি দৌড়ে একজনের একটিই নাম। ৭ ডিসেম্বর রাত ৯টায় নাম জমা বন্ধ। সদস্য না হলেও মাঠের ধার থেকে দেখতে পারেন।",
+   "link": [
+    "#event/sports",
+    "Sports Day details",
+    "ক্রীড়া দিবসের বিস্তারিত"
+   ]
+  },
+  {
+   "id": "n3",
+   "date": "06 Nov",
+   "tag": "Nursery",
+   "tagBn": "নার্সারি",
+   "title": "Winter flowers have arrived",
+   "titleBn": "শীতের ফুলের চারা এসে গেছে",
+   "body": "Dahlia and chrysanthemum in stock. Members get 10% off at the counter.",
+   "bodyBn": "ডালিয়া ও চন্দ্রমল্লিকা এসেছে। সদস্যদের জন্য ১০% ছাড়।",
+   "iso": "2026-11-06",
+   "more": "Seedlings sell out in the first two weeks. Message Sutapa-di on WhatsApp and she will set some aside for you.",
+   "moreBn": "প্রথম দুই সপ্তাহেই চারা শেষ হয়ে যায়। হোয়াটসঅ্যাপে সুতপা-দিকে জানালে আপনার জন্য সরিয়ে রাখবেন।",
+   "link": [
+    "#nursery",
+    "Browse the nursery",
+    "নার্সারি দেখুন"
+   ]
+  },
+  {
+   "id": "n6",
+   "date": "03 Nov",
+   "iso": "2026-11-03",
+   "tag": "General",
+   "tagBn": "সাধারণ",
+   "title": "Found after Kali Puja: a child’s blue bicycle",
+   "titleBn": "কালীপূজার পরে পাওয়া গেছে: ছোটদের নীল সাইকেল",
+   "body": "It is kept at the club room. Describe it to collect it, any evening 6 to 9 pm.",
+   "bodyBn": "ক্লাব ঘরে রাখা আছে। বর্ণনা দিয়ে যেকোনো সন্ধ্যা ৬টা থেকে ৯টার মধ্যে নিয়ে যান।",
+   "link": [
+    "#contact",
+    "Contact the club",
+    "ক্লাবে যোগাযোগ"
+   ]
+  },
+  {
+   "id": "n4",
+   "date": "28 Oct",
+   "tag": "Accounts",
+   "tagBn": "হিসাব",
+   "title": "Durga Puja 2026 accounts published",
+   "titleBn": "দুর্গাপূজা ২০২৬-এর হিসাব প্রকাশিত",
+   "body": "Full income and expenditure is available in the app under Notices.",
+   "bodyBn": "সম্পূর্ণ আয়-ব্যয়ের হিসাব অ্যাপে দেখা যাবে।",
+   "iso": "2026-10-28",
+   "more": "The audited accounts were presented to members. How each ₹100 of chanda was spent, including the share kept for Saraswati Puja, is on the Chanda & accounts page. Members can see every bill in the app.",
+   "moreBn": "অডিট করা হিসাব সদস্যদের সামনে পেশ হয়েছে। প্রতি ₹১০০ চাঁদা কোথায় গেল, সরস্বতী পূজার জন্য রাখা অংশসহ, চাঁদা ও হিসাব পাতায়। প্রতিটি বিল সদস্যরা অ্যাপে দেখতে পান।",
+   "link": [
+    "#chanda",
+    "Chanda & accounts",
+    "চাঁদা ও হিসাব"
+   ]
+  },
+  {
+   "id": "n7",
+   "date": "20 Oct",
+   "iso": "2026-10-20",
+   "tag": "Members",
+   "tagBn": "সদস্য",
+   "title": "Pay your subscription by UPI",
+   "titleBn": "ইউপিআই-তে চাঁদা দিন",
+   "body": "Members can now pay ₹100 a month by UPI in the member app. The treasurer confirms within a day.",
+   "bodyBn": "সদস্যরা এখন অ্যাপে ইউপিআই দিয়ে মাসে ₹১০০ দিতে পারেন। কোষাধ্যক্ষ এক দিনের মধ্যে নিশ্চিত করবেন।",
+   "more": "Your receipt comes on WhatsApp. Cash at the club room is still fine.",
+   "moreBn": "রসিদ হোয়াটসঅ্যাপে আসবে। ক্লাব ঘরে নগদেও দেওয়া যায়।",
+   "link": [
+    "#join",
+    "Not a member yet? Join",
+    "এখনও সদস্য নন? যোগ দিন"
+   ]
+  }
+ ],
+ "pujaSpend": [
+  {
+   "en": "Idol & pandal",
+   "bn": "প্রতিমা ও প্যান্ডেল",
+   "v": 168000,
+   "c": "#d21f1b"
+  },
+  {
+   "en": "Bhog for 4,200",
+   "bn": "৪,২০০ জনের ভোগ",
+   "v": 121000,
+   "c": "#f2a516"
+  },
+  {
+   "en": "Lights & sound",
+   "bn": "আলো ও শব্দ",
+   "v": 64000,
+   "c": "#2b2f36"
+  },
+  {
+   "en": "Cultural nights",
+   "bn": "সাংস্কৃতিক সন্ধ্যা",
+   "v": 38000,
+   "c": "#2c6a3a"
+  },
+  {
+   "en": "Puja & purohit",
+   "bn": "পূজা ও পুরোহিত",
+   "v": 29000,
+   "c": "#9a6400"
+  },
+  {
+   "en": "Kept for Saraswati Puja",
+   "bn": "সরস্বতী পূজার জন্য রাখা",
+   "v": 62000,
+   "c": "#b9b2a0"
+  }
+ ],
+ "drive": {
+  "event": "Saraswati Puja 2027",
+  "eventBn": "সরস্বতী পূজা ২০২৭",
+  "target": 85000,
+  "budget": [
+   {
+    "head": "Idol",
+    "headBn": "প্রতিমা",
+    "amount": 18000
+   },
+   {
+    "head": "Pandal & lights",
+    "headBn": "প্যান্ডেল ও আলো",
+    "amount": 24000
+   },
+   {
+    "head": "Bhog (600 plates)",
+    "headBn": "ভোগ (৬০০ প্লেট)",
+    "amount": 21000
+   },
+   {
+    "head": "Purohit & puja items",
+    "headBn": "পুরোহিত ও পূজার সামগ্রী",
+    "amount": 8500
+   },
+   {
+    "head": "Cultural evening",
+    "headBn": "সাংস্কৃতিক সন্ধ্যা",
+    "amount": 9500
+   },
+   {
+    "head": "Misc. & contingency",
+    "headBn": "বিবিধ",
+    "amount": 4000
+   }
+  ],
+  "areas": [
+   {
+    "lane": "Lane 1",
+    "laneBn": "১ নং গলি",
+    "volunteer": "Bapi Halder",
+    "target": 15000,
+    "got": 11200,
+    "houses": 48,
+    "visited": 37
+   },
+   {
+    "lane": "Lane 2",
+    "laneBn": "২ নং গলি",
+    "volunteer": "Moumita Kar",
+    "target": 15000,
+    "got": 14100,
+    "houses": 44,
+    "visited": 42
+   },
+   {
+    "lane": "Lane 3",
+    "laneBn": "৩ নং গলি",
+    "volunteer": "Manas Kundu",
+    "target": 12000,
+    "got": 5400,
+    "houses": 39,
+    "visited": 16
+   },
+   {
+    "lane": "Pukur Par",
+    "laneBn": "পুকুর পাড়",
+    "volunteer": "Tumpa Guha",
+    "target": 10000,
+    "got": 8650,
+    "houses": 31,
+    "visited": 27
+   },
+   {
+    "lane": "School Road",
+    "laneBn": "স্কুল রোড",
+    "volunteer": "Sanjay Nandi",
+    "target": 13000,
+    "got": 6100,
+    "houses": 52,
+    "visited": 20
+   }
+  ],
+  "sponsors": [
+   {
+    "name": "Bose Hardware",
+    "nameBn": "বোস হার্ডওয়্যার",
+    "amount": 10000,
+    "gives": "Gate banner",
+    "givesBn": "গেট ব্যানার",
+    "status": "paid"
+   },
+   {
+    "name": "Annapurna Sweets",
+    "nameBn": "অন্নপূর্ণা মিষ্টান্ন",
+    "amount": 5000,
+    "gives": "Bhog counter board",
+    "givesBn": "ভোগ কাউন্টার বোর্ড",
+    "status": "promised"
+   },
+   {
+    "name": "Dr. N. Dutta Clinic",
+    "nameBn": "ডাঃ এন. দত্ত ক্লিনিক",
+    "amount": 3000,
+    "gives": "Stage mention",
+    "givesBn": "মঞ্চে ঘোষণা",
+    "status": "paid"
+   }
+  ],
+  "collected": 58450,
+  "houses": 214,
+  "visited": 142,
+  "updated": "15 Nov 2026",
+  "updatedBn": "১৫ নভেম্বর ২০২৬",
+  "date": "11 Feb 2027",
+  "dateBn": "১১ ফেব্রুয়ারি ২০২৭"
+ },
+ "documents": [
+  {
+   "en": "Registration certificate",
+   "bn": "নথিভুক্তির শংসাপত্র",
+   "note": "Reg. No. S-0027153 / 2022-23",
+   "noteBn": "রেজি. নং S-0027153 / 2022-23",
+   "size": "1 page",
+   "sizeBn": "১ পাতা"
+  },
+  {
+   "en": "Rules of the club (bye-laws)",
+   "bn": "ক্লাবের নিয়মাবলী",
+   "note": "Bengali, adopted at the 2022 AGM",
+   "noteBn": "বাংলায়, ২০২২-এর এজিএম-এ গৃহীত",
+   "size": "6 pages",
+   "sizeBn": "৬ পাতা"
+  },
+  {
+   "members": true,
+   "en": "Durga Puja 2026 accounts",
+   "bn": "দুর্গাপূজা ২০২৬-এর হিসাব",
+   "note": "Income, spending and bills",
+   "noteBn": "আয়, খরচ ও বিল",
+   "size": "4 pages",
+   "sizeBn": "৪ পাতা"
+  },
+  {
+   "members": true,
+   "en": "AGM report and audited accounts 2025–26",
+   "bn": "এজিএম রিপোর্ট ও অডিট করা হিসাব ২০২৫–২৬",
+   "note": "All three books: Club, Catering, Nursery",
+   "noteBn": "তিনটি খাতাই: ক্লাব, ক্যাটারিং, নার্সারি",
+   "size": "12 pages",
+   "sizeBn": "১২ পাতা"
+  }
+ ],
+ "contactTopics": [
+  {
+   "key": "membership",
+   "en": "Membership",
+   "bn": "সদস্যপদ",
+   "role": "Secretary"
+  },
+  {
+   "key": "serving",
+   "en": "Serving team booking",
+   "bn": "পরিবেশন দলের বুকিং",
+   "role": "Catering in-charge"
+  },
+  {
+   "key": "nursery",
+   "en": "Nursery and plants",
+   "bn": "নার্সারি ও গাছ",
+   "role": "Nursery in-charge"
+  },
+  {
+   "key": "chanda",
+   "en": "Chanda, sponsorship or donation",
+   "bn": "চাঁদা, স্পনসর বা দান",
+   "role": "Treasurer"
+  },
+  {
+   "key": "events",
+   "en": "Events and volunteering",
+   "bn": "অনুষ্ঠান ও স্বেচ্ছাসেবা",
+   "role": "Puja in-charge"
+  },
+  {
+   "key": "photo",
+   "en": "Remove a photo of me",
+   "bn": "আমার ছবি সরাতে চাই",
+   "role": "Secretary"
+  },
+  {
+   "key": "other",
+   "en": "Something else",
+   "bn": "অন্য কিছু",
+   "role": "Secretary"
+  }
+ ],
+ "plantInfo": {
+  "p1": {
+   "light": "sun",
+   "water": "often",
+   "about": [
+    "Big red flowers almost all year. Loved for Kali and Durga Puja.",
+    "প্রায় সারা বছর বড় লাল ফুল। কালী ও দুর্গাপূজায় প্রিয়।"
+   ],
+   "tip": [
+    "Water daily in summer. Pinch the tips after flowering for more branches.",
+    "গরমে রোজ জল দিন। ফুল ঝরার পর ডগা ছাঁটলে ডাল বাড়ে।"
+   ]
+  },
+  "p2": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Fragrant white flowers with orange stems that fall at dawn in autumn.",
+    "শরতে ভোরে ঝরে পড়া কমলা বোঁটার সুগন্ধি সাদা ফুল।"
+   ],
+   "tip": [
+    "Plant in the ground once it grows past the pot. Flowers from the second year.",
+    "টব ছাড়িয়ে বড় হলে মাটিতে বসান। দ্বিতীয় বছর থেকে ফুল।"
+   ]
+  },
+  "p3": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Bulbs for tall stems of scented white flowers in summer and the rains.",
+    "গ্রীষ্ম ও বর্ষায় লম্বা ডাঁটায় সুগন্ধি সাদা ফুলের কন্দ।"
+   ],
+   "tip": [
+    "Plant 5 cm deep, 15 cm apart. Keep the soil moist but not wet.",
+    "৫ সেমি গভীরে, ১৫ সেমি ফাঁকে পুঁতুন। মাটি ভেজা রাখুন, জল জমবে না।"
+   ]
+  },
+  "p4": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "A tray of seedlings for winter flowers and puja garlands.",
+    "শীতের ফুল ও পূজার মালার জন্য চারার ট্রে।"
+   ],
+   "tip": [
+    "Plant out in November. Flowers in about 8 weeks.",
+    "নভেম্বরে বসান। প্রায় ৮ সপ্তাহে ফুল।"
+   ]
+  },
+  "p5": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Large winter flowers in red, pink and yellow. Just arrived.",
+    "লাল, গোলাপি, হলুদ রঙের বড় শীতের ফুল। সদ্য এসেছে।"
+   ],
+   "tip": [
+    "Needs full sun and a stick for support when the flowers open.",
+    "পুরো রোদ চাই। ফুল ফুটলে একটা কাঠি দিয়ে ঠেকা দিন।"
+   ]
+  },
+  "p6": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Winter chrysanthemum, the flower of the Durga Puja and winter shows.",
+    "শীতের চন্দ্রমল্লিকা, পূজা ও ফুল প্রদর্শনীর ফুল।"
+   ],
+   "tip": [
+    "Remove side buds for bigger flowers. Water at the base, not the leaves.",
+    "পাশের কুঁড়ি ছাঁটলে ফুল বড় হয়। পাতায় নয়, গোড়ায় জল দিন।"
+   ]
+  },
+  "p7": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Holy basil for the courtyard and daily puja.",
+    "উঠোন ও নিত্য পূজার তুলসী।"
+   ],
+   "tip": [
+    "Pinch off the flower spikes to keep it leafy.",
+    "মঞ্জরী ভেঙে দিলে পাতা ঘন হয়।"
+   ]
+  },
+  "p8": {
+   "light": "part",
+   "water": "little",
+   "about": [
+    "Easy, hardy and good for skin and small burns.",
+    "সহজে বাঁচে, ত্বক ও ছোটখাটো পোড়ায় কাজে লাগে।"
+   ],
+   "tip": [
+    "Water once a week. Too much water rots the roots.",
+    "সপ্তাহে একবার জল। বেশি জলে গোড়া পচে।"
+   ]
+  },
+  "p9": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Kagzi lemon on a grafted plant. Fruits in about a year.",
+    "কলমের কাগজি লেবু। প্রায় এক বছরে ফল।"
+   ],
+   "tip": [
+    "Give it the sunniest spot. Feed with compost every two months.",
+    "সবচেয়ে রোদের জায়গা দিন। দু-মাস অন্তর জৈব সার।"
+   ]
+  },
+  "p10": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Grafted guava for a big pot or the garden.",
+    "বড় টব বা বাগানের জন্য কলমের পেয়ারা।"
+   ],
+   "tip": [
+    "Prune after fruiting to keep it small and full.",
+    "ফল শেষে ছাঁটলে গাছ ছোট ও ঘন থাকে।"
+   ]
+  },
+  "p11": {
+   "light": "shade",
+   "water": "moderate",
+   "about": [
+    "An indoor climber that grows in water or soil.",
+    "জলে বা মাটিতে বাড়ে এমন ঘরের লতা।"
+   ],
+   "tip": [
+    "Keep away from strong sun. Change the water every week if in a bottle.",
+    "কড়া রোদ থেকে দূরে রাখুন। বোতলে রাখলে সপ্তাহে জল বদলান।"
+   ]
+  },
+  "p12": {
+   "light": "shade",
+   "water": "little",
+   "about": [
+    "A tough indoor plant that needs very little care.",
+    "খুব কম যত্নে বাঁচে এমন শক্ত ঘরের গাছ।"
+   ],
+   "tip": [
+    "Water every two weeks. Fine in a dim corner.",
+    "দু-সপ্তাহে একবার জল। আধো-অন্ধকার কোণেও চলে।"
+   ]
+  },
+  "p13": {
+   "light": "sun",
+   "water": "little",
+   "about": [
+    "Paper-like flowers in bright pink for the gate or the roof.",
+    "গেট বা ছাদের জন্য উজ্জ্বল গোলাপি কাগজের মতো ফুল।"
+   ],
+   "tip": [
+    "Flowers best when the soil dries between waterings.",
+    "দুবার জলের মাঝে মাটি শুকোলে ফুল বেশি।"
+   ]
+  },
+  "p14": {
+   "light": "sun",
+   "water": "moderate",
+   "about": [
+    "Fresh curry leaves for the kitchen. Back in stock soon.",
+    "রান্নাঘরের টাটকা কারিপাতা। শিগগির আবার আসবে।"
+   ],
+   "tip": [
+    "Pick the top leaves often; the plant grows bushier.",
+    "ওপরের পাতা নিয়মিত তুললে গাছ ঝোপালো হয়।"
+   ]
+  }
+ },
+ "SEO_PAGES": [
+  [
+   "home",
+   "Home page",
+   "হোম পাতা",
+   "Gede Maitree Club · Netaji Para",
+   "গেদে মৈত্রী ক্লাব · নেতাজি পাড়া",
+   "Gede Maitree Club, Netaji Para, est. 2014, Reg. No. S-0027153 / 2022-23. Pujas, sports, a serving team for family occasions and a neighbourhood nursery.",
+   "গেদে মৈত্রী ক্লাব, নেতাজি পাড়া, প্রতিষ্ঠা ২০১৪, রেজি. নং S-0027153 / 2022-23। পূজা, খেলা, পারিবারিক অনুষ্ঠানে পরিবেশন আর পাড়ার নার্সারি।"
+  ],
+  [
+   "committee",
+   "About page",
+   "আমাদের কথা",
+   "About the club",
+   "ক্লাবের কথা",
+   "Who runs Gede Maitree Club: the elected committee, our mission and values, and the story of the club since 2014.",
+   "গেদে মৈত্রী ক্লাব কারা চালান: নির্বাচিত কমিটি, আমাদের লক্ষ্য ও মূল্যবোধ, আর ২০১৪ থেকে ক্লাবের গল্প।"
+  ],
+  [
+   "events",
+   "Events",
+   "অনুষ্ঠান",
+   "Events",
+   "অনুষ্ঠান",
+   "Pujas, sports day, the blood camp and more at Gede Maitree Club, Netaji Para. Dates, times and what to bring.",
+   "গেদে মৈত্রী ক্লাবের পূজা, ক্রীড়া দিবস, রক্তদান শিবির ও আরও অনেক কিছু। তারিখ, সময় আর কী আনবেন।"
+  ],
+  [
+   "notices",
+   "Notices",
+   "নোটিস",
+   "Notices",
+   "নোটিস",
+   "The latest notices from Gede Maitree Club: meetings, pujas, sports and service for Netaji Para.",
+   "গেদে মৈত্রী ক্লাবের সাম্প্রতিক নোটিস: সভা, পূজা, খেলা ও পাড়ার সেবা।"
+  ],
+  [
+   "catering",
+   "Serving",
+   "পরিবেশন",
+   "Maitree Serving",
+   "মৈত্রী পরিবেশন",
+   "Maitree Serving: the club’s serving team for weddings, annaprashan and family occasions. Rates per guest and how to book.",
+   "মৈত্রী পরিবেশন: বিয়ে, অন্নপ্রাশন ও পারিবারিক অনুষ্ঠানে ক্লাবের পরিবেশন দল। মাথাপিছু রেট আর বুকিংয়ের নিয়ম।"
+  ],
+  [
+   "nursery",
+   "Nursery",
+   "নার্সারি",
+   "Maitree Nursery",
+   "মৈত্রী নার্সারি",
+   "Maitree Nursery by the club gate: flowering plants, seedlings and pots at fair prices. Order on WhatsApp.",
+   "ক্লাবের গেটের পাশে মৈত্রী নার্সারি: ফুলের গাছ, চারা আর টব, ন্যায্য দামে। হোয়াটসঅ্যাপে অর্ডার দিন।"
+  ],
+  [
+   "gallery",
+   "Gallery",
+   "ছবি",
+   "Gallery",
+   "ছবি",
+   "Photos and videos from Durga Puja, Kali Puja, sports day and more at Gede Maitree Club.",
+   "গেদে মৈত্রী ক্লাবের দুর্গাপূজা, কালীপূজা, ক্রীড়া দিবস ও আরও অনেক কিছুর ছবি ও ভিডিও।"
+  ],
+  [
+   "chanda",
+   "Chanda & accounts",
+   "চাঁদা ও হিসাব",
+   "Chanda & accounts",
+   "চাঁদা ও হিসাব",
+   "Where your chanda goes: how each ₹100 was spent at Durga Puja 2026, with audited accounts presented at the AGM.",
+   "আপনার চাঁদা কোথায় যায়: দুর্গাপূজা ২০২৬-এ প্রতি ₹১০০-র হিসাব, অডিট করা খাতা এজিএম-এ পেশ।"
+  ],
+  [
+   "contact",
+   "Contact",
+   "যোগাযোগ",
+   "Contact & directions",
+   "যোগাযোগ ও পথ",
+   "Find the Gede Maitree Club room on Netaji Subhas Road, Netaji Para, Kolkata 700084. Open 6 to 9 pm every day.",
+   "নেতাজি সুভাষ রোড, নেতাজি পাড়া, কলকাতা ৭০০০৮৪-এ গেদে মৈত্রী ক্লাব ঘর। রোজ সন্ধ্যা ৬টা থেকে ৯টা খোলা।"
+  ],
+  [
+   "join",
+   "Become a member",
+   "সদস্য হোন",
+   "Become a member",
+   "সদস্য হোন",
+   "Join Gede Maitree Club for ₹100 a month. Open to every family in Netaji Para.",
+   "মাসে ₹১০০-তে গেদে মৈত্রী ক্লাবের সদস্য হোন। নেতাজি পাড়ার সব পরিবারের জন্য খোলা।"
+  ],
+  [
+   "volunteer",
+   "Get involved",
+   "হাত লাগান",
+   "Get involved",
+   "হাত লাগান",
+   "Lend a hand at Gede Maitree Club: open duties for the coming pujas and events, and regular roles. Sign up in a minute.",
+   "গেদে মৈত্রী ক্লাবে হাত লাগান: সামনের পূজা ও অনুষ্ঠানের খালি দায়িত্ব আর নিয়মিত কাজ। এক মিনিটে নাম দিন।"
+  ]
+ ],
+ "pastWhenBn": {
+  "Durga Puja 2026": "১৭–২১ অক্টোবর",
+  "Kali Puja & Bhai Phonta": "৮–১০ নভেম্বর"
+ },
+ "pastAlbum": {
+  "Durga Puja 2026": "puja",
+  "Kali Puja & Bhai Phonta": "kali"
+ },
+ "askAbout": {
+  "President": [
+   "Club direction, disputes, the AGM",
+   "ক্লাবের দিশা, বিবাদ, এজিএম"
+  ],
+  "Secretary": [
+   "Membership, meetings, notices, privacy",
+   "সদস্যপদ, সভা, নোটিস, গোপনীয়তা"
+  ],
+  "Treasurer": [
+   "Subscriptions, receipts, the accounts",
+   "চাঁদা, রসিদ, হিসাব"
+  ],
+  "Puja in-charge": [
+   "Pujas, chanda, bhog passes",
+   "পূজা, চাঁদা, ভোগের পাস"
+  ],
+  "Catering in-charge": [
+   "Serving quotes and bookings",
+   "পরিবেশনের কোটেশন ও বুকিং"
+  ],
+  "Nursery in-charge": [
+   "Plants, orders, stock",
+   "গাছ, অর্ডার, স্টক"
+  ],
+  "Sports secretary": [
+   "Sports day, coaching, the ground",
+   "ক্রীড়া দিবস, প্রশিক্ষণ, মাঠ"
+  ]
+ },
+ "searchFaq": [
+  {
+   "href": "#faq-who",
+   "en": "Who can become a member?",
+   "bn": "কারা সদস্য হতে পারেন?"
+  },
+  {
+   "href": "#faq-nonmembers",
+   "en": "Can non-members come to the pujas?",
+   "bn": "সদস্য না হলে কি পূজায় আসা যায়?"
+  },
+  {
+   "href": "#faq-serving",
+   "en": "How do I book the serving team?",
+   "bn": "পরিবেশনের দল কীভাবে বুক করব?"
+  },
+  {
+   "href": "#faq-pay",
+   "en": "How do I pay my subscription?",
+   "bn": "চাঁদা কীভাবে দেব?"
+  },
+  {
+   "href": "#faq-chanda",
+   "en": "Can I give puja chanda without being a member?",
+   "bn": "সদস্য না হয়েও কি পূজার চাঁদা দিতে পারি?"
+  },
+  {
+   "href": "#give",
+   "en": "How to give chanda (UPI, cash, a volunteer visits)",
+   "bn": "কীভাবে চাঁদা দেবেন (ইউপিআই, নগদ, স্বেচ্ছাসেবক)"
+  }
+ ],
+ "PHOTOS": {
+  "pujaNight": {
+   "src": "https://images.unsplash.com/photo-1733038382444-9bd64e1df0de?auto=format&fit=crop&w=1600&q=70",
+   "by": "Dibakar Roy",
+   "page": "https://unsplash.com/photos/zltEt617b78",
+   "alt": "A Durga Puja pandal in Kolkata at night, people gathered around the stage",
+   "altBn": "রাতে কলকাতার দুর্গাপূজার প্যান্ডেল"
+  },
+  "pujaIdol": {
+   "src": "https://images.unsplash.com/photo-1666159682323-e02a2c1795c6?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anirban Sarkar",
+   "page": "https://unsplash.com/photos/4chOzq_4s-w",
+   "alt": "Durga Puja in Kolkata, evening",
+   "altBn": "কলকাতার দুর্গাপূজা, সন্ধ্যা"
+  },
+  "pujaCrowd": {
+   "src": "https://images.unsplash.com/photo-1730028346011-1543dd5f5b1e?auto=format&fit=crop&w=1600&q=70",
+   "by": "Nishant Singh",
+   "page": "https://unsplash.com/photos/JwLGMXPcIZo",
+   "alt": "Evening Durga Puja procession with the idol and a crowd under festival lights",
+   "altBn": "সন্ধ্যায় প্রতিমা নিয়ে শোভাযাত্রা"
+  },
+  "sindoor": {
+   "src": "https://images.unsplash.com/photo-1644476533751-f5691b78f9c9?auto=format&fit=crop&w=1600&q=70",
+   "by": "Sushmita Nag",
+   "page": "https://unsplash.com/photos/tN-D7gP_TmM",
+   "alt": "Women playing Sindoor Khela on the last day of Durga Puja, Kolkata",
+   "altBn": "দশমীতে সিঁদুর খেলা, কলকাতা"
+  },
+  "pujaMorning": {
+   "src": "https://images.unsplash.com/photo-1640281694730-df0af5ca7bd2?auto=format&fit=crop&w=1600&q=70",
+   "by": "Sushmita Nag",
+   "page": "https://unsplash.com/photos/hIJhbDP8Nio",
+   "alt": "People in front of the Durga idol in the morning, Kolkata",
+   "altBn": "সকালে প্রতিমার সামনে ভক্তরা, কলকাতা"
+  },
+  "race": {
+   "src": "https://images.unsplash.com/photo-1646399362077-01c5647f2308?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anil Sharma",
+   "page": "https://unsplash.com/photos/JVHOhx_AF2w",
+   "alt": "A boy running an obstacle race on a sports field",
+   "altBn": "মাঠে বাধা দৌড়ে একটি ছেলে"
+  },
+  "runners": {
+   "src": "https://images.unsplash.com/photo-1594388771969-a72da086806d?auto=format&fit=crop&w=1600&q=70",
+   "by": "Moon Bhuyan",
+   "page": "https://unsplash.com/photos/nSL6ZFJNJl4",
+   "alt": "Two children running on a road",
+   "altBn": "রাস্তায় দৌড়চ্ছে দুটি শিশু"
+  },
+  "feast": {
+   "src": "https://images.unsplash.com/photo-1777613112862-f9ca6d6fa56e?auto=format&fit=crop&w=1600&q=70",
+   "by": "Adil Murshed",
+   "page": "https://unsplash.com/photos/m2DOFYJCINw",
+   "alt": "Bengali festive food in clay pots with marigolds",
+   "altBn": "মাটির পাত্রে বাঙালি উৎসবের খাবার"
+  },
+  "feast2": {
+   "src": "https://images.unsplash.com/photo-1777613112895-139720bd43c9?auto=format&fit=crop&w=1600&q=70",
+   "by": "Adil Murshed",
+   "page": "https://unsplash.com/photos/6QNkA7P3EhI",
+   "alt": "Rice and curries served in clay pots",
+   "altBn": "মাটির পাত্রে ভাত ও তরকারি"
+  },
+  "kadai": {
+   "src": "https://images.unsplash.com/photo-1769030471026-2053279edaa7?auto=format&fit=crop&w=1600&q=70",
+   "by": "Zoshua Colah",
+   "page": "https://unsplash.com/photos/H5pw3LutKSc",
+   "alt": "Frying in a large kadai",
+   "altBn": "বড় কড়াইয়ে ভাজা"
+  },
+  "potted": {
+   "src": "https://images.unsplash.com/photo-1653129391403-18f5edfa0124?auto=format&fit=crop&w=1600&q=70",
+   "by": "Girish B",
+   "page": "https://unsplash.com/photos/93wOBFYDSUs",
+   "alt": "Flowering plants in pots",
+   "altBn": "টবে ফুলের গাছ"
+  },
+  "nurseryTable": {
+   "src": "https://images.unsplash.com/photo-1653129443759-95554c6e3434?auto=format&fit=crop&w=1600&q=70",
+   "by": "Girish B",
+   "page": "https://unsplash.com/photos/_QDw8h1CCyE",
+   "alt": "A variety of potted plants on display",
+   "altBn": "নানা রকম টবের গাছ"
+  },
+  "diyas": {
+   "src": "https://images.unsplash.com/photo-1792664024678-576272475f2a?auto=format&fit=crop&w=1600&q=70",
+   "by": "Brijender Dua",
+   "page": "https://unsplash.com/photos/rX4KWO6lAB0",
+   "alt": "Lit clay lamps on a rangoli at night",
+   "altBn": "রাতে আলপনার ওপর প্রদীপ"
+  },
+  "diyaTray": {
+   "src": "https://images.unsplash.com/photo-1577083753695-e010191bacb5?auto=format&fit=crop&w=1600&q=70",
+   "by": "Udayaditya Barua",
+   "page": "https://unsplash.com/photos/xisPXJqwQkA",
+   "alt": "Lit diyas and petals on a tray",
+   "altBn": "থালায় প্রদীপ ও ফুলের পাপড়ি"
+  },
+  "blood": {
+   "src": "https://images.unsplash.com/photo-1536856136534-bb679c52a9aa?auto=format&fit=crop&w=1600&q=70",
+   "by": "LuAnn Hunt",
+   "page": "https://unsplash.com/photos/X20g2GQsVdA",
+   "alt": "A volunteer donating blood at a blood drive",
+   "altBn": "রক্তদান শিবিরে রক্ত দিচ্ছেন একজন"
+  },
+  "garlands": {
+   "src": "https://images.unsplash.com/photo-1789971649660-eefc756ee5dd?auto=format&fit=crop&w=1600&q=70",
+   "by": "Sangram Rakate",
+   "page": "https://unsplash.com/photos/V15kJDxvqKk",
+   "alt": "Garlands of marigold and jasmine",
+   "altBn": "গাঁদা ও জুঁইয়ের মালা"
+  },
+  "marigold": {
+   "src": "https://images.unsplash.com/photo-1716747449890-d3f1cfa83d2f?auto=format&fit=crop&w=1600&q=70",
+   "by": "Aravind Reddy Tarugu",
+   "page": "https://unsplash.com/photos/F0jsLyrEnQI",
+   "alt": "A marigold in full bloom",
+   "altBn": "পূর্ণ প্রস্ফুটিত গাঁদা ফুল"
+  },
+  "catBuffet": {
+   "src": "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1600&q=70",
+   "by": "Saile Ilyas",
+   "page": "https://unsplash.com/photos/SiwrpBnxDww",
+   "alt": "A buffet table with silver chafing dishes",
+   "altBn": "রুপোলি চাফিং ডিশে সাজানো বুফে টেবিল"
+  },
+  "catBanana": {
+   "src": "https://images.unsplash.com/photo-1678781416302-d59ed9ed46d0?auto=format&fit=crop&w=1600&q=70",
+   "by": "Nidhin K S",
+   "page": "https://unsplash.com/photos/m7ltD98UTHY",
+   "alt": "A meal served on a banana leaf",
+   "altBn": "কলাপাতায় পরিবেশন করা খাবার"
+  },
+  "catWaiter": {
+   "src": "https://images.unsplash.com/photo-1719573019827-d06944a0c2be?auto=format&fit=crop&w=1600&q=70",
+   "by": "Roshan Chakkeeri",
+   "page": "https://unsplash.com/photos/H9q_XcRpHNo",
+   "alt": "A server in uniform carrying a tray",
+   "altBn": "পোশাক পরা পরিবেশনকারী, হাতে ট্রে"
+  },
+  "catPlating": {
+   "src": "https://images.unsplash.com/photo-1687369595840-e96a912586f1?auto=format&fit=crop&w=1600&q=70",
+   "by": "Gastro Editorial",
+   "page": "https://unsplash.com/photos/Rp0KQRcQfDc",
+   "alt": "Gloved hands setting out plates",
+   "altBn": "দস্তানা পরা হাতে প্লেট সাজানো"
+  },
+  "catTable": {
+   "src": "https://images.unsplash.com/photo-1562050344-f7ad946cee35?auto=format&fit=crop&w=1600&q=70",
+   "by": "Nadia Valko",
+   "page": "https://unsplash.com/photos/0hAdietsUrE",
+   "alt": "A long table laid with plates and glasses",
+   "altBn": "প্লেট ও গ্লাসে সাজানো লম্বা টেবিল"
+  },
+  "catThali": {
+   "src": "https://images.unsplash.com/photo-1589778655375-3e622a9fc91c?auto=format&fit=crop&w=1600&q=70",
+   "by": "Barun Ghosh",
+   "page": "https://unsplash.com/photos/wClFKcjhNcI",
+   "alt": "A full thali on a steel plate",
+   "altBn": "স্টিলের থালায় পুরো থালি"
+  },
+  "p1": {
+   "src": "https://images.unsplash.com/photo-1567990989224-6441e1483ac8?auto=format&fit=crop&w=1600&q=70",
+   "by": "Robert Thiemann",
+   "page": "https://unsplash.com/photos/TTaxId0Im2s",
+   "alt": "A red hibiscus flower",
+   "altBn": "লাল জবা ফুল"
+  },
+  "p2": {
+   "src": "https://images.unsplash.com/photo-1728046591877-95c5cce10910?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anindita Barma",
+   "page": "https://unsplash.com/photos/Pnj57CLXSec",
+   "alt": "Shiuli flowers with orange stems on a white cloth",
+   "altBn": "সাদা কাপড়ে কমলা বোঁটার শিউলি ফুল"
+  },
+  "p3": {
+   "src": "https://images.unsplash.com/photo-1728046726837-9798a510fe36?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anindita Barma",
+   "page": "https://unsplash.com/photos/BQ301L37Cm0",
+   "alt": "White rajanigandha flowers in a wooden bowl",
+   "altBn": "কাঠের বাটিতে রজনীগন্ধা"
+  },
+  "p4": {
+   "src": "https://images.unsplash.com/photo-1716747449890-d3f1cfa83d2f?auto=format&fit=crop&w=1600&q=70",
+   "by": "Aravind Reddy Tarugu",
+   "page": "https://unsplash.com/photos/F0jsLyrEnQI",
+   "alt": "A marigold in full bloom",
+   "altBn": "পূর্ণ প্রস্ফুটিত গাঁদা ফুল"
+  },
+  "p5": {
+   "src": "https://images.unsplash.com/photo-1601021215663-ee72b7063578?auto=format&fit=crop&w=1600&q=70",
+   "by": "Timo C. Dinger",
+   "page": "https://unsplash.com/photos/GjQ9mpJg4OQ",
+   "alt": "A dahlia flower",
+   "altBn": "ডালিয়া ফুল"
+  },
+  "p6": {
+   "src": "https://images.unsplash.com/photo-1724073339133-938ada52e511?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anh Tuan Thomas",
+   "page": "https://unsplash.com/photos/Pyx3V0XO0gU",
+   "alt": "Yellow chrysanthemum flowers",
+   "altBn": "হলুদ চন্দ্রমল্লিকা"
+  },
+  "p7": {
+   "src": "https://images.unsplash.com/photo-1669131080043-f69be198e64f?auto=format&fit=crop&w=1600&q=70",
+   "by": "Liz Pullan Pattathy",
+   "page": "https://unsplash.com/photos/sotuQuIBxKM",
+   "alt": "A tulsi plant",
+   "altBn": "তুলসী গাছ"
+  },
+  "p8": {
+   "src": "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=1600&q=70",
+   "by": "Stephanie Harvey",
+   "page": "https://unsplash.com/photos/T0inbt7nRME",
+   "alt": "Aloe vera in a white pot",
+   "altBn": "সাদা টবে ঘৃতকুমারী"
+  },
+  "p9": {
+   "src": "https://images.unsplash.com/photo-1526438281712-35d96b8586e5?auto=format&fit=crop&w=1600&q=70",
+   "by": "Dan Gold",
+   "page": "https://unsplash.com/photos/cUaXzFXVKkA",
+   "alt": "Lemons on the tree",
+   "altBn": "গাছে লেবু"
+  },
+  "p10": {
+   "src": "https://images.unsplash.com/photo-1633349202776-39545fa23de7?auto=format&fit=crop&w=1600&q=70",
+   "by": "Anisa Wulan Asri",
+   "page": "https://unsplash.com/photos/dSb8R7QAeLM",
+   "alt": "Green guavas on a branch",
+   "altBn": "ডালে সবুজ পেয়ারা"
+  },
+  "p11": {
+   "src": "https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&fit=crop&w=1600&q=70",
+   "by": "micheile henderson",
+   "page": "https://unsplash.com/photos/ZVprbBmT8QA",
+   "alt": "A money plant in a glass vase",
+   "altBn": "কাচের পাত্রে মানি প্ল্যান্ট"
+  },
+  "p12": {
+   "src": "https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?auto=format&fit=crop&w=1600&q=70",
+   "by": "Jake Goossen",
+   "page": "https://unsplash.com/photos/iIuyXTcEBTI",
+   "alt": "A snake plant in a pot",
+   "altBn": "টবে স্নেক প্ল্যান্ট"
+  },
+  "p13": {
+   "src": "https://images.unsplash.com/photo-1637924925587-2551d0661c52?auto=format&fit=crop&w=1600&q=70",
+   "by": "Ilham Abitama",
+   "page": "https://unsplash.com/photos/0vZz7v9bFEA",
+   "alt": "Pink bougainvillea flowers",
+   "altBn": "গোলাপি বাগানবিলাস"
+  },
+  "p14": {
+   "src": "https://images.unsplash.com/photo-1758649094570-9dc3b30ce80d?auto=format&fit=crop&w=1600&q=70",
+   "by": "Santhosh Sethumadhavan",
+   "page": "https://unsplash.com/photos/qklO7VepVZw",
+   "alt": "Curry leaves on a branch",
+   "altBn": "ডালে কারিপাতা"
+  },
+  "group": {
+   "src": "https://images.unsplash.com/photo-1764006195843-e6f9a5781500?auto=format&fit=crop&w=1600&q=70",
+   "by": "Michael Proctor",
+   "page": "https://unsplash.com/photos/a-group-of-people-sitting-on-a-couch-GaaVbBLDLv0",
+   "alt": "A group of friends sitting together on sofas in a bright room",
+   "altBn": "উজ্জ্বল ঘরে সোফায় একসাথে বসে একদল বন্ধু"
+  }
+ },
+ "ALBUMS": [
+  {
+   "key": "puja",
+   "en": "Durga Puja",
+   "bn": "দুর্গাপূজা"
+  },
+  {
+   "key": "kali",
+   "en": "Kali Puja",
+   "bn": "কালীপূজা"
+  },
+  {
+   "key": "sports",
+   "en": "Sports Day",
+   "bn": "ক্রীড়া দিবস"
+  },
+  {
+   "key": "kitchen",
+   "en": "Maitree Serving",
+   "bn": "মৈত্রী পরিবেশন"
+  },
+  {
+   "key": "nursery",
+   "en": "Nursery",
+   "bn": "নার্সারি"
+  },
+  {
+   "key": "service",
+   "en": "Blood donation",
+   "bn": "রক্তদান"
+  }
+ ],
+ "GALLERY": [
+  {
+   "id": "kali-26",
+   "album": "kali",
+   "date": "2026-11-08",
+   "en": "Kali Puja & Bhai Phonta",
+   "bn": "কালীপূজা ও ভাইফোঁটা",
+   "when": "8–10 Nov 2026",
+   "whenBn": "৮–১০ নভে ২০২৬",
+   "items": [
+    {
+     "v": "Green-crackers night at the pandal",
+     "vBn": "প্যান্ডেলে সবুজ বাজির রাত",
+     "poster": "diyas",
+     "dur": "2:14"
+    },
+    {
+     "p": "diyas"
+    },
+    {
+     "p": "diyaTray"
+    }
+   ]
+  },
+  {
+   "id": "nursery-winter-26",
+   "album": "nursery",
+   "date": "2026-11-06",
+   "en": "Winter flowers arrive",
+   "bn": "শীতের ফুল এল",
+   "when": "6 Nov 2026",
+   "whenBn": "৬ নভে ২০২৬",
+   "items": [
+    {
+     "p": "nurseryTable"
+    },
+    {
+     "p": "marigold"
+    },
+    {
+     "p": "potted"
+    }
+   ]
+  },
+  {
+   "id": "dey-wedding-26",
+   "album": "kitchen",
+   "date": "2026-11-01",
+   "en": "Serving at the Dey family wedding, 160 guests",
+   "bn": "দে পরিবারের বিয়েতে পরিবেশন, ১৬০ জন",
+   "when": "1 Nov 2026",
+   "whenBn": "১ নভে ২০২৬",
+   "items": [
+    {
+     "p": "feast"
+    },
+    {
+     "v": "The serving team’s first batch",
+     "vBn": "পরিবেশন দলের প্রথম ব্যাচ",
+     "poster": "kadai",
+     "dur": "0:48"
+    },
+    {
+     "p": "feast2"
+    }
+   ]
+  },
+  {
+   "id": "durga-26",
+   "album": "puja",
+   "date": "2026-10-17",
+   "en": "Durga Puja",
+   "bn": "দুর্গাপূজা",
+   "when": "17–21 Oct 2026",
+   "whenBn": "১৭–২১ অক্টো ২০২৬",
+   "items": [
+    {
+     "p": "pujaNight"
+    },
+    {
+     "v": "Dhunuchi naach on Navami night",
+     "vBn": "নবমীর রাতে ধুনুচি নাচ",
+     "poster": "pujaCrowd",
+     "dur": "1:58"
+    },
+    {
+     "p": "pujaIdol"
+    },
+    {
+     "p": "pujaMorning"
+    },
+    {
+     "v": "Sindoor khela on Dashami",
+     "vBn": "দশমীর সিঁদুর খেলা",
+     "poster": "sindoor",
+     "dur": "3:42"
+    },
+    {
+     "p": "sindoor"
+    },
+    {
+     "p": "pujaCrowd"
+    },
+    {
+     "p": "garlands"
+    }
+   ]
+  },
+  {
+   "id": "blood-26",
+   "album": "service",
+   "date": "2026-08-15",
+   "en": "Blood donation camp · 58 donors",
+   "bn": "রক্তদান শিবির · ৫৮ জন দাতা",
+   "when": "15 Aug 2026",
+   "whenBn": "১৫ আগ ২০২৬",
+   "items": [
+    {
+     "p": "blood"
+    }
+   ]
+  },
+  {
+   "id": "sports-25",
+   "album": "sports",
+   "date": "2025-12-14",
+   "en": "Annual Sports Day",
+   "bn": "বার্ষিক ক্রীড়া",
+   "when": "14 Dec 2025",
+   "whenBn": "১৪ ডিসে ২০২৫",
+   "items": [
+    {
+     "v": "Under-12 sack race",
+     "vBn": "অনূর্ধ্ব-১২ বস্তা দৌড়",
+     "poster": "race",
+     "dur": "1:12"
+    },
+    {
+     "p": "race"
+    },
+    {
+     "p": "runners"
+    }
+   ]
+  }
+ ]
+}
