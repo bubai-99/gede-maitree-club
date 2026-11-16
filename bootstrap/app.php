@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureCommittee;
+use App\Http\Middleware\EnsureMember;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,6 +18,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             SetLocale::class,
         ]);
+
+        $middleware->alias([
+            'member' => EnsureMember::class,
+            'committee' => EnsureCommittee::class,
+        ]);
+
+        // Guests are sent to the sign-in page of the part of the app they asked for.
+        $middleware->redirectGuestsTo(
+            fn (Request $request) => $request->is('admin', 'admin/*') ? route('admin.login') : route('member.login'),
+        );
+
+        // Signed-in people who open a sign-in page go to their app.
+        $middleware->redirectUsersTo(
+            fn (Request $request) => $request->is('admin', 'admin/*') ? route('admin.dashboard') : route('member.home'),
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

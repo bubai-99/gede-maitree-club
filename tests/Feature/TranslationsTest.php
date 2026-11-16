@@ -35,6 +35,8 @@ class TranslationsTest extends TestCase
         $patterns = [
             "/__\\(\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             "/'(?:label|group)'\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
+            // Flash messages: ->with('status', 'English text') (translated by <x-flash>)
+            "/with\\(\\s*'status',\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             // Enum labels: self::Case => 'English label'
             "/self::\\w+\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
         ];

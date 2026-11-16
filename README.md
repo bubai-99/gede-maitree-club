@@ -80,3 +80,43 @@ setting is on, the website footer says that the content is a sample.
 
 Receipt numbers (`MC-26-0142`, `CT-26-0018`, `NS-26-0311`) come from `App\Support\ReceiptNumbers`,
 which locks the counter row for the book and year inside a transaction.
+
+## Signing in
+
+| Who | Where | With |
+|---|---|---|
+| Member families | `/app/login` | mobile number or email + password, or a one-time code |
+| Committee | `/admin/login` | mobile number or email + password |
+
+Both use Laravel's own authentication (one `users` table, the `web` guard). A member account
+belongs to a family (`users.family_id`); a committee account has `is_committee` and at least one
+committee role. The `member` and `committee` middleware keep the two apart: members get a 403 in
+the console and committee-only accounts are sent from the member app to the console. Someone who
+is both can use both.
+
+- Five wrong passwords in a minute (per login and address) throttle the form; ten wrong passwords
+  for one login lock it for 15 minutes. Sessions are regenerated on sign-in and invalidated on
+  sign-out; every form has a CSRF token.
+- Forgotten passwords: `/forgot-password` emails a reset link. The mail driver is `log` until the
+  club has an email account, so the link is written to `storage/logs/laravel.log`.
+- One-time codes: `App\Contracts\OtpSender` with a log-only driver (`OTP_DRIVER=log`) that writes
+  the code to the log. Real SMS in India needs a DLT-registered sender and template; add a driver
+  for the chosen SMS provider when the club has one.
+
+### Roles
+
+Roles from the plan are seeded by `RoleSeeder` (spatie/laravel-permission): Admin (Secretary),
+Treasurer, Puja in-charge, Catering in-charge, Nursery in-charge, Volunteer, Website editor and
+Member. Permissions are listed in `App\Enums\Role::permissions()`; the Admin passes every check
+(`Gate::before`). Policies in `app/Policies` guard every model the console touches.
+
+### Sample sign-ins
+
+`php artisan migrate --seed` creates two SAMPLE accounts:
+
+- a committee admin, email `SEED_ADMIN_EMAIL` (default `admin@example.org`)
+- a member of the sample family MC-0104, email `SEED_MEMBER_EMAIL` (default `member@example.org`)
+
+Their passwords come from `SEED_ADMIN_PASSWORD` and `SEED_MEMBER_PASSWORD` in `.env`. If those are
+blank the seeder makes random passwords and prints them once in the console. These are sample
+accounts for trying the app; never put real people's details here.

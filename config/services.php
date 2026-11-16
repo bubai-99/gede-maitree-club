@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // One-time sign-in codes. Only "log" exists until the club has a DLT-registered SMS sender.
+    'otp' => [
+        'driver' => env('OTP_DRIVER', 'log'),
+    ],
+
 ];
