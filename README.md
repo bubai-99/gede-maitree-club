@@ -136,3 +136,23 @@ minute per address and are saved to `enquiries` for the committee.
   must check every date against its panjika before a real calendar goes online.
 - **Photos:** sample photos are hotlinked from Unsplash with the photographer credited, as Unsplash
   asks. Swap them for the club's own (upload in the console, or edit `config/photos.php`).
+
+## Committee console and website CMS
+
+`/admin` has a sidebar on laptops and a bottom bar on phones. **Today** shows live counts (families,
+dues, money collected this month, open enquiries, coming events, plants running low). **Website**
+edits the public site without code:
+
+- events, notices, nursery plants, serving packages and the committee list, each with
+  *Save as draft* and *Save and publish* (the website only ever shows published content);
+- page banners and text for every page, in English and Bengali (`config/pages.php`), kept as a
+  draft until published;
+- club contact details, the top menu (show, hide, rename, reorder) and the search-engine title and
+  description of each page;
+- enquiries from the website forms, marked as handled;
+- the audit log (Admin only): every change, with who made it (spatie/laravel-activitylog).
+
+Photos are uploaded with spatie/laravel-medialibrary to the `public` disk (JPG, PNG or WebP, up to
+4 MB). Run `php artisan storage:link` once so they are served. Every committee role may look at the
+website screens; only the Admin and the Website editor may change or publish anything (policies in
+`app/Policies`, checked on every route).

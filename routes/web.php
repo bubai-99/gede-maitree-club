@@ -104,4 +104,31 @@ Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(fun
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group(function () {
     Route::get('/', Admin\DashboardController::class)->name('dashboard');
     Route::post('/logout', [CommitteeLoginController::class, 'destroy'])->name('logout');
+
+    // Website CMS (policies: everyone on the committee may look; Admin and Website editor may edit)
+    Route::get('/website', Admin\WebsiteController::class)->name('website');
+
+    $cms = [
+        'events' => [Admin\EventController::class, 'event'],
+        'notices' => [Admin\NoticeController::class, 'notice'],
+        'plants' => [Admin\PlantController::class, 'plant'],
+        'packages' => [Admin\CateringPackageController::class, 'package'],
+        'committee' => [Admin\CommitteeMemberController::class, 'committee'],
+    ];
+
+    foreach ($cms as $name => [$controller, $parameter]) {
+        Route::resource($name, $controller)->except('show')->parameters([$name => $parameter]);
+        Route::post("/{$name}/{{$parameter}}/publish", [$controller, 'publish'])->name("{$name}.publish");
+        Route::delete("/{$name}/{{$parameter}}/publish", [$controller, 'unpublish'])->name("{$name}.unpublish");
+    }
+
+    Route::get('/pages', [Admin\PageController::class, 'index'])->name('pages.index');
+    Route::get('/pages/{key}', [Admin\PageController::class, 'edit'])->whereIn('key', array_keys(config('pages')))->name('pages.edit');
+    Route::put('/pages/{key}', [Admin\PageController::class, 'update'])->whereIn('key', array_keys(config('pages')))->name('pages.update');
+
+    Route::get('/settings', [Admin\SettingsController::class, 'edit'])->name('settings.edit');
+    Route::put('/settings', [Admin\SettingsController::class, 'update'])->name('settings.update');
+
+    Route::resource('enquiries', Admin\EnquiryController::class)->only(['index', 'show', 'update']);
+    Route::get('/activity', Admin\ActivityController::class)->name('activity');
 });

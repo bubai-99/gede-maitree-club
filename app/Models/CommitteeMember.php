@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PublishesContent;
 use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
 use App\Models\Concerns\HasPhoto;
@@ -17,7 +18,7 @@ use Spatie\MediaLibrary\HasMedia;
  * A committee member shown on the About page.
  */
 #[Fillable(['name', 'name_bn', 'role', 'role_bn', 'phone', 'photo', 'since', 'sort', 'status', 'published_at'])]
-class CommitteeMember extends Model implements HasMedia
+class CommitteeMember extends Model implements HasMedia, PublishesContent
 {
     /** @use HasFactory<CommitteeMemberFactory> */
     use Bilingual, HasFactory, HasPhoto, LogsChanges, Publishable;

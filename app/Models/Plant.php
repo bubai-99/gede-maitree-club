@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PublishesContent;
 use App\Enums\PlantCategory;
 use App\Enums\PlantLight;
 use App\Enums\PlantWater;
@@ -24,7 +25,7 @@ use Spatie\MediaLibrary\HasMedia;
     'slug', 'name', 'name_bn', 'category', 'pot', 'pot_bn', 'price', 'member_price', 'stock', 'is_new',
     'light', 'water', 'about', 'about_bn', 'tip', 'tip_bn', 'photo', 'active', 'sort', 'status', 'published_at',
 ])]
-class Plant extends Model implements HasMedia
+class Plant extends Model implements HasMedia, PublishesContent
 {
     /** @use HasFactory<PlantFactory> */
     use Bilingual, HasFactory, HasPhoto, LogsChanges, Publishable;

@@ -58,12 +58,40 @@ class SiteSettings
      */
     public function mainMenu(): array
     {
-        return array_map(fn (array $item): array => [
-            'url' => route($item['route']),
-            'label' => __($item['label']),
-            'class' => $item['class'] ?? '',
-            'active' => request()->routeIs($item['route'], $item['route'].'.*', str_replace('.index', '.*', $item['route'])),
-        ], SiteMenu::available(SiteMenu::MAIN));
+        $saved = $this->menuSettings();
+        $items = [];
+
+        foreach (SiteMenu::available(SiteMenu::MAIN) as $position => $item) {
+            $setting = $saved[$item['route']] ?? [];
+
+            if (! ($setting['show'] ?? true)) {
+                continue;
+            }
+
+            $items[] = [
+                'url' => route($item['route']),
+                'label' => local_text($setting['label'] ?? null, $setting['label_bn'] ?? null) ?: __($item['label']),
+                'class' => $item['class'] ?? '',
+                'active' => request()->routeIs($item['route'], str_replace('.index', '.*', $item['route'])),
+                'sort' => (int) ($setting['sort'] ?? $position),
+            ];
+        }
+
+        usort($items, fn (array $a, array $b): int => $a['sort'] <=> $b['sort']);
+
+        return array_map(fn (array $item): array => array_diff_key($item, ['sort' => true]), $items);
+    }
+
+    /**
+     * Saved menu choices per route: show, label, label_bn, sort.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function menuSettings(): array
+    {
+        $menu = $this->get('menu', []);
+
+        return is_array($menu) ? $menu : [];
     }
 
     /**

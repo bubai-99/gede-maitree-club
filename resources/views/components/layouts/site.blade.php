@@ -12,7 +12,7 @@
     $club = $site->club();
     $bn = app()->getLocale() === 'bn';
     $clubName = $bn ? $club['name_bn'] : $club['name'];
-    $pageTitle = $title ? $title.' · '.$clubName : $site->seo($seo ?? 'home', 'title');
+    $pageTitle = $seo ? $site->seo($seo, 'title') : ($title ? $title.' · '.$clubName : $site->seo('home', 'title'));
     $pageDescription = $description ?? $site->seo($seo ?? 'home', 'description');
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');

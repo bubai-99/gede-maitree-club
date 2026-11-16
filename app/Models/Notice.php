@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PublishesContent;
 use App\Enums\NoticeAudience;
 use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * A notice for the website (everyone) or the member app (members only).
  */
 #[Fillable(['slug', 'title', 'title_bn', 'tag', 'tag_bn', 'summary', 'summary_bn', 'body', 'body_bn', 'audience', 'pinned', 'status', 'published_at'])]
-class Notice extends Model
+class Notice extends Model implements PublishesContent
 {
     /** @use HasFactory<NoticeFactory> */
     use Bilingual, HasFactory, LogsChanges, Publishable;

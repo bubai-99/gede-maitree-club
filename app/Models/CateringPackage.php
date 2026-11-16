@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PublishesContent;
 use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
 use App\Models\Concerns\LogsChanges;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * A Maitree Serving package. The club serves; it does not cook. The rate is per guest.
  */
 #[Fillable(['slug', 'name', 'name_bn', 'for', 'for_bn', 'rate', 'min_guests', 'popular', 'menu', 'menu_bn', 'sort', 'status', 'published_at'])]
-class CateringPackage extends Model
+class CateringPackage extends Model implements PublishesContent
 {
     /** @use HasFactory<CateringPackageFactory> */
     use Bilingual, HasFactory, LogsChanges, Publishable;

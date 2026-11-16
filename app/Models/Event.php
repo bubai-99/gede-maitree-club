@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PublishesContent;
 use App\Enums\EventKind;
 use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
@@ -27,7 +28,7 @@ use Spatie\MediaLibrary\HasMedia;
     'pass_required', 'contact_role', 'chanda_box', 'about', 'about_bn', 'schedule', 'bring', 'photo',
     'status', 'published_at',
 ])]
-class Event extends Model implements HasMedia
+class Event extends Model implements HasMedia, PublishesContent
 {
     /** @use HasFactory<EventFactory> */
     use Bilingual, HasFactory, HasPhoto, LogsChanges, Publishable;
