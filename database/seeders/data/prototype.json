@@ -575,6 +575,386 @@
    "prefix": "NS"
   }
  },
+ "families": [
+  {
+   "no": "MC-0101",
+   "head": "Subrata Ghosh",
+   "headBn": "সুব্রত ঘোষ",
+   "lane": "Lane 1",
+   "laneBn": "১ নং গলি",
+   "phone": "9831000000",
+   "size": 4,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2014,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0104",
+   "head": "Ananya Mukherjee",
+   "headBn": "অনন্যা মুখার্জি",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9831734917",
+   "size": 3,
+   "dueMonths": 2,
+   "due": 200,
+   "since": 2019,
+   "status": "due"
+  },
+  {
+   "no": "MC-0107",
+   "head": "Pradip Saha",
+   "headBn": "প্রদীপ সাহা",
+   "lane": "Lane 3",
+   "laneBn": "৩ নং গলি",
+   "phone": "9832469834",
+   "size": 5,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2024,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0110",
+   "head": "Mithu Das",
+   "headBn": "মিঠু দাস",
+   "lane": "Pukur Par",
+   "laneBn": "পুকুর পাড়",
+   "phone": "9833204751",
+   "size": 2,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2016,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0113",
+   "head": "Rajib Banerjee",
+   "headBn": "রাজীব ব্যানার্জি",
+   "lane": "School Road",
+   "laneBn": "স্কুল রোড",
+   "phone": "9833939668",
+   "size": 4,
+   "dueMonths": 5,
+   "due": 500,
+   "since": 2021,
+   "status": "due"
+  },
+  {
+   "no": "MC-0116",
+   "head": "Kakoli Sen",
+   "headBn": "কাকলি সেন",
+   "lane": "Lane 1",
+   "laneBn": "১ নং গলি",
+   "phone": "9834674585",
+   "size": 3,
+   "dueMonths": 1,
+   "due": 100,
+   "since": 2026,
+   "status": "due"
+  },
+  {
+   "no": "MC-0119",
+   "head": "Debashis Pal",
+   "headBn": "দেবাশিস পাল",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9835409502",
+   "size": 6,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2018,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0122",
+   "head": "Shampa Roy",
+   "headBn": "শম্পা রায়",
+   "lane": "Lane 3",
+   "laneBn": "৩ নং গলি",
+   "phone": "9836144419",
+   "size": 2,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2023,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0125",
+   "head": "Tapas Mondal",
+   "headBn": "তাপস মণ্ডল",
+   "lane": "Pukur Par",
+   "laneBn": "পুকুর পাড়",
+   "phone": "9836879336",
+   "size": 4,
+   "dueMonths": 3,
+   "due": 300,
+   "since": 2015,
+   "status": "due"
+  },
+  {
+   "no": "MC-0128",
+   "head": "Rina Chatterjee",
+   "headBn": "রিনা চ্যাটার্জি",
+   "lane": "School Road",
+   "laneBn": "স্কুল রোড",
+   "phone": "9837614253",
+   "size": 3,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2020,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0131",
+   "head": "Bapi Halder",
+   "headBn": "বাপি হালদার",
+   "lane": "Lane 1",
+   "laneBn": "১ নং গলি",
+   "phone": "9838349170",
+   "size": 5,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2025,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0134",
+   "head": "Sutapa Bose",
+   "headBn": "সুতপা বসু",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9839084087",
+   "size": 4,
+   "dueMonths": 1,
+   "due": 100,
+   "since": 2017,
+   "status": "due"
+  },
+  {
+   "no": "MC-0137",
+   "head": "Arindam Dey",
+   "headBn": "অরিন্দম দে",
+   "lane": "Lane 3",
+   "laneBn": "৩ নং গলি",
+   "phone": "9839819004",
+   "size": 3,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2022,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0140",
+   "head": "Moumita Kar",
+   "headBn": "মৌমিতা কর",
+   "lane": "Pukur Par",
+   "laneBn": "পুকুর পাড়",
+   "phone": "9840553921",
+   "size": 2,
+   "dueMonths": 8,
+   "due": 800,
+   "since": 2014,
+   "status": "lapsed"
+  },
+  {
+   "no": "MC-0143",
+   "head": "Gopal Biswas",
+   "headBn": "গোপাল বিশ্বাস",
+   "lane": "School Road",
+   "laneBn": "স্কুল রোড",
+   "phone": "9841288838",
+   "size": 5,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2019,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0146",
+   "head": "Jhuma Sarkar",
+   "headBn": "ঝুমা সরকার",
+   "lane": "Lane 1",
+   "laneBn": "১ নং গলি",
+   "phone": "9842023755",
+   "size": 3,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2024,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0149",
+   "head": "Nirmal Dutta",
+   "headBn": "নির্মল দত্ত",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9842758672",
+   "size": 4,
+   "dueMonths": 2,
+   "due": 200,
+   "since": 2016,
+   "status": "due"
+  },
+  {
+   "no": "MC-0152",
+   "head": "Payel Majumdar",
+   "headBn": "পায়েল মজুমদার",
+   "lane": "Lane 3",
+   "laneBn": "৩ নং গলি",
+   "phone": "9843493589",
+   "size": 2,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2021,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0155",
+   "head": "Sanjay Nandi",
+   "headBn": "সঞ্জয় নন্দী",
+   "lane": "Pukur Par",
+   "laneBn": "পুকুর পাড়",
+   "phone": "9844228506",
+   "size": 3,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2026,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0158",
+   "head": "Tumpa Guha",
+   "headBn": "টুম্পা গুহ",
+   "lane": "School Road",
+   "laneBn": "স্কুল রোড",
+   "phone": "9844963423",
+   "size": 4,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2018,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0161",
+   "head": "Ashok Chakraborty",
+   "headBn": "অশোক চক্রবর্তী",
+   "lane": "Lane 1",
+   "laneBn": "১ নং গলি",
+   "phone": "9845698340",
+   "size": 5,
+   "dueMonths": 4,
+   "due": 400,
+   "since": 2023,
+   "status": "due"
+  },
+  {
+   "no": "MC-0164",
+   "head": "Rupa Bhattacharya",
+   "headBn": "রূপা ভট্টাচার্য",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9846433257",
+   "size": 3,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2015,
+   "status": "paid"
+  },
+  {
+   "no": "MC-0167",
+   "head": "Manas Kundu",
+   "headBn": "মানস কুণ্ডু",
+   "lane": "Lane 3",
+   "laneBn": "৩ নং গলি",
+   "phone": "9847168174",
+   "size": 2,
+   "dueMonths": 1,
+   "due": 100,
+   "since": 2020,
+   "status": "due"
+  },
+  {
+   "no": "MC-0170",
+   "head": "Lipika Paul",
+   "headBn": "লিপিকা পাল",
+   "lane": "Pukur Par",
+   "laneBn": "পুকুর পাড়",
+   "phone": "9847903091",
+   "size": 4,
+   "dueMonths": 0,
+   "due": 0,
+   "since": 2025,
+   "status": "paid"
+  }
+ ],
+ "me": {
+  "family": {
+   "no": "MC-0104",
+   "head": "Ananya Mukherjee",
+   "headBn": "অনন্যা মুখার্জি",
+   "lane": "Lane 2",
+   "laneBn": "২ নং গলি",
+   "phone": "9831734917",
+   "size": 3,
+   "dueMonths": 2,
+   "due": 200,
+   "since": 2019,
+   "status": "due"
+  },
+  "name": "Ananya Mukherjee",
+  "nameBn": "অনন্যা মুখার্জি",
+  "dependents": [
+   {
+    "name": "Sourav Mukherjee",
+    "nameBn": "সৌরভ মুখার্জি",
+    "rel": "Spouse",
+    "relBn": "স্বামী"
+   },
+   {
+    "name": "Ishaan Mukherjee",
+    "nameBn": "ঈশান মুখার্জি",
+    "rel": "Son, 12",
+    "relBn": "ছেলে, ১২"
+   }
+  ],
+  "dues": [
+   {
+    "month": "Oct 2026",
+    "monthBn": "অক্টো ২০২৬",
+    "amount": 100
+   },
+   {
+    "month": "Nov 2026",
+    "monthBn": "নভে ২০২৬",
+    "amount": 100
+   }
+  ],
+  "history": [
+   {
+    "date": "12 Sep 2026",
+    "receipt": "MC-26-0388",
+    "amount": 300,
+    "mode": "Cash",
+    "by": "Tapas Mondal"
+   },
+   {
+    "date": "04 Jun 2026",
+    "receipt": "MC-26-0214",
+    "amount": 300,
+    "mode": "UPI",
+    "by": "Tapas Mondal"
+   },
+   {
+    "date": "09 Mar 2026",
+    "receipt": "MC-26-0097",
+    "amount": 300,
+    "mode": "Cash",
+    "by": "Tapas Mondal"
+   }
+  ]
+ },
  "eventInfo": {
   "blood": {
    "photo": "blood",

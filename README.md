@@ -69,3 +69,14 @@ npm run build                  # production assets
 
 GitHub Actions (`.github/workflows/ci.yml`) runs all four on every push and pull request, with a
 `postgres:17` service.
+
+## Sample data
+
+`php artisan migrate --seed` loads the three account books, the fee plans and SAMPLE content
+copied from the prototype (`database/seeders/data/prototype.json`): events, nursery plants,
+serving packages, the committee list, notices and 24 sample families. All names, phone numbers,
+amounts and photos are placeholders, never real member data. While the `sample_data` site
+setting is on, the website footer says that the content is a sample.
+
+Receipt numbers (`MC-26-0142`, `CT-26-0018`, `NS-26-0311`) come from `App\Support\ReceiptNumbers`,
+which locks the counter row for the book and year inside a transaction.

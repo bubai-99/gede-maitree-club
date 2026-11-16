@@ -35,6 +35,8 @@ class TranslationsTest extends TestCase
         $patterns = [
             "/__\\(\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             "/'(?:label|group)'\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
+            // Enum labels: self::Case => 'English label'
+            "/self::\\w+\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
         ];
 
         foreach ([resource_path('views'), app_path()] as $dir) {

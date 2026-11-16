@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\App;
 
 /**
@@ -107,6 +108,8 @@ class SiteSettings
      */
     protected function stored(): array
     {
-        return $this->stored ??= [];
+        return $this->stored ??= SiteSetting::query()->get()
+            ->mapWithKeys(fn (SiteSetting $setting): array => [$setting->key => $setting->value])
+            ->all();
     }
 }
