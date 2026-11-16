@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\OtpLoginController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Member;
+use App\Http\Controllers\Site;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,39 @@ Route::get('/lang/{locale}', LocaleController::class)
 |--------------------------------------------------------------------------
 */
 
-Route::view('/', 'site.home')->name('home');
+Route::get('/', Site\HomeController::class)->name('home');
+
+Route::get('/events', [Site\EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event:slug}', [Site\EventController::class, 'show'])->name('events.show');
+Route::get('/notices', [Site\NoticeController::class, 'index'])->name('notices.index');
+Route::get('/notices/{notice:slug}', [Site\NoticeController::class, 'show'])->name('notices.show');
+
+Route::controller(Site\PageController::class)->group(function () {
+    Route::get('/catering', 'catering')->name('catering');
+    Route::get('/nursery', 'nursery')->name('nursery');
+    Route::get('/gallery', 'gallery')->name('gallery');
+    Route::get('/chanda', 'chanda')->name('chanda');
+    Route::get('/about', 'committee')->name('committee');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::get('/join', 'join')->name('join');
+    Route::get('/volunteer', 'volunteer')->name('volunteer');
+    Route::get('/panjika', 'panjika')->name('panjika');
+    Route::get('/privacy', 'privacy')->name('privacy');
+    Route::get('/terms', 'terms')->name('terms');
+});
+
+// Website forms: saved as enquiries, rate limited, with a honeypot field.
+Route::controller(Site\EnquiryController::class)->middleware('throttle:forms')->name('forms.')->group(function () {
+    Route::post('/contact', 'contact')->name('contact');
+    Route::post('/join', 'join')->name('join');
+    Route::post('/catering', 'catering')->name('catering');
+    Route::post('/volunteer', 'volunteer')->name('volunteer');
+    Route::post('/gallery/photos', 'photos')->name('photos');
+    Route::post('/chanda/pledge', 'chanda')->name('chanda');
+});
+
+Route::get('/sitemap.xml', [Site\SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [Site\SitemapController::class, 'robots'])->name('robots');
 
 /*
 |--------------------------------------------------------------------------

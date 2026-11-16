@@ -120,3 +120,19 @@ Member. Permissions are listed in `App\Enums\Role::permissions()`; the Admin pas
 Their passwords come from `SEED_ADMIN_PASSWORD` and `SEED_MEMBER_PASSWORD` in `.env`. If those are
 blank the seeder makes random passwords and prints them once in the console. These are sample
 accounts for trying the app; never put real people's details here.
+
+## Website
+
+Every prototype screen is a real route: `/` (home), `/events` and `/events/{slug}`, `/notices` and
+`/notices/{slug}`, `/catering`, `/nursery`, `/gallery`, `/chanda`, `/about`, `/contact`, `/join`,
+`/volunteer`, `/panjika`, `/privacy`, `/terms`, plus a custom 404, `/sitemap.xml` and `/robots.txt`.
+Lists show published content only. Page text that the committee can edit is listed in
+`config/pages.php`; titles and descriptions for search engines are in `config/seo.php` (both can be
+changed in the console). The forms (contact, membership, catering enquiry, volunteer, photos, chanda
+pledge) are validated by FormRequests, carry a hidden honeypot field, are limited to 5 sends a
+minute per address and are saved to `enquiries` for the committee.
+
+- **Panjika:** a placeholder page for now. The prototype computes tithis in the browser; the club
+  must check every date against its panjika before a real calendar goes online.
+- **Photos:** sample photos are hotlinked from Unsplash with the photographer credited, as Unsplash
+  asks. Swap them for the club's own (upload in the console, or edit `config/photos.php`).

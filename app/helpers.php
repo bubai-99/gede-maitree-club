@@ -32,3 +32,17 @@ if (! function_exists('local_date')) {
         return Bangla::date($date, $format);
     }
 }
+
+if (! function_exists('local_text')) {
+    /**
+     * Pick the Bengali text on the Bengali site when there is one, else the English.
+     */
+    function local_text(mixed $english, mixed $bengali = null): string
+    {
+        if (app()->getLocale() === 'bn' && is_string($bengali) && $bengali !== '') {
+            return $bengali;
+        }
+
+        return is_scalar($english) ? (string) $english : '';
+    }
+}

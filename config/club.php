@@ -29,6 +29,13 @@ return [
     'monthly_fee' => 100,
     'admission_fee' => 500,
     'member_discount_percent' => 10,
+
+    // SAMPLE numbers shown on the home and About pages until the committee sets them.
+    'stats' => [
+        'volunteers' => 61,
+        'bhog_plates' => 4200,
+        'year' => '2025–26',
+    ],
     'social' => [
         'facebook' => 'https://www.facebook.com/gedemaitreeclub',
         'instagram' => 'https://www.instagram.com/gedemaitreeclub',

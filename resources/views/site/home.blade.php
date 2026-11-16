@@ -1,12 +1,230 @@
-<x-layouts.site>
+@php
+    /** @var \App\Support\PageContent $content */
+    $content = app(\App\Support\PageContent::class);
+    $stats = config('club.stats');
+    $spendTotal = $lastPuja ? array_sum(array_column($lastPuja['spend'], 'amount')) : 0;
+    $strip = collect($gallery)->flatMap(fn ($day) => collect($day['items'])->map(fn ($item) => $item + ['day' => $day]))->take(8);
+@endphp
+<x-layouts.site seo="home">
+    {{-- Hero --}}
     <div class="banner min-h-[80svh] lg:min-h-[86svh] flex items-end md:items-center">
-        <div class="banner-media" aria-hidden="true"><x-photo key="pujaNight" :width="1800" eager /></div>
-        <div class="banner-shade"></div>
-        <div class="relative w-full mx-auto max-w-[1160px] px-5 pt-28 pb-20 md:pb-24">
-            <p class="eyebrow text-marigold">{{ __('Netaji Para · Est. 2014') }}</p>
-            <h1 class="mt-4 font-display leading-[1.04] text-[clamp(2.6rem,6.4vw,4.8rem)] max-w-[15ch]">{{ __('Twelve years of pujas, play and looking out for each other') }}</h1>
-            <p class="mt-5 text-[17px] sm:text-[19px] leading-relaxed text-white/85 max-w-[50ch]">{{ __('A club run by neighbours. Durga, Kali and Saraswati Puja, sports day, blood donation, a serving team for the para’s weddings and a nursery by the gate.') }}</p>
+        <div class="banner-media" aria-hidden="true">
+            @if ($content->samplePhotoKey('home'))
+                <x-photo :key="$content->samplePhotoKey('home')" :width="1800" eager />
+            @elseif ($content->photoUrl('home'))
+                <img src="{{ $content->photoUrl('home') }}" alt="" class="w-full h-full object-cover" fetchpriority="high">
+            @endif
         </div>
-        <x-photo-credit key="pujaNight" class="banner-credit" />
+        <div class="banner-shade"></div>
+        <div class="relative w-full mx-auto max-w-[1160px] px-5 pt-28 pb-20 md:pb-24 grid lg:grid-cols-12 gap-10 lg:gap-8 items-end">
+            <div class="lg:col-span-8 min-w-0">
+                <p class="eyebrow text-marigold">{{ $content->text('home', 'hero_kicker') }}</p>
+                <h1 class="mt-4 font-display leading-[1.04] text-[clamp(2.6rem,6.4vw,4.8rem)] max-w-[15ch]">{{ $content->text('home', 'hero_title') }}</h1>
+                <p class="mt-5 text-[17px] sm:text-[19px] leading-relaxed text-white/85 max-w-[50ch]">{{ $content->text('home', 'hero_sub') }}</p>
+                <div class="mt-8 flex flex-wrap gap-2.5">
+                    <a href="{{ route('join') }}" class="btn btn-primary h-12 px-6 text-base">{{ __('Become a member') }}</a>
+                    <a href="{{ route('events.index') }}" class="btn btn-glass h-12 px-6 text-base"><span>{{ __('See what’s on') }}</span><x-icon name="arrow-right" /></a>
+                </div>
+            </div>
+            <div class="lg:col-span-4 lg:justify-self-end w-full lg:max-w-[360px]">
+                <div class="hero-glass rounded-[22px] p-5 sm:p-6">
+                    <p class="flex items-center justify-between gap-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-white/75"><span>{{ __('The club in numbers') }}</span><span class="num normal-case tracking-normal font-medium text-white/55">{{ digits($stats['year']) }}</span></p>
+                    <dl class="mt-4 grid grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-0 lg:divide-y lg:divide-white/15">
+                        @foreach ([[__('Member families'), $families], [__('Volunteers'), $stats['volunteers']], [__('Bhog plates'), $stats['bhog_plates']]] as [$label, $value])
+                            <div class="lg:flex lg:items-baseline lg:justify-between lg:py-3"><dt class="text-[12.5px] text-white/70 lg:order-2">{{ $label }}</dt><dd class="mt-1 lg:mt-0 font-display text-[1.75rem] sm:text-[2rem] leading-none num">{{ \App\Support\Bangla::number((int) $value) }}</dd></div>
+                        @endforeach
+                    </dl>
+                </div>
+            </div>
+        </div>
+        @if ($content->samplePhotoKey('home'))
+            <p class="banner-credit">{{ __('Photo') }}: <x-photo-credit :key="$content->samplePhotoKey('home')" /></p>
+        @endif
+    </div>
+
+    {{-- Next event: a ticket --}}
+    @if ($nextEvent)
+        <div class="mx-auto max-w-[1160px] px-5 pt-10">
+            <div class="gz-ticket flex flex-col md:flex-row md:items-stretch">
+                <div class="flex items-center gap-5 px-6 py-5 md:pr-8">
+                    <div class="text-center leading-none">
+                        <span class="block text-[11.5px] font-bold uppercase tracking-[0.16em]">{{ __('Next up') }}</span>
+                        <span class="block mt-2 font-display text-[3rem] num">{{ local_date($nextEvent->starts_at, 'd') }}</span>
+                        <span class="block mt-1 text-[13px] font-semibold">{{ local_date($nextEvent->starts_at, 'M') }}</span>
+                    </div>
+                    <div class="min-w-0 border-l border-ink/25 pl-5">
+                        <p class="font-display text-[1.6rem] leading-tight"><a href="{{ route('events.show', $nextEvent) }}" class="hover:underline decoration-2">{{ $nextEvent->tr('title') }}</a></p>
+                        <p class="mt-1 text-[14px]">{{ local_date($nextEvent->starts_at, 'l') }} · {{ $nextEvent->tr('time_label') }}</p>
+                        <p class="text-[14px] flex items-center gap-1.5"><x-icon name="map-pin" class="w-4 h-4" /><span>{{ $nextEvent->tr('place') }}</span></p>
+                    </div>
+                </div>
+                <div class="md:ml-auto flex flex-wrap items-center gap-4 px-6 py-5 border-t md:border-t-0 border-dashed border-ink/30 gz-perf">
+                    <p class="text-[14px] font-semibold num">{{ trans_choice('{0} Today|{1} Tomorrow|[2,*] In :count days', (int) now()->startOfDay()->diffInDays($nextEvent->starts_at->copy()->startOfDay()), ['count' => digits((int) now()->startOfDay()->diffInDays($nextEvent->starts_at->copy()->startOfDay()))]) }}</p>
+                    <div class="flex gap-2">
+                        <a href="{{ route('events.show', $nextEvent) }}" class="btn btn-ink h-11">{{ __('Details') }}</a>
+                        <a href="https://wa.me/{{ $site->club()['whatsapp'] }}" target="_blank" rel="noopener" class="btn h-11 border border-ink/30 hover:bg-white/40"><x-icon name="message-circle" /><span>{{ __('Ask') }}</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- What the club does --}}
+    <div class="mx-auto max-w-[1160px] px-5 pt-20">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+            <div>
+                <p class="gz-kicker">{{ __('What we do') }}</p>
+                <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Three things, one set of books') }}</h2>
+            </div>
+            <p class="text-[16px] text-ink-2 max-w-[42ch]">{{ __('What the serving team and the nursery earn pays for the pujas and the service work.') }}</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5">
+            @foreach ([
+                ['events.index', 'book-club', 'pujaCrowd', '01', 'text-sindoor', __('Club life'), __('Pujas, games and service'), __('Durga, Kali and Saraswati Puja, sports day, blood donation camps and the winter picnic.'), __('See the calendar')],
+                ['catering', 'book-catering', 'feast', '02', 'text-turmeric', __('Maitree Serving'), __('Serving at your occasion'), __('The team that serves bhog to thousands, at your annaprashan or wedding. You bring the food; from ₹35 a guest.'), __('See the packages')],
+                ['nursery', 'book-nursery', 'potted', '03', 'text-tulsi', __('Maitree Nursery'), __('Plants by the club gate'), __('Joba, shiuli, tulsi, fruit saplings and winter flowers. Members get 10% off.'), __('Browse plants')],
+            ] as [$route, $book, $photo, $no, $colour, $kicker, $title, $text, $cta])
+                <a href="{{ route($route) }}" class="{{ $book }} group block">
+                    <div class="relative aspect-[4/3] md:aspect-[4/5] rounded-[18px] overflow-hidden bg-paper-3">
+                        <div class="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"><x-photo :key="$photo" sizes="(min-width: 768px) 33vw, 100vw" /></div>
+                        <span class="absolute left-4 top-4 font-display text-[2.6rem] leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.5)]">{{ digits($no) }}</span>
+                    </div>
+                    <p class="mt-4 text-[13px] font-bold tracking-[0.14em] uppercase {{ $colour }}">{{ $kicker }}</p>
+                    <h3 class="mt-1 font-display text-[1.6rem] leading-snug">{{ $title }}</h3>
+                    <p class="mt-2 text-[15px] text-ink-2">{{ $text }}</p>
+                    <span class="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold"><span>{{ $cta }}</span><x-icon name="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1" /></span>
+                </a>
+            @endforeach
+        </div>
+        <p class="mt-3 text-[12px] text-ink-3">{{ __('Photos') }}: <x-photo-credit key="pujaCrowd" />, <x-photo-credit key="feast" />, <x-photo-credit key="potted" /></p>
+    </div>
+
+    {{-- Our story --}}
+    <div class="mt-20 gz border-y gz-hair">
+        <div class="mx-auto max-w-[1160px] px-5 py-16 grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            <div class="lg:col-span-6">
+                <p class="gz-kicker">{{ __('Our story') }}</p>
+                <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ $content->text('home', 'story_title') }}</h2>
+                <p class="mt-6 text-[17px] leading-relaxed text-ink-2 max-w-[52ch] gz-dropcap">{{ $content->text('home', 'story_text') }}</p>
+                <p class="mt-6 text-[14px] text-ink-2 num">{{ __('Registered society · Reg. No.') }} {{ $site->club()['reg_no'] }}</p>
+                <a href="{{ route('committee') }}" class="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-sindoor hover:underline"><span>{{ __('About the club and committee') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
+            </div>
+            @include('site.partials.timeline', ['class' => 'lg:col-span-6'])
+        </div>
+    </div>
+
+    {{-- Coming up + notice board --}}
+    <div class="mx-auto max-w-[1160px] px-5 pt-20 grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div class="lg:col-span-7">
+            <div class="flex items-end justify-between gap-4 mb-4">
+                <div><p class="gz-kicker">{{ __('Calendar') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Coming up') }}</h2></div>
+                <a href="{{ route('events.index') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('All events') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
+            </div>
+            <ol class="border-t border-ink/80">
+                @forelse ($upcoming as $event)
+                    @include('site.partials.event-row', ['event' => $event])
+                @empty
+                    <li class="py-6 text-ink-2">{{ __('No events are planned yet. Check back soon.') }}</li>
+                @endforelse
+            </ol>
+        </div>
+        <aside class="lg:col-span-5" aria-labelledby="board-h">
+            <div class="relative gz rounded-[18px] p-6 pt-8 border gz-hair">
+                <span class="absolute -top-2.5 left-7 w-5 h-5 rounded-full bg-sindoor shadow-[0_2px_3px_rgba(0,0,0,.3)]" aria-hidden="true"></span>
+                <div class="flex items-center justify-between gap-3">
+                    <h2 id="board-h" class="font-display text-[1.7rem] leading-tight">{{ __('Notice board') }}</h2>
+                    <a href="{{ route('notices.index') }}" class="text-[14px] font-semibold text-sindoor hover:underline">{{ __('All notices') }}</a>
+                </div>
+                <ul class="mt-2">
+                    @foreach ($notices as $notice)
+                        <li class="py-3 border-b gz-hair last:border-0">
+                            <p class="text-[12.5px] text-ink-3 num">{{ local_date($notice->published_at, 'j M') }} · {{ $notice->tr('tag') }} @if ($notice->pinned)· <span class="text-sindoor font-semibold">{{ __('Pinned') }}</span>@endif</p>
+                            <a href="{{ route('notices.show', $notice) }}" class="mt-0.5 block font-semibold hover:text-sindoor">{{ $notice->tr('title') }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    {{-- Gallery strip --}}
+    @if ($strip->isNotEmpty())
+        <div class="pt-20">
+            <div class="mx-auto max-w-[1160px] px-5 flex items-end justify-between gap-4 mb-6">
+                <div><p class="gz-kicker">{{ __('From the gallery') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('The para in pictures') }}</h2></div>
+                <a href="{{ route('gallery') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('Open the gallery') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
+            </div>
+            <div class="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar px-5 snap-x snap-mandatory">
+                @foreach ($strip as $item)
+                    <figure class="shrink-0 w-[70vw] sm:w-[320px] snap-start">
+                        <div class="relative aspect-[4/3] rounded-[14px] overflow-hidden bg-paper-3"><x-photo :key="$item['photo']" :width="640" sizes="320px" /></div>
+                        <figcaption class="mt-2 text-[13px] text-ink-2">{{ local_text($item['day']['title'], $item['day']['title_bn'] ?? null) }} · <x-photo-credit :key="$item['photo']" class="text-ink-3" /></figcaption>
+                    </figure>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    {{-- Where the chanda went --}}
+    @if ($lastPuja && $spendTotal > 0)
+        <div class="mx-auto max-w-[1160px] px-5 pt-20 grid lg:grid-cols-12 gap-10 items-start">
+            <div class="lg:col-span-5">
+                <p class="gz-kicker">{{ __('Open books') }}</p>
+                <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Where your chanda went') }}</h2>
+                <p class="mt-4 text-[17px] text-ink-2 leading-relaxed max-w-[42ch]">{{ __('How each ₹100 of chanda was spent at :puja. Every bill is entered in the club khata, and the accounts are audited and presented at the AGM.', ['puja' => local_text($lastPuja['title'], $lastPuja['title_bn'] ?? null)]) }}</p>
+                <a href="{{ route('chanda') }}" class="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-sindoor hover:underline"><span>{{ __('Full accounts and this year’s chanda') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
+            </div>
+            <div class="lg:col-span-7">
+                @include('site.partials.spend-ledger', ['spend' => $lastPuja['spend'], 'total' => $spendTotal])
+            </div>
+        </div>
+    @endif
+
+    {{-- Who runs the club --}}
+    @if ($committee->isNotEmpty())
+        <div class="mx-auto max-w-[1160px] px-5 pt-20">
+            <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+                <div><p class="gz-kicker">{{ __('Committee 2025–27') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Who runs the club') }}</h2></div>
+                <a href="{{ route('committee') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('Full committee') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
+            </div>
+            <ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                @foreach ($committee as $person)
+                    @include('site.partials.person', ['person' => $person])
+                @endforeach
+            </ul>
+            <p class="mt-4 text-[14px] text-ink-3">{{ __('Elected by members at the AGM every two years. All volunteers.') }}</p>
+        </div>
+    @endif
+
+    {{-- Questions --}}
+    <div class="mx-auto max-w-[1160px] px-5 pt-20 grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div class="lg:col-span-4">
+            <p class="gz-kicker">{{ __('Questions') }}</p>
+            <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Common questions') }}</h2>
+            <p class="mt-4 text-[16px] text-ink-2">{{ __('Anything else? Call the secretary, or drop in at the club any evening.') }}</p>
+            <a href="tel:{{ preg_replace('/\s+/', '', $site->club()['phone']) }}" class="mt-5 btn btn-line"><x-icon name="phone" /><span class="num">{{ $site->club()['phone'] }}</span></a>
+        </div>
+        <div class="lg:col-span-8 border-t border-ink/80">
+            @include('site.partials.faq')
+        </div>
+    </div>
+
+    {{-- Join band --}}
+    <div class="join-band mt-20 relative overflow-hidden bg-sindoor text-white">
+        <div class="absolute -right-16 -top-16 opacity-15 pointer-events-none" aria-hidden="true"><x-seal :size="320" color="#fff" /></div>
+        <div class="relative mx-auto max-w-[1160px] px-5 py-16 sm:py-20 grid lg:grid-cols-12 gap-10 items-center">
+            <div class="lg:col-span-7">
+                <p class="gz-nameplate text-[clamp(1.5rem,3.2vw,2.1rem)]">{{ __('Become a member') }}</p>
+                <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('₹100 a month for your whole household') }}</h2>
+                <p class="mt-4 text-[17px] text-white/90 leading-relaxed max-w-[48ch]">{{ __('The form takes five minutes and the committee approves it at the next meeting. The yearly plan and the admission fee are explained on the next step.') }}</p>
+                <a href="{{ route('join') }}" class="btn bg-white text-ink hover:bg-paper-2 h-12 px-6 text-base mt-7"><span>{{ __('Apply to join') }}</span><x-icon name="arrow-right" /></a>
+            </div>
+            <ul class="lg:col-span-5 space-y-4 text-[17px]">
+                <li class="flex gap-3"><x-icon name="ticket" class="w-6 h-6 text-marigold" /><span>{{ __('Member passes for bhog, the picnic and sports day') }}</span></li>
+                <li class="flex gap-3"><x-icon name="badge-percent" class="w-6 h-6 text-marigold" /><span>{{ __('Member prices on serving and plants') }}</span></li>
+                <li class="flex gap-3"><x-icon name="vote" class="w-6 h-6 text-marigold" /><span>{{ __('A vote at the AGM') }}</span></li>
+                <li class="flex gap-3"><x-icon name="id-card" class="w-6 h-6 text-marigold" /><span>{{ __('A digital ID card in the app') }}</span></li>
+            </ul>
+        </div>
     </div>
 </x-layouts.site>

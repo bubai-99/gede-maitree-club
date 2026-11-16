@@ -67,6 +67,48 @@ class SiteSettings
     }
 
     /**
+     * The current chanda drive, last puja's spending and documents.
+     *
+     * @return array<string, mixed>
+     */
+    public function chanda(): array
+    {
+        $chanda = $this->get('chanda', []);
+
+        return is_array($chanda) ? $chanda : [];
+    }
+
+    /**
+     * Gallery days, newest first: each with an album key, a date, a title and photo/video items.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function galleryDays(): array
+    {
+        $gallery = $this->get('gallery', []);
+        $days = is_array($gallery) && is_array($gallery['days'] ?? null) ? array_values($gallery['days']) : [];
+
+        usort($days, fn (array $a, array $b): int => strcmp((string) ($b['date'] ?? ''), (string) ($a['date'] ?? '')));
+
+        return $days;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function galleryAlbums(): array
+    {
+        $gallery = $this->get('gallery', []);
+
+        return is_array($gallery) && is_array($gallery['albums'] ?? null) ? array_values($gallery['albums']) : [];
+    }
+
+    public function isSample(): bool
+    {
+        return (bool) $this->get('sample_data', false);
+    }
+
+    /**
      * schema.org NGO block for search engines.
      *
      * @return array<string, mixed>

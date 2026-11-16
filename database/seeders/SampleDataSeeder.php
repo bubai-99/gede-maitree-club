@@ -13,6 +13,7 @@ use App\Enums\PlantLight;
 use App\Enums\PlantWater;
 use App\Enums\PublishStatus;
 use App\Models\CateringPackage;
+use App\Models\ChandaEntry;
 use App\Models\CommitteeMember;
 use App\Models\Due;
 use App\Models\Event;
@@ -22,6 +23,7 @@ use App\Models\Notice;
 use App\Models\Payment;
 use App\Models\Plant;
 use App\Models\SiteSetting;
+use App\Models\Sponsor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -48,8 +50,78 @@ class SampleDataSeeder extends Seeder
         $this->committee();
         $this->notices();
         $this->families();
+        $this->chanda();
+        $this->gallery();
 
         SiteSetting::query()->updateOrCreate(['key' => 'sample_data'], ['value' => true]);
+    }
+
+    /**
+     * The current puja chanda drive: budget, lane targets and sponsors (SAMPLE figures),
+     * last puja's spending and the club's documents.
+     */
+    private function chanda(): void
+    {
+        $drive = $this->data['drive'];
+        $event = Event::query()->where('chanda_box', true)->first();
+
+        SiteSetting::query()->updateOrCreate(['key' => 'chanda'], ['value' => [
+            'event_slug' => $event?->slug,
+            'title' => $drive['event'],
+            'title_bn' => $drive['eventBn'],
+            'target' => $drive['target'],
+            'budget' => array_map(fn (array $b): array => ['head' => $b['head'], 'head_bn' => $b['headBn'], 'amount' => $b['amount']], $drive['budget']),
+            'areas' => array_map(fn (array $a): array => [
+                'lane' => $a['lane'], 'lane_bn' => $a['laneBn'], 'volunteer' => $a['volunteer'],
+                'target' => $a['target'], 'houses' => $a['houses'], 'visited' => $a['visited'],
+            ], $drive['areas']),
+            'last_puja' => [
+                'title' => 'Durga Puja 2026',
+                'title_bn' => 'দুর্গাপূজা ২০২৬',
+                'spend' => array_map(fn (array $s): array => ['head' => $s['en'], 'head_bn' => $s['bn'], 'amount' => $s['v'], 'colour' => $s['c']], $this->data['pujaSpend']),
+            ],
+            'documents' => array_map(fn (array $d): array => [
+                'title' => $d['en'], 'title_bn' => $d['bn'], 'note' => $d['note'], 'note_bn' => $d['noteBn'], 'size' => $d['size'], 'size_bn' => $d['sizeBn'],
+            ], $this->data['documents']),
+        ]]);
+
+        if ($event === null) {
+            return;
+        }
+
+        foreach ($drive['areas'] as $area) {
+            ChandaEntry::query()->updateOrCreate(['event_id' => $event->id, 'area' => $area['lane']], [
+                'donor_name' => 'Sample: lane total so far',
+                'amount' => $area['got'],
+            ]);
+        }
+
+        foreach ($drive['sponsors'] as $sponsor) {
+            Sponsor::query()->updateOrCreate(['event_id' => $event->id, 'name' => $sponsor['name']], [
+                'amount' => $sponsor['amount'],
+                'deliverable' => $sponsor['gives'],
+            ]);
+        }
+    }
+
+    /**
+     * Gallery albums, date-wise (SAMPLE Unsplash photos, credited on the page).
+     */
+    private function gallery(): void
+    {
+        SiteSetting::query()->updateOrCreate(['key' => 'gallery'], ['value' => [
+            'albums' => array_map(fn (array $a): array => ['key' => $a['key'], 'title' => $a['en'], 'title_bn' => $a['bn']], $this->data['ALBUMS']),
+            'days' => array_map(fn (array $g): array => [
+                'id' => $g['id'],
+                'album' => $g['album'],
+                'date' => $g['date'],
+                'title' => $g['en'],
+                'title_bn' => $g['bn'],
+                'items' => array_map(fn (array $item): array => isset($item['v'])
+                    ? ['type' => 'video', 'photo' => $item['poster'], 'caption' => $item['v'], 'caption_bn' => $item['vBn'], 'duration' => $item['dur']]
+                    : ['type' => 'photo', 'photo' => $item['p']], $g['items']),
+            ], $this->data['GALLERY']),
+        ]]);
     }
 
     private function events(): void

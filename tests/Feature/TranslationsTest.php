@@ -41,6 +41,12 @@ class TranslationsTest extends TestCase
             "/self::\\w+\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
         ];
 
+        // Editable page text: field labels and default text are translation keys.
+        preg_match_all("/'(?:label|default)'\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/", File::get(config_path('pages.php')), $pageKeys);
+        foreach ($pageKeys[1] as $raw) {
+            $keys[str_replace("\\'", "'", $raw)] ??= 'config/pages.php';
+        }
+
         foreach ([resource_path('views'), app_path()] as $dir) {
             foreach (File::allFiles($dir) as $file) {
                 if ($file->getExtension() !== 'php') {

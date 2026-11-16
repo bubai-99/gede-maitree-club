@@ -13,6 +13,7 @@ enum EnquiryKind: string
     case Catering = 'catering';
     case Volunteer = 'volunteer';
     case Photos = 'photos';
+    case Chanda = 'chanda';
 
     public function englishLabel(): string
     {
@@ -22,6 +23,7 @@ enum EnquiryKind: string
             self::Catering => 'Catering enquiry',
             self::Volunteer => 'Volunteer',
             self::Photos => 'Photos',
+            self::Chanda => 'Chanda pledge',
         };
     }
 }

@@ -5,14 +5,15 @@
     'canonical' => null,
     'ogType' => 'website',
     'noindex' => false,
+    'seo' => null,
 ])
 @php
     /** @var \App\Support\SiteSettings $site */
     $club = $site->club();
     $bn = app()->getLocale() === 'bn';
     $clubName = $bn ? $club['name_bn'] : $club['name'];
-    $pageTitle = $title ? $title.' · '.$clubName : $site->seo('home', 'title');
-    $pageDescription = $description ?? $site->seo('home', 'description');
+    $pageTitle = $title ? $title.' · '.$clubName : $site->seo($seo ?? 'home', 'title');
+    $pageDescription = $description ?? $site->seo($seo ?? 'home', 'description');
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');
     $mainMenu = $site->mainMenu();
@@ -160,6 +161,9 @@
                         <a href="{{ route('terms') }}" class="hover:text-white">{{ __('Terms') }}</a>
                     @endif
                     <span>{{ __('Photos: Unsplash (samples)') }}</span>
+                    @if ($site->isSample())
+                        <span class="text-marigold">{{ __('Sample content: names, numbers and photos are placeholders.') }}</span>
+                    @endif
                 </div>
             </div>
         </div>
