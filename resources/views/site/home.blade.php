@@ -100,6 +100,7 @@
                     <div class="relative aspect-[4/3] md:aspect-[4/5] rounded-[18px] overflow-hidden bg-paper-3">
                         <div class="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"><x-photo :key="$photo" sizes="(min-width: 768px) 33vw, 100vw" /></div>
                         <span class="absolute left-4 top-4 font-display text-[2.6rem] leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.5)]">{{ digits($no) }}</span>
+                        <span class="absolute right-3 top-3 text-[11.5px] text-white bg-black/50 px-1.5 rounded"><x-photo-credit :key="$photo" /></span>
                     </div>
                     <p class="mt-4 text-[13px] font-bold tracking-[0.14em] uppercase {{ $colour }}">{{ $kicker }}</p>
                     <h3 class="mt-1 font-display text-[1.6rem] leading-snug">{{ $title }}</h3>
@@ -108,7 +109,6 @@
                 </a>
             @endforeach
         </div>
-        <p class="mt-3 text-[12px] text-ink-3">{{ __('Photos') }}: <x-photo-credit key="pujaCrowd" />, <x-photo-credit key="feast" />, <x-photo-credit key="potted" /></p>
     </div>
 
     {{-- Our story --}}
@@ -149,9 +149,12 @@
                 </div>
                 <ul class="mt-2">
                     @foreach ($notices as $notice)
-                        <li class="py-3 border-b gz-hair last:border-0">
-                            <p class="text-[12.5px] text-ink-3 num">{{ local_date($notice->published_at, 'j M') }} · {{ $notice->tr('tag') }} @if ($notice->pinned)· <span class="text-sindoor font-semibold">{{ __('Pinned') }}</span>@endif</p>
-                            <a href="{{ route('notices.show', $notice) }}" class="mt-0.5 block font-semibold hover:text-sindoor">{{ $notice->tr('title') }}</a>
+                        <li class="border-b border-ink/15 last:border-0">
+                            <a href="{{ route('notices.show', $notice) }}" class="group block py-3.5">
+                                <span class="text-[12.5px] flex items-center gap-2">@if ($notice->tag)<span class="font-bold uppercase tracking-wide text-sindoor-deep">{{ $notice->tr('tag') }}</span>@endif<span class="text-ink-2 num">{{ local_date($notice->published_at, 'j M') }}</span>@if ($notice->pinned)<x-icon name="pin" class="w-3.5 h-3.5 text-ink-3" /><span class="sr-only">{{ __('Pinned') }}</span>@endif</span>
+                                <span class="block font-semibold leading-snug mt-1 group-hover:underline">{{ $notice->tr('title') }}</span>
+                                <span class="block text-[15px] text-ink-2 mt-0.5 leading-snug">{{ $notice->tr('summary') }}</span>
+                            </a>
                         </li>
                     @endforeach
                 </ul>

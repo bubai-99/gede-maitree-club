@@ -1,35 +1,39 @@
+@php
+    $url = route('notices.show', $notice);
+    $club = $site->club();
+@endphp
 <x-layouts.site :title="$notice->tr('title')" :description="\Illuminate\Support\Str::limit((string) $notice->tr('summary'), 155)" og-type="article">
-    <article class="mx-auto max-w-[760px] px-5 pt-12 pb-16">
-        <nav aria-label="{{ __('Breadcrumb') }}" class="text-[14px] text-ink-2">
-            <ol class="flex flex-wrap items-center gap-1.5">
-                <li><a href="{{ route('home') }}" class="hover:text-ink">{{ __('Home') }}</a></li><li aria-hidden="true">/</li>
-                <li><a href="{{ route('notices.index') }}" class="hover:text-ink">{{ __('Notices') }}</a></li>
-            </ol>
-        </nav>
-        <p class="mt-6 flex flex-wrap items-center gap-2 text-[13px] text-ink-3 num">
-            <time datetime="{{ $notice->published_at?->toDateString() }}">{{ local_date($notice->published_at) }}</time>
-            @if ($notice->tag)
-                <span class="chip h-6 bg-paper-2 text-ink-2">{{ $notice->tr('tag') }}</span>
-            @endif
+    <article class="mx-auto max-w-[760px] px-5 pt-8 pb-20">
+        <a href="{{ route('notices.index') }}" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-ink-2 hover:text-ink" data-no-print><x-icon name="arrow-left" class="w-4 h-4" />{{ __('All notices') }}</a>
+        <p class="mt-8 flex flex-wrap items-center gap-3 text-[13px]">
+            @if ($notice->tag)<span class="font-bold uppercase tracking-wide text-sindoor-deep">{{ $notice->tr('tag') }}</span>@endif
+            <time class="text-ink-2" datetime="{{ $notice->published_at?->toDateString() }}">{{ local_date($notice->published_at, 'l, j F Y') }}</time>
         </p>
-        <h1 class="mt-3 font-display text-[clamp(2rem,5vw,3rem)] leading-tight">{{ $notice->tr('title') }}</h1>
-        <div class="mt-6 prose-site text-[18px] leading-relaxed text-ink-2">
-            <p>{{ $notice->tr('summary') }}</p>
+        <h1 class="mt-3 font-display leading-[1.05] text-[clamp(2.2rem,5.5vw,3.4rem)]">{{ $notice->tr('title') }}</h1>
+        <div class="mt-6 text-[18px] leading-relaxed text-ink-2 prose-site max-w-[62ch]">
+            <p class="text-ink">{{ $notice->tr('summary') }}</p>
             @if ($notice->tr('body'))
                 @foreach (preg_split('/\R{2,}/', (string) $notice->tr('body')) ?: [] as $paragraph)
                     <p>{{ $paragraph }}</p>
                 @endforeach
             @endif
         </div>
-        <p class="mt-10"><a href="{{ route('notices.index') }}" class="inline-flex items-center gap-1.5 font-semibold text-sindoor hover:underline"><x-icon name="arrow-left" class="w-4 h-4" /><span>{{ __('All notices') }}</span></a></p>
+        <div class="mt-8 pt-6 border-t border-rule flex flex-wrap gap-2" data-no-print>
+            <a href="https://wa.me/?text={{ rawurlencode($notice->title.': '.$url) }}" target="_blank" rel="noopener" class="btn btn-line btn-sm"><x-icon name="message-circle" />{{ __('Send on WhatsApp') }}</a>
+            <button type="button" class="btn btn-line btn-sm" x-data @click="window.print()"><x-icon name="printer" />{{ __('Print') }}</button>
+        </div>
 
         @if ($more->isNotEmpty())
-            <h2 class="mt-14 font-display text-[1.6rem]">{{ __('More notices') }}</h2>
-            <ul class="mt-3 border-t border-ink/80">
-                @foreach ($more as $other)
-                    <li class="py-3 border-b border-rule"><a href="{{ route('notices.show', $other) }}" class="font-semibold hover:text-sindoor">{{ $other->tr('title') }}</a> <span class="text-[13px] text-ink-3 num">· {{ local_date($other->published_at, 'j M') }}</span></li>
+            <nav class="mt-10 grid sm:grid-cols-2 gap-3" aria-label="{{ __('More notices') }}" data-no-print>
+                @foreach ($more->take(2) as $other)
+                    @php $older = $other->published_at && $notice->published_at && $other->published_at->lt($notice->published_at); @endphp
+                    <a href="{{ route('notices.show', $other) }}" class="block card card-hover p-4 {{ $older ? 'sm:text-right sm:order-2' : '' }}">
+                        <span class="text-[13px] text-ink-3">{{ $older ? __('Older') : __('Newer') }}</span>
+                        <span class="block font-semibold leading-snug mt-0.5">{{ $other->tr('title') }}</span>
+                    </a>
                 @endforeach
-            </ul>
+            </nav>
         @endif
+        <p class="print-only mt-8 text-[11px]">{{ $club['name'] }} · {{ __('Reg. No.') }} {{ $club['reg_no'] }} · {{ $club['phone'] }}</p>
     </article>
 </x-layouts.site>
