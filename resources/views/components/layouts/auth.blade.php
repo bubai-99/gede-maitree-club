@@ -17,7 +17,7 @@
             <div class="absolute inset-0 -z-10 bg-ink/75"></div>
             <x-seal :size="88" color="#fff" />
             <div>
-                <p class="font-display leading-[0.95] text-[clamp(3.25rem,4.4vw,4.25rem)] tracking-[-0.02em]">{{ __('Gede Maitree Club') }}</p>
+                <p class="font-display leading-[0.95] text-[clamp(3.25rem,4.4vw,4.25rem)] tracking-[-0.02em]">{!! str_replace(' ', '<br>', e(__('Gede Maitree Club'))) !!}</p>
                 <p class="poster text-[1.6rem] leading-tight mt-5 text-marigold">{{ $isAdmin ? __('The committee room') : __('Members’ entrance') }}</p>
                 <p class="mt-4 text-[16px] text-white/80 max-w-[38ch]">
                     {{ $isAdmin
@@ -31,7 +31,7 @@
         <div class="flex flex-col">
             <header class="flex items-center justify-between gap-3 px-5 sm:px-10 h-16">
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5" aria-label="{{ __('Gede Maitree Club website') }}">
-                    <x-seal :size="36" :estd="false" aria-hidden="true" />
+                    <x-seal :size="40" :rotate="-6" aria-hidden="true" />
                     <span class="font-display text-xl text-sindoor lg:hidden">{{ __('Gede Maitree Club') }}</span>
                 </a>
                 <div class="flex items-center gap-3">
@@ -45,6 +45,12 @@
                     {{ $slot }}
                 </div>
             </main>
+            @if ($isAdmin)
+                <footer class="px-5 sm:px-10 pb-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[14px] font-semibold text-ink-2">
+                    <a href="{{ route('admin.scan') }}" class="hover:text-ink">{{ __('Gate volunteer? Open the scanner →') }}</a>
+                    <a href="{{ route('member.login') }}" class="hover:text-ink">{{ __('Member? Sign in to the member app →') }}</a>
+                </footer>
+            @endif
         </div>
     </div>
 </body>

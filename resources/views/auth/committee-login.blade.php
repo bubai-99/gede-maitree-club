@@ -1,19 +1,17 @@
 <x-layouts.auth :title="__('Committee sign-in')" portal="admin" photo="pujaCrowd">
-    <p class="text-[11.5px] font-semibold tracking-[0.14em] text-ink-2">{{ __('COMMITTEE CONSOLE') }}</p>
-    <h1 class="mt-1 font-display text-[2rem] leading-tight">{{ __('Committee sign-in') }}</h1>
+    <h1 class="font-display text-[2.3rem] leading-tight">{{ __('Committee sign-in') }}</h1>
+    <p class="mt-2 text-[15px] text-ink-2">{{ __('For office bearers and in-charges. Members use the member app.') }}</p>
 
-    <form method="POST" action="{{ route('admin.login.store') }}" class="mt-6 space-y-4">
+    <form method="POST" action="{{ route('admin.login.store') }}" class="mt-8 space-y-5">
         @csrf
-        <x-field name="login" :label="__('Mobile number or email')" autocomplete="username" required autofocus />
-        <x-field name="password" type="password" :label="__('Password')" autocomplete="current-password" required />
-        <div class="flex items-center justify-between gap-3 text-[14px]">
-            <label class="flex items-center gap-2"><input type="checkbox" name="remember" value="1" class="w-4 h-4 accent-sindoor"> {{ __('Keep me signed in') }}</label>
+        <x-field name="login" :label="__('Mobile number or email')" autocomplete="username" placeholder="98300 12345" required autofocus />
+        <x-password-field :label="__('Password')" required />
+        <div class="flex items-center justify-between gap-3 text-[15px]">
+            <label class="flex items-center gap-2"><input type="checkbox" name="remember" value="1" class="w-5 h-5 accent-[#2b2f36]"> {{ __('Keep me signed in') }}</label>
             <a href="{{ route('password.request') }}" class="font-semibold text-sindoor hover:underline">{{ __('Forgot password?') }}</a>
         </div>
-        <button type="submit" class="btn btn-ink w-full h-12">{{ __('Sign in') }}</button>
+        <button type="submit" class="btn btn-primary w-full h-12 text-base">{{ __('Continue') }}</button>
     </form>
 
-    <div class="mt-8 pt-6 border-t border-rule text-[14px] text-ink-2">
-        <a href="{{ route('member.login') }}" class="font-semibold hover:text-ink hover:underline">{{ __('Member? Sign in to the member app →') }}</a>
-    </div>
+    <p class="mt-8 text-[15px] text-ink-2"><a href="{{ route('member.login') }}" class="font-semibold text-ink hover:underline">{{ __('Member sign-in') }}</a></p>
 </x-layouts.auth>
