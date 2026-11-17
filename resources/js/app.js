@@ -1,7 +1,10 @@
 import Alpine from 'alpinejs';
 import { drawIcons } from './icons';
+import { razorpayCheckout } from './pay';
 
 window.Alpine = Alpine;
+
+Alpine.data('razorpayCheckout', razorpayCheckout);
 
 document.addEventListener('alpine:initialized', () => drawIcons());
 

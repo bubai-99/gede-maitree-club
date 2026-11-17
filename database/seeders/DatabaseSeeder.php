@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             BookSeeder::class,
             SampleDataSeeder::class,
             SampleUsersSeeder::class,
+            SampleAccountsSeeder::class,
         ]);
     }
 }

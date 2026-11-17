@@ -567,3 +567,14 @@ button.pj-cell:hover { border-color: rgba(43,47,54,.35); }
 
 /* Alpine: hide x-cloak elements until Alpine starts */
 [x-cloak] { display: none !important; }
+
+/* =====================================================================
+   Member app and console: printing a receipt, a statement or a report
+   ===================================================================== */
+@media print {
+  .app-shell { background: #fff !important; }
+  .app-shell [data-no-print], .app-shell .skip-link { display: none !important; }
+  .app-shell main { padding: 0 !important; max-width: none !important; }
+  .app-shell .receipt-paper { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid; }
+  .app-shell .print-only { display: block !important; }
+}

@@ -48,7 +48,7 @@ Enforced on the server (middleware, policies, gates), never only in the UI.
 ## Milestones
 
 Each milestone ends with: tests green, Pint clean, Larastan clean,
-`npm run build` passing, one commit.
+`npm run build` passing, one commit. Done so far: M0 to M7.
 
 | # | Milestone | Done when |
 |---|---|---|
@@ -59,7 +59,7 @@ Each milestone ends with: tests green, Pint clean, Larastan clean,
 | M4 | Public website | Every prototype website screen as a real route, data from the database, forms saved with validation and rate limits, SEO, sitemap |
 | M5 | Console & website CMS | Console shell and dashboard; CMS for pages, events, plants, packages, notices, contact, committee, menu, media; draft → publish; activity log |
 | M6 | Member app core | Home, dues, receipts, ID card, events, notices, profile; PWA manifests and service worker |
-| M7 | Fees & khata | Cash entry, UPI confirm, receipts with numbering, three books, reports |
+| M7 | Fees & khata ✅ | Cash entry, online payments with Razorpay Standard Checkout (UPI to the club with a UTR as fallback), UPI confirm and bank statement matching, receipts with numbering, three books, reports |
 | M8 | Events, chanda, passes, scanner | Chanda book, sponsors, passes with QR, offline scanner |
 | M9 | Catering & nursery | Enquiry → quote → advance → bill; roster; counter sale and stock |
 | M10 | Meetings, polls, push | Notices to members, AGM polls, web push |
@@ -72,11 +72,15 @@ users             id, name, email, phone, password, locale, family_id?, is_commi
 families          id, family_no, head_name, address, area, phone, status, joined_on
 members           id, family_id, name, name_bn, relation, dob, phone, blood_group
 fee_plans         id, name, amount, period (monthly|yearly), admission_fee
-dues              id, family_id, period, amount, status (due|paid|waived)
-payments          id, family_id, amount, mode (cash|upi), upi_ref, received_by, receipt_no, status
+dues              id, family_id, period, amount, status (due|paid|waived), waived_reason, waived_by, waived_at
+payments          id, family_id, amount, mode (cash|upi|online), gateway (razorpay|manual_upi), reference,
+                  gateway_order_id, gateway_payment_id, gateway_method, gateway_fee_paise, gateway_tax_paise,
+                  upi_ref (UTR), received_by, receipt_no, status, note, paid_at, submitted_at, cancelled_at/by
 payment_due       payment_id, due_id
 books             id, code (club|catering|nursery)
-ledger_entries    id, book_id, type (income|expense), head, amount, note, source_type, source_id, recorded_by
+ledger_entries    id, book_id, entry_date, type (income|expense|deposit|withdrawal), account (cash|bank), head,
+                  amount, note, source_type, source_id, recorded_by, reverses_id (+ bill photo, medialibrary)
+webhook_events    id, provider, event_id, event, payload, processed_at   (Razorpay webhooks already handled)
 receipt_counters  book_code, year, last_no          (MC-25-0142, CT-25-0018, NS-25-0311)
 events            id, slug, title, title_bn, kind, starts_at, time_label(_bn), place(_bn), pass_required,
                   contact_role, chanda_box, about(_bn), schedule (json), bring (json), status, published_at
@@ -105,6 +109,6 @@ activity_log      (spatie)
 ## Rules
 
 - Every user-facing string goes through `__()` with both languages filled.
-- Money is stored in whole rupees as integers.
+- Money is stored in whole rupees as integers (paise only at the Razorpay boundary).
 - Sample data stays marked as sample. No real member data in seeders.
 - Secrets live in `.env` only. `.env` is never committed.

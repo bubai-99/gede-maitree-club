@@ -11,7 +11,7 @@
             @if ($total > 0)
                 <p class="mt-2 font-display text-[2.6rem] leading-none num text-sindoor">{{ rupees($total) }}</p>
                 <p class="mt-2 text-ink-2">{{ $dues->map(fn ($due) => local_date($due->period, 'M Y'))->implode(', ') }}</p>
-                <a href="{{ route('member.dues') }}" class="mt-5 btn btn-primary">{{ __('How to pay') }}</a>
+                <a href="{{ route('member.pay') }}" class="mt-5 btn btn-primary"><x-icon name="indian-rupee" /><span>{{ __('Pay now') }}</span></a>
             @else
                 <p class="mt-2 font-display text-[2rem] leading-none text-tulsi">{{ __('All paid up') }}</p>
                 @if ($lastPayment)

@@ -20,7 +20,8 @@ final class Navigation
     public const MEMBER = [
         ['group' => null, 'items' => [
             ['route' => 'member.home', 'icon' => 'house', 'label' => 'Home'],
-            ['route' => 'member.dues', 'icon' => 'indian-rupee', 'label' => 'Dues'],
+            ['route' => 'member.pay', 'icon' => 'indian-rupee', 'label' => 'Pay dues'],
+            ['route' => 'member.dues', 'icon' => 'scroll-text', 'label' => 'Statement'],
             ['route' => 'member.receipts.index', 'icon' => 'receipt-text', 'label' => 'Receipts'],
             ['route' => 'member.card', 'icon' => 'id-card', 'label' => 'Member cards'],
         ]],
@@ -36,7 +37,7 @@ final class Navigation
     /** @var list<array{route: string, icon: string, label: string}> */
     public const MEMBER_TABS = [
         ['route' => 'member.home', 'icon' => 'house', 'label' => 'Home'],
-        ['route' => 'member.dues', 'icon' => 'indian-rupee', 'label' => 'Dues'],
+        ['route' => 'member.pay', 'icon' => 'indian-rupee', 'label' => 'Pay'],
         ['route' => 'member.card', 'icon' => 'id-card', 'label' => 'Card'],
         ['route' => 'member.events.index', 'icon' => 'calendar-days', 'label' => 'Events'],
         ['route' => 'member.profile', 'icon' => 'user', 'label' => 'Profile'],
@@ -51,6 +52,17 @@ final class Navigation
     public const ADMIN = [
         ['group' => null, 'items' => [
             ['route' => 'admin.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Today', 'ability' => 'console.view'],
+        ]],
+        ['group' => 'Members', 'items' => [
+            ['route' => 'admin.collect', 'icon' => 'hand-coins', 'label' => 'Collect payment', 'ability' => 'fees.manage'],
+            ['route' => 'admin.dues.index', 'icon' => 'bell-ring', 'label' => 'Dues & reminders', 'ability' => 'fees.manage'],
+            ['route' => 'admin.payments.index', 'icon' => 'smartphone', 'label' => 'Online payments', 'ability' => 'fees.manage'],
+        ]],
+        ['group' => 'Books', 'items' => [
+            ['route' => 'admin.khata.index', 'icon' => 'book-open', 'label' => 'Khata', 'ability' => 'khata.open'],
+            ['route' => 'admin.receipts.index', 'icon' => 'receipt', 'label' => 'Receipts register', 'ability' => 'fees.manage'],
+            ['route' => 'admin.cash', 'icon' => 'landmark', 'label' => 'Cash & bank', 'ability' => 'khata.open'],
+            ['route' => 'admin.reports.index', 'icon' => 'chart-column', 'label' => 'Reports', 'ability' => 'reports.open'],
         ]],
         ['group' => 'Website', 'items' => [
             ['route' => 'admin.website', 'icon' => 'globe', 'label' => 'Website', 'ability' => 'website.view'],
@@ -71,6 +83,7 @@ final class Navigation
     /** @var list<array{route: string, icon: string, label: string, ability: string}> */
     public const ADMIN_TABS = [
         ['route' => 'admin.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Today', 'ability' => 'console.view'],
+        ['route' => 'admin.collect', 'icon' => 'hand-coins', 'label' => 'Collect', 'ability' => 'fees.manage'],
         ['route' => 'admin.website', 'icon' => 'globe', 'label' => 'Website', 'ability' => 'website.view'],
         ['route' => 'admin.events.index', 'icon' => 'calendar-days', 'label' => 'Events', 'ability' => 'website.view'],
         ['route' => 'admin.enquiries.index', 'icon' => 'inbox', 'label' => 'Enquiries', 'ability' => 'console.view'],
@@ -111,7 +124,7 @@ final class Navigation
 
         return array_values(array_map(fn (array $item): array => $item + [
             'url' => route($item['route']),
-            'active' => request()->routeIs($item['route'], str_replace('.index', '.*', $item['route'])),
+            'active' => request()->routeIs($item['route'], $item['route'].'.*', str_replace('.index', '.*', $item['route'])),
         ], $visible));
     }
 }

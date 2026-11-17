@@ -15,10 +15,10 @@
     <link rel="manifest" href="{{ asset('admin.webmanifest') }}">
     <link rel="apple-touch-icon" href="{{ asset('icons/admin-180.png') }}">
 </head>
-<body class="min-h-dvh bg-paper" data-sw="{{ asset('sw.js') }}" x-data="{ side: false }" @keydown.escape.window="side = false">
+<body class="app-shell min-h-dvh bg-paper" data-sw="{{ asset('sw.js') }}" x-data="{ side: false }" @keydown.escape.window="side = false">
     <a href="#main" class="skip-link">{{ __('Skip to content') }}</a>
     <div class="lg:grid lg:grid-cols-[260px_minmax(0,1fr)] min-h-dvh">
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-[260px] -translate-x-full lg:translate-x-0 lg:sticky lg:top-0 lg:h-dvh lg:w-auto bg-paper-2 border-r border-rule flex flex-col transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)]"
+        <aside data-no-print id="sidebar" class="fixed inset-y-0 left-0 z-40 w-[260px] -translate-x-full lg:translate-x-0 lg:sticky lg:top-0 lg:h-dvh lg:w-auto bg-paper-2 border-r border-rule flex flex-col transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)]"
             :class="{ '-translate-x-full': ! side }" aria-label="{{ __('Console') }}">
             <div class="px-5 h-16 flex items-center gap-2.5 border-b border-rule shrink-0">
                 <x-seal :size="36" :estd="false" aria-hidden="true" />
@@ -57,7 +57,7 @@
         <div class="fixed inset-0 bg-ink/40 z-30 lg:hidden" x-show="side" x-cloak @click="side = false"></div>
 
         <div class="min-w-0 flex flex-col">
-            <header class="h-16 border-b border-rule flex items-center gap-3 px-4 sm:px-6 bg-paper sticky top-0 z-20">
+            <header data-no-print class="h-16 border-b border-rule flex items-center gap-3 px-4 sm:px-6 bg-paper sticky top-0 z-20">
                 <button type="button" class="lg:hidden w-10 h-10 -ml-2 grid place-items-center rounded-md hover:bg-paper-2" @click="side = true" aria-controls="sidebar" :aria-expanded="side.toString()" aria-label="{{ __('Open menu') }}"><x-icon name="menu" class="w-5 h-5" /></button>
                 <p class="font-semibold truncate">{{ $title }}</p>
                 <div class="ml-auto flex items-center gap-2">
@@ -75,7 +75,7 @@
     </div>
 
     @if ($tabs)
-        <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-paper border-t border-rule grid h-16 pb-[env(safe-area-inset-bottom)] text-[11.5px] font-semibold text-ink-2" style="grid-template-columns: repeat({{ count($tabs) + 1 }}, minmax(0, 1fr))" aria-label="{{ __('Quick') }}">
+        <nav data-no-print class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-paper border-t border-rule grid h-16 pb-[env(safe-area-inset-bottom)] text-[11.5px] font-semibold text-ink-2" style="grid-template-columns: repeat({{ count($tabs) + 1 }}, minmax(0, 1fr))" aria-label="{{ __('Quick') }}">
             @foreach ($tabs as $tab)
                 <a href="{{ $tab['url'] }}" @if ($tab['active']) aria-current="page" @endif class="flex flex-col items-center justify-center gap-1 aria-[current=page]:text-sindoor"><x-icon :name="$tab['icon']" class="w-5 h-5" /><span>{{ __($tab['label']) }}</span></a>
             @endforeach

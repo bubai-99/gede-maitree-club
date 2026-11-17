@@ -24,6 +24,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'committee' => EnsureCommittee::class,
         ]);
 
+        // Razorpay posts webhooks without a CSRF token; they are checked by their signature instead.
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/razorpay',
+        ]);
+
         // Guests are sent to the sign-in page of the part of the app they asked for.
         $middleware->redirectGuestsTo(
             fn (Request $request) => $request->is('admin', 'admin/*') ? route('admin.login') : route('member.login'),

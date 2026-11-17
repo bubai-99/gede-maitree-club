@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * A member household. The subscription is per family.
  */
-#[Fillable(['family_no', 'head_name', 'head_name_bn', 'address', 'area', 'area_bn', 'phone', 'status', 'joined_on'])]
+#[Fillable(['family_no', 'head_name', 'head_name_bn', 'address', 'area', 'area_bn', 'phone', 'status', 'joined_on', 'last_reminded_at'])]
 class Family extends Model
 {
     /** @use HasFactory<FamilyFactory> */
@@ -28,6 +28,7 @@ class Family extends Model
         return [
             'status' => FamilyStatus::class,
             'joined_on' => 'date',
+            'last_reminded_at' => 'datetime',
         ];
     }
 

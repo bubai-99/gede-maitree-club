@@ -55,7 +55,7 @@ enum Role: string
 
         return match ($this) {
             self::Admin => Permission::all(),
-            self::Treasurer => [...$console, 'members.manage', 'fees.manage', 'books.view', 'reports.view'],
+            self::Treasurer => [...$console, 'members.manage', 'fees.manage', 'books.view', 'books.manage', 'reports.view'],
             self::PujaInCharge => [...$console, 'events.manage', 'chanda.record', 'passes.manage', 'passes.scan'],
             self::CateringInCharge => [...$console, 'catering.manage', 'books.catering'],
             self::NurseryInCharge => [...$console, 'nursery.manage', 'books.nursery'],

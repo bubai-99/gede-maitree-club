@@ -39,6 +39,10 @@ class TranslationsTest extends TestCase
             "/with\\(\\s*'status',\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             // Enum labels: self::Case => 'English label'
             "/self::\\w+\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
+            // Payment messages shown to people (translated where they are displayed)
+            "/PaymentException\\(\\s*'((?:[^'\\\\]|\\\\.)*)'/",
+            // Notes on payments and reasons in the bank statement check: const NOTE_X / REASON_X = 'English'
+            "/const (?:NOTE|REASON)_\\w+\\s*=\\s*'((?:[^'\\\\]|\\\\.)*)'/",
         ];
 
         // Editable page text: field labels and default text are translation keys.

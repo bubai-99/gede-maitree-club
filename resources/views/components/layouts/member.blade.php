@@ -16,11 +16,11 @@
     <link rel="manifest" href="{{ asset('member.webmanifest') }}">
     <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png') }}">
 </head>
-<body class="min-h-dvh bg-paper-2" data-sw="{{ asset('sw.js') }}">
+<body class="app-shell min-h-dvh bg-paper-2" data-sw="{{ asset('sw.js') }}">
     <a href="#main" class="skip-link">{{ __('Skip to content') }}</a>
 
     <div class="lg:grid lg:grid-cols-[272px_minmax(0,1fr)] min-h-dvh">
-        <aside class="hidden lg:flex flex-col sticky top-0 h-dvh border-r border-rule bg-paper" aria-label="{{ __('Member app') }}">
+        <aside data-no-print class="hidden lg:flex flex-col sticky top-0 h-dvh border-r border-rule bg-paper" aria-label="{{ __('Member app') }}">
             <a href="{{ $homeUrl }}" class="flex items-center gap-3 px-5 h-[72px] shrink-0 border-b border-rule">
                 <x-seal :size="40" :estd="false" aria-hidden="true" />
                 <span class="min-w-0 leading-tight">
@@ -61,7 +61,7 @@
         </aside>
 
         <div class="min-w-0 flex flex-col">
-            <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm border-b border-rule">
+            <header data-no-print class="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm border-b border-rule">
                 <div class="mx-auto max-w-[1120px] h-14 lg:h-[72px] px-4 sm:px-6 lg:px-10 flex items-center gap-2">
                     <a href="{{ $homeUrl }}" class="flex items-center gap-2.5 min-w-0 lg:hidden" aria-label="{{ __('Home') }}">
                         <x-seal :size="32" :estd="false" aria-hidden="true" />
@@ -94,7 +94,7 @@
     </div>
 
     @if ($tabs)
-        <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-rule bg-paper/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]" aria-label="{{ __('App') }}">
+        <nav data-no-print class="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-rule bg-paper/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]" aria-label="{{ __('App') }}">
             <div class="grid max-w-xl mx-auto" style="grid-template-columns: repeat({{ count($tabs) }}, minmax(0, 1fr))">
                 @foreach ($tabs as $tab)
                     <a href="{{ $tab['url'] }}" @if ($tab['active']) aria-current="page" @endif class="relative flex flex-col items-center gap-0.5 pt-2 pb-2.5 text-[11.5px] font-medium text-ink-3 aria-[current=page]:text-sindoor">

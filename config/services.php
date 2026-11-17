@@ -40,4 +40,23 @@ return [
         'driver' => env('OTP_DRIVER', 'log'),
     ],
 
+    // Online payments with Razorpay Standard Checkout. While the key ID or secret is blank the
+    // member app falls back to UPI to the club's own UPI ID, confirmed by the treasurer.
+    // The key ID is public (it goes to the browser); the key secret and webhook secret never do.
+    'razorpay' => [
+        'key_id' => env('RAZORPAY_KEY_ID'),
+        'key_secret' => env('RAZORPAY_KEY_SECRET'),
+        'webhook_secret' => env('RAZORPAY_WEBHOOK_SECRET'),
+        'api_url' => 'https://api.razorpay.com/v1',
+        // Unpaid checkouts are marked expired after this many minutes (payments:expire).
+        'expire_after_minutes' => 30,
+    ],
+
+    // UPI to the club (fallback): the UPI ID and payee name in the upi://pay link and QR code.
+    // Blank means the UPI ID saved in the console's club settings.
+    'upi' => [
+        'id' => env('CLUB_UPI_ID'),
+        'name' => env('CLUB_UPI_NAME'),
+    ],
+
 ];

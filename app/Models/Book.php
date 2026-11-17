@@ -27,6 +27,14 @@ class Book extends Model
     }
 
     /**
+     * The book with this code (created on first use if the seeder has not run).
+     */
+    public static function forCode(BookCode $code): self
+    {
+        return self::query()->firstOrCreate(['code' => $code->value], ['name' => $code->englishLabel()]);
+    }
+
+    /**
      * @return HasMany<LedgerEntry, $this>
      */
     public function entries(): HasMany

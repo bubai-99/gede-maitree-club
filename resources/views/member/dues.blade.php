@@ -1,52 +1,75 @@
-@php($club = $site->club())
-<x-layouts.member :title="__('Dues')">
-    <h1 class="font-display text-[2rem] leading-tight">{{ __('Your dues') }}</h1>
-    <p class="text-ink-2 num">{{ __('Family') }} {{ $family->family_no }} · {{ rupees((int) $club['monthly_fee']) }} / {{ __('month') }}</p>
+@php
+    $labels = ['paid' => __('Paid'), 'due' => __('Due'), 'wait' => __('Checking'), 'next' => __('Upcoming'), 'waived' => __('Waived'), 'none' => __('Not billed')];
+    $tones = [
+        'paid' => 'bg-tulsi-wash text-tulsi border-tulsi/20',
+        'due' => 'bg-sindoor-wash text-sindoor-deep border-sindoor/30',
+        'wait' => 'bg-marigold-wash text-turmeric border-marigold/40',
+        'next' => 'bg-card text-ink-3 border-rule border-dashed',
+        'waived' => 'bg-paper-2 text-ink-2 border-rule',
+        'none' => 'bg-card text-ink-3 border-rule',
+    ];
+@endphp
+<x-layouts.member :title="__('Statement')">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+            <h1 class="font-display text-[2rem] leading-tight">{{ __('Statement') }}</h1>
+            <p class="text-ink-2 num">{{ __('Subscription for family :no, month by month.', ['no' => $family->family_no]) }}</p>
+        </div>
+        <button type="button" onclick="window.print()" class="btn btn-line btn-sm" data-no-print><x-icon name="printer" /><span>{{ __('Print or save as PDF') }}</span></button>
+    </div>
 
-    <section class="mt-6 card p-6" aria-labelledby="owe-h">
-        <h2 id="owe-h" class="text-[13px] font-semibold uppercase tracking-wide text-ink-3">{{ __('To pay') }}</h2>
-        @if ($outstanding > 0)
-            <p class="mt-2 font-display text-[2.6rem] leading-none num text-sindoor">{{ rupees($outstanding) }}</p>
-            <div class="mt-5 grid sm:grid-cols-2 gap-4">
-                <div class="rounded-xl border border-rule p-4">
-                    <p class="font-semibold flex items-center gap-2"><x-icon name="smartphone" class="w-5 h-5 text-sindoor" />{{ __('Pay by UPI') }}</p>
-                    <p class="mt-1 text-[14px] text-ink-2">{{ __('Scan with any UPI app. Put your name and lane in the note.') }}</p>
-                    <p class="mt-2 font-semibold num select-all">{{ $club['upi'] }}</p>
-                    <p class="mt-1 text-[13px] text-ink-3">{{ __('The treasurer confirms the payment and your receipt appears here.') }}</p>
-                </div>
-                <div class="rounded-xl border border-rule p-4">
-                    <p class="font-semibold flex items-center gap-2"><x-icon name="banknote" class="w-5 h-5 text-sindoor" />{{ __('I’ll pay cash') }}</p>
-                    <p class="mt-1 text-[14px] text-ink-2">{{ __('Daily 6–9 pm. The treasurer gives you a receipt on the spot.') }}</p>
-                    <p class="mt-2 text-[14px] text-ink-2">{{ local_text($club['address'], $club['address_bn']) }}</p>
-                </div>
+    <form method="GET" class="mt-5 flex flex-wrap items-center gap-2" data-no-print>
+        <label for="fy" class="text-sm text-ink-2">{{ __('Financial year') }}</label>
+        <select id="fy" name="fy" class="field h-10 w-auto" onchange="this.form.submit()">
+            @foreach ($years as $year)
+                <option value="{{ $year }}" @selected($fy === $year)>{{ local_date(\Illuminate\Support\Carbon::create($year, 4, 1), 'M Y') }} – {{ local_date(\Illuminate\Support\Carbon::create($year + 1, 3, 1), 'M Y') }}</option>
+            @endforeach
+        </select>
+        <noscript><button class="btn btn-line h-10">{{ __('Show') }}</button></noscript>
+    </form>
+
+    <div class="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
+        <div class="rounded-lg border border-rule bg-card p-3 sm:p-4"><p class="text-[13px] text-ink-3">{{ __('Paid') }}</p><p class="font-display text-[1.5rem] sm:text-[1.9rem] leading-tight text-tulsi num">{{ rupees($paid) }}</p></div>
+        <div class="rounded-lg border border-rule bg-card p-3 sm:p-4"><p class="text-[13px] text-ink-3">{{ __('Due') }}</p><p class="font-display text-[1.5rem] sm:text-[1.9rem] leading-tight num {{ $owed ? 'text-sindoor-deep' : '' }}">{{ rupees($owed) }}</p></div>
+        <div class="rounded-lg border border-rule bg-card p-3 sm:p-4"><p class="text-[13px] text-ink-3">{{ __('Still to come') }}</p><p class="font-display text-[1.5rem] sm:text-[1.9rem] leading-tight text-ink-2 num">{{ rupees($upcoming) }}</p></div>
+    </div>
+
+    <h2 class="sr-only">{{ __('Months') }}</h2>
+    <ol class="mt-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+        @foreach ($rows as $row)
+            <li class="rounded-lg border {{ $tones[$row['state']] }} px-3 py-2.5">
+                <p class="text-[13px] font-semibold">{{ local_date($row['month'], 'M Y') }}</p>
+                <p class="text-[12.5px] mt-0.5 flex items-center gap-1">@if ($row['state'] === 'paid')<x-icon name="check" class="w-3.5 h-3.5" />@endif{{ $labels[$row['state']] }}</p>
+            </li>
+        @endforeach
+    </ol>
+
+    <section class="mt-6 rounded-lg border border-rule bg-card" aria-labelledby="pay-h">
+        <h2 id="pay-h" class="px-4 pt-4 font-display text-[1.4rem]">{{ __('Payments this year') }}</h2>
+        @if ($payments->isNotEmpty())
+            <div class="overflow-x-auto">
+                <table class="khata-table mt-2 min-w-[520px]">
+                    <thead><tr><th scope="col">{{ __('Date') }}</th><th scope="col">{{ __('Receipt') }}</th><th scope="col">{{ __('Months') }}</th><th scope="col">{{ __('Mode') }}</th><th scope="col" class="amt">{{ __('Amount') }}</th></tr></thead>
+                    <tbody>
+                        @foreach ($payments as $payment)
+                            <tr>
+                                <td class="whitespace-nowrap">{{ local_date($payment->paid_at, 'j M Y') }}</td>
+                                <td><a href="{{ route('member.receipts.show', $payment) }}" class="font-semibold num hover:underline">{{ $payment->receipt_no }}</a>@if ($payment->status === \App\Enums\PaymentStatus::Cancelled) <span class="chip bg-ink text-white">{{ __('Cancelled') }}</span>@endif</td>
+                                <td>{{ $payment->monthsLabel() ?: '—' }}</td>
+                                <td>{{ $payment->modeLabel() }}</td>
+                                <td class="amt font-semibold">{{ rupees($payment->amount) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            @if ($site->isSample())
-                <p class="mt-3 text-[13px] text-sindoor-deep">{{ __('Sample UPI ID. Please don’t send money.') }}</p>
-            @endif
         @else
-            <p class="mt-2 font-display text-[2rem] leading-none text-tulsi">{{ __('All paid up') }}</p>
-            <p class="mt-2 text-ink-2">{{ __('Thank you. Your next month is due on the 1st.') }}</p>
+            <p class="p-4 text-ink-2">{{ __('No payments yet this year.') }}</p>
         @endif
     </section>
 
-    <section class="mt-6" aria-labelledby="statement-h">
-        <h2 id="statement-h" class="font-display text-[1.5rem]">{{ __('Statement') }}</h2>
-        <div class="mt-3 overflow-x-auto rounded-xl border border-rule bg-card khata">
-            <table class="khata-table">
-                <thead><tr><th scope="col" class="pl-16">{{ __('Month') }}</th><th scope="col" class="amt">{{ __('Amount') }}</th><th scope="col">{{ __('Status') }}</th></tr></thead>
-                <tbody>
-                    @forelse ($dues as $due)
-                        <tr>
-                            <td class="pl-16">{{ local_date($due->period, 'F Y') }}</td>
-                            <td class="amt">{{ rupees($due->amount) }}</td>
-                            <td><span class="chip {{ $due->status === \App\Enums\DueStatus::Due ? 'bg-sindoor-wash text-sindoor-deep' : 'bg-tulsi-wash text-tulsi' }}">{{ $due->status->label() }}</span></td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="3" class="pl-16 text-ink-2">{{ __('Nothing here yet.') }}</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <a href="{{ route('member.receipts.index') }}" class="mt-4 inline-flex items-center gap-1 text-[14px] font-semibold text-sindoor hover:underline">{{ __('Receipts') }}<x-icon name="arrow-right" class="w-4 h-4" /></a>
-    </section>
+    @if ($outstanding > 0)
+        <a href="{{ route('member.pay') }}" class="btn btn-primary w-full sm:w-auto h-12 mt-5" data-no-print><x-icon name="indian-rupee" /><span>{{ __('Pay :amount due', ['amount' => rupees($outstanding)]) }}</span></a>
+    @endif
+    <a href="{{ route('member.receipts.index') }}" class="mt-4 ml-1 inline-flex items-center gap-1 text-[14px] font-semibold text-sindoor hover:underline" data-no-print>{{ __('Receipts') }}<x-icon name="arrow-right" class="w-4 h-4" /></a>
 </x-layouts.member>

@@ -6,9 +6,13 @@ use App\Contracts\OtpSender;
 use App\Models\CateringPackage;
 use App\Models\CommitteeMember;
 use App\Models\Event;
+use App\Models\LedgerEntry;
 use App\Models\Notice;
 use App\Models\Plant;
 use App\Models\User;
+use App\Payments\ManualUpiGateway;
+use App\Payments\PaymentGateway;
+use App\Payments\RazorpayGateway;
 use App\Support\Otp\LogOtpSender;
 use App\Support\PageContent;
 use App\Support\SiteSettings;
@@ -32,6 +36,21 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(SiteSettings::class);
         $this->app->scoped(PageContent::class);
+
+        // Payments: Razorpay when its keys are set, otherwise UPI to the club's own UPI ID.
+        $this->app->bind(RazorpayGateway::class, fn (): RazorpayGateway => new RazorpayGateway(
+            keyId: (string) config('services.razorpay.key_id'),
+            keySecret: (string) config('services.razorpay.key_secret'),
+            webhookSecret: is_string(config('services.razorpay.webhook_secret')) ? config('services.razorpay.webhook_secret') : null,
+            apiUrl: (string) config('services.razorpay.api_url'),
+        ));
+        $this->app->bind(ManualUpiGateway::class, fn (): ManualUpiGateway => new ManualUpiGateway(
+            upiId: is_string(config('services.upi.id')) ? config('services.upi.id') : null,
+            payeeName: is_string(config('services.upi.name')) ? config('services.upi.name') : null,
+        ));
+        $this->app->bind(PaymentGateway::class, fn ($app): PaymentGateway => RazorpayGateway::configured()
+            ? $app->make(RazorpayGateway::class)
+            : $app->make(ManualUpiGateway::class));
 
         $this->app->bind(OtpSender::class, function (): OtpSender {
             return match (config('services.otp.driver')) {
@@ -60,6 +79,14 @@ class AppServiceProvider extends ServiceProvider
         Route::model('plant', Plant::class);
         Route::model('package', CateringPackage::class);
         Route::model('committee', CommitteeMember::class);
+        Route::model('entry', LedgerEntry::class);
+
+        // Console menu: the khata opens for anyone who may see at least one book.
+        Gate::define('khata.open', fn (User $user): bool => $user->can('viewAny', LedgerEntry::class));
+        Gate::define('reports.open', fn (User $user): bool => $user->can('viewReports', LedgerEntry::class));
+
+        // Razorpay webhooks: generous, but not unlimited.
+        RateLimiter::for('webhooks', fn (Request $request): Limit => Limit::perMinute(120)->by($request->ip()));
 
         // Website forms: a few sends a minute from one address, and a daily cap.
         RateLimiter::for('forms', fn (Request $request): array => [
@@ -67,7 +94,7 @@ class AppServiceProvider extends ServiceProvider
             Limit::perDay(50)->by($request->ip()),
         ]);
 
-        View::composer(['components.layouts.*', 'site.*', 'errors.*', 'member.*', 'admin.*'], function (\Illuminate\View\View $view): void {
+        View::composer(['components.layouts.*', 'site.*', 'errors.*', 'member.*', 'admin.*', 'partials.*'], function (\Illuminate\View\View $view): void {
             $view->with('site', $this->app->make(SiteSettings::class));
         });
     }

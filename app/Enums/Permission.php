@@ -16,6 +16,7 @@ final class Permission
         'members.manage',
         'fees.manage',
         'books.view',
+        'books.manage',
         'books.catering',
         'books.nursery',
         'reports.view',

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Member;
 use App\Http\Controllers\Site;
+use App\Http\Controllers\Webhooks;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -94,6 +95,16 @@ Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(fun
     Route::get('/', Member\HomeController::class)->name('home');
     Route::post('/logout', [MemberLoginController::class, 'destroy'])->name('logout');
 
+    // Paying dues: Razorpay Standard Checkout, or UPI to the club with a UTR (see PaymentGateway).
+    Route::controller(Member\PayController::class)->prefix('pay')->name('pay')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store')->middleware('throttle:20,1')->name('.store');
+        Route::get('/{payment}', 'show')->name('.show');
+        Route::post('/{payment}/razorpay', 'razorpay')->middleware('throttle:20,1')->name('.razorpay');
+        Route::post('/{payment}/utr', 'utr')->middleware('throttle:10,1')->name('.utr');
+        Route::get('/{payment}/done', 'done')->name('.done');
+    });
+
     Route::controller(Member\AccountController::class)->group(function () {
         Route::get('/dues', 'dues')->name('dues');
         Route::get('/receipts', 'receipts')->name('receipts.index');
@@ -146,4 +157,63 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
 
     Route::resource('enquiries', Admin\EnquiryController::class)->only(['index', 'show', 'update']);
     Route::get('/activity', Admin\ActivityController::class)->name('activity');
+
+    // Fees: cash entry, online and UPI payments, dues (policies: Treasurer and Admin)
+    Route::get('/collect', [Admin\CollectController::class, 'create'])->name('collect');
+    Route::post('/collect', [Admin\CollectController::class, 'store'])->name('collect.store');
+
+    Route::controller(Admin\BankImportController::class)->prefix('payments/import')->name('payments.import')->group(function () {
+        Route::get('/', 'create');
+        Route::post('/', 'store')->name('.store');
+        Route::get('/{token}', 'show')->whereUuid('token')->name('.show');
+        Route::post('/{token}', 'confirm')->whereUuid('token')->name('.confirm');
+    });
+
+    Route::controller(Admin\PaymentController::class)->prefix('payments')->name('payments.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/{payment}/confirm', 'confirm')->name('confirm');
+        Route::post('/{payment}/reject', 'reject')->name('reject');
+        Route::post('/{payment}/cancel', 'cancel')->name('cancel');
+    });
+
+    Route::controller(Admin\DueController::class)->prefix('dues')->name('dues.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/generate', 'generate')->name('generate');
+        Route::post('/remind', 'remind')->name('remind');
+        Route::get('/{family}', 'family')->name('family');
+        Route::post('/{family}/waive', 'waive')->name('waive');
+    });
+
+    // Books (khata), receipts register, cash and bank, reports
+    Route::controller(Admin\ReceiptController::class)->prefix('receipts')->name('receipts.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/export', 'export')->name('export');
+        Route::get('/{payment}', 'show')->name('show');
+    });
+
+    Route::controller(Admin\KhataController::class)->prefix('khata')->name('khata.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::post('/{entry}/reverse', 'reverse')->name('reverse');
+        Route::get('/{entry}/bill', 'bill')->name('bill');
+    });
+
+    Route::get('/cash', Admin\CashController::class)->name('cash');
+
+    Route::controller(Admin\ReportController::class)->prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/collections.csv', 'collections')->name('collections');
+        Route::get('/income-expenditure.csv', 'incomeExpenditure')->name('income-expenditure');
+    });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Webhooks (no session sign-in, no CSRF token: checked by signature)
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/webhooks/razorpay', Webhooks\RazorpayWebhookController::class)
+    ->middleware('throttle:webhooks')
+    ->name('webhooks.razorpay');
