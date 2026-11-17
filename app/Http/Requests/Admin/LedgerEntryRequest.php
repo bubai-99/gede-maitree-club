@@ -41,6 +41,7 @@ class LedgerEntryRequest extends FormRequest
             'entry_date' => ['required', 'date', 'before_or_equal:today', 'after:2014-01-01'],
             'note' => ['nullable', 'string', 'max:255'],
             'bill' => ['nullable', 'file', 'mimetypes:'.implode(',', LedgerEntry::BILL_MIMES), 'max:4096'],
+            'event_id' => ['nullable', 'integer', Rule::exists('events', 'id')],
         ];
     }
 
@@ -52,13 +53,14 @@ class LedgerEntryRequest extends FormRequest
     }
 
     /**
-     * @return array{type: LedgerType, head: LedgerHead, account: LedgerAccount, amount: int, entry_date: string, note: ?string}
+     * @return array{type: LedgerType, head: LedgerHead, account: LedgerAccount, amount: int, entry_date: string, note: ?string, event_id: ?int}
      */
     public function entryData(): array
     {
         $type = LedgerType::from($this->string('type')->toString());
 
         return [
+            'event_id' => $this->filled('event_id') && ! $type->isTransfer() ? $this->integer('event_id') : null,
             'type' => $type,
             'head' => $type->isTransfer() ? LedgerHead::CashTransfer : LedgerHead::from($this->string('head')->toString()),
             'account' => LedgerAccount::from($this->string('account')->toString()),

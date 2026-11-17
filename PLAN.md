@@ -48,7 +48,7 @@ Enforced on the server (middleware, policies, gates), never only in the UI.
 ## Milestones
 
 Each milestone ends with: tests green, Pint clean, Larastan clean,
-`npm run build` passing, one commit. Done so far: M0 to M7.
+`npm run build` passing, one commit. Done so far: M0 to M8.
 
 | # | Milestone | Done when |
 |---|---|---|
@@ -60,7 +60,7 @@ Each milestone ends with: tests green, Pint clean, Larastan clean,
 | M5 | Console & website CMS | Console shell and dashboard; CMS for pages, events, plants, packages, notices, contact, committee, menu, media; draft → publish; activity log |
 | M6 | Member app core | Home, dues, receipts, ID card, events, notices, profile; PWA manifests and service worker |
 | M7 | Fees & khata ✅ | Cash entry, online payments with Razorpay Standard Checkout (UPI to the club with a UTR as fallback), UPI confirm and bank statement matching, receipts with numbering, three books, reports |
-| M8 | Events, chanda, passes, scanner | Chanda book, sponsors, passes with QR, offline scanner |
+| M8 | Events, chanda, passes, scanner ✅ | Registrations and family passes with QR, chanda book (CH-26-0001 series), sponsors, cash handover, budget vs spent, offline gate scanner |
 | M9 | Catering & nursery | Enquiry → quote → advance → bill; roster; counter sale and stock |
 | M10 | Meetings, polls, push | Notices to members, AGM polls, web push |
 | M11 | Launch | Data import, backups, deploy to a VPS, HTTPS |
@@ -78,15 +78,25 @@ payments          id, family_id, amount, mode (cash|upi|online), gateway (razorp
                   upi_ref (UTR), received_by, receipt_no, status, note, paid_at, submitted_at, cancelled_at/by
 payment_due       payment_id, due_id
 books             id, code (club|catering|nursery)
-ledger_entries    id, book_id, entry_date, type (income|expense|deposit|withdrawal), account (cash|bank), head,
+ledger_entries    id, book_id, event_id?, entry_date, type (income|expense|deposit|withdrawal), account (cash|bank), head,
                   amount, note, source_type, source_id, recorded_by, reverses_id (+ bill photo, medialibrary)
 webhook_events    id, provider, event_id, event, payload, processed_at   (Razorpay webhooks already handled)
-receipt_counters  book_code, year, last_no          (MC-25-0142, CT-25-0018, NS-25-0311)
+receipt_counters  book_code, year, last_no          (MC-25-0142, CT-25-0018, NS-25-0311; "chanda" → CH-26-0001)
 events            id, slug, title, title_bn, kind, starts_at, time_label(_bn), place(_bn), pass_required,
-                  contact_role, chanda_box, about(_bn), schedule (json), bring (json), status, published_at
-chanda_entries    id, event_id, donor_name, area, amount, collected_by, receipt_no
-sponsors          id, event_id, name, amount, deliverable
-passes            id, event_id, member_id, qr_token, used_at, scanned_by
+                  registration_open, registration_closes_at, capacity, family_limit, members_only,
+                  contact_role, chanda_box, chanda_target, chanda_public, about(_bn), schedule (json), bring (json),
+                  budget (json), status, published_at, cancelled_at, cancel_reason(_bn), cancelled_by
+event_registrations id, event_id, family_id, people, status (registered|cancelled), registered_by, cancelled_at/by
+passes            id, event_id, registration_id, family_id, token_hash (sha256), token (encrypted), people, status,
+                  used_at, scanned_by, gate, entered_people
+pass_scans        id, uuid, event_id, pass_id, family_id, scanned_by, gate, method, result, people, let_in, offline,
+                  conflict (duplicate|cancelled), scanned_at, undone_at
+chanda_areas      id, event_id, name(_bn), collector_id, target, houses, visited, sort
+chanda_entries    id, event_id, chanda_area_id, family_id, sponsor_id, donor_name, donor_phone, show_name, amount,
+                  mode (cash|upi), upi_ref, collected_by, recorded_by, receipt_no, received_at, ledger_entry_id,
+                  handover_id, cancelled_at/by, cancel_reason
+sponsors          id, event_id, name(_bn), amount, deliverable(_bn), status (promised|received)
+cash_handovers    id, event_id, collector_id, received_by, expected, counted, receipts, note
 catering_packages id, name(_bn), for(_bn), rate, min_guests, popular, menu (json), menu_bn (json), sort
 catering_orders   id, customer_name, phone, is_member, event_date, guests, package_id, venue, status
 catering_roster   id, order_id, server_name, phone, is_leader, wage, confirmed

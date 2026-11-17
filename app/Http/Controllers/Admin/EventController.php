@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RegistrationStatus;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 /**
+ * Events: website content (draft → publish, as in the CMS) plus what the Puja in-charge runs:
+ * registration settings, who is coming, the gate and the chanda book.
+ *
  * @extends CmsController<Event>
  */
 class EventController extends CmsController
@@ -56,6 +63,19 @@ class EventController extends CmsController
         ];
     }
 
+    public function index(): View
+    {
+        Gate::authorize('viewAny', Event::class);
+
+        $events = Event::query()
+            ->withCount(['registrations as families' => fn ($q) => $q->where('status', RegistrationStatus::Registered->value)])
+            ->withSum(['registrations as people' => fn ($q) => $q->where('status', RegistrationStatus::Registered->value)], 'people')
+            ->orderByDesc('starts_at')
+            ->paginate(30);
+
+        return view('admin.events.index', ['events' => $events]);
+    }
+
     public function store(EventRequest $request): RedirectResponse
     {
         $event = Event::query()->create([...$request->eventData(), ...$this->statusFromButton($request)]);
@@ -70,5 +90,19 @@ class EventController extends CmsController
         $this->savePhoto($request, $event);
 
         return $this->saved($request, 'admin.events.index', __('Event'));
+    }
+
+    /**
+     * An event with registrations or chanda receipts is never deleted: cancel it instead.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $event = $this->record($request);
+
+        if ($event instanceof Event && ($event->registrations()->exists() || $event->chandaEntries()->exists())) {
+            return back()->with('error', __('This event has registrations or chanda receipts. Cancel it instead of deleting it.'));
+        }
+
+        return parent::destroy($request);
     }
 }

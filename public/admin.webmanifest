@@ -16,6 +16,7 @@
     { "src": "/icons/admin.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "Gate scanner", "short_name": "Gate", "url": "/admin/scan" },
     { "name": "Website", "url": "/admin/website" },
     { "name": "Enquiries", "url": "/admin/enquiries" }
   ]

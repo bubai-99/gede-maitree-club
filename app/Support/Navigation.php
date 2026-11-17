@@ -63,10 +63,15 @@ final class Navigation
             ['route' => 'admin.receipts.index', 'icon' => 'receipt', 'label' => 'Receipts register', 'ability' => 'fees.manage'],
             ['route' => 'admin.cash', 'icon' => 'landmark', 'label' => 'Cash & bank', 'ability' => 'khata.open'],
             ['route' => 'admin.reports.index', 'icon' => 'chart-column', 'label' => 'Reports', 'ability' => 'reports.open'],
+            ['route' => 'admin.chanda.index', 'icon' => 'hand-heart', 'label' => 'Puja chanda', 'ability' => 'chanda.open'],
+            ['route' => 'admin.chanda.cash', 'icon' => 'wallet', 'label' => 'Chanda cash', 'ability' => 'chanda.cash'],
+        ]],
+        ['group' => 'Club', 'items' => [
+            ['route' => 'admin.events.index', 'icon' => 'calendar-days', 'label' => 'Events', 'ability' => 'website.view'],
+            ['route' => 'admin.scan', 'icon' => 'scan-line', 'label' => 'Gate scanner', 'ability' => 'passes.scan'],
         ]],
         ['group' => 'Website', 'items' => [
             ['route' => 'admin.website', 'icon' => 'globe', 'label' => 'Website', 'ability' => 'website.view'],
-            ['route' => 'admin.events.index', 'icon' => 'calendar-days', 'label' => 'Events', 'ability' => 'website.view'],
             ['route' => 'admin.notices.index', 'icon' => 'megaphone', 'label' => 'Notices', 'ability' => 'website.view'],
             ['route' => 'admin.plants.index', 'icon' => 'sprout', 'label' => 'Nursery plants', 'ability' => 'website.view'],
             ['route' => 'admin.packages.index', 'icon' => 'chef-hat', 'label' => 'Serving packages', 'ability' => 'website.view'],

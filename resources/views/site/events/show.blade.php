@@ -45,6 +45,9 @@
             </nav>
             <p class="eyebrow text-marigold">{{ $event->kind->label() }}</p>
             <h1 class="mt-3 font-display leading-[1.04] text-[clamp(2.4rem,6vw,4.2rem)] max-w-[18ch]">{{ $event->tr('title') }}</h1>
+            @if ($event->isCancelled())
+                <p class="mt-4 inline-flex flex-wrap items-center gap-2 rounded-lg bg-sindoor px-4 py-2 text-white font-semibold" role="status"><x-icon name="ban" class="w-5 h-5" />{{ __('This event has been cancelled.') }} <span class="font-normal">{{ local_text($event->cancel_reason, $event->cancel_reason_bn) }}</span></p>
+            @endif
             <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[16px] text-white/90">
                 <li class="flex items-center gap-2"><x-icon name="calendar-days" class="w-4 h-4 text-marigold" />{{ local_date($event->starts_at, 'l, j F Y') }}</li>
                 <li class="flex items-center gap-2"><x-icon name="clock" class="w-4 h-4 text-marigold" />{{ $event->tr('time_label') }}</li>

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\Role;
 use App\Models\Event;
 use App\Models\Family;
+use App\Models\Notice;
 use App\Models\Payment;
 use App\Models\User;
 use Database\Seeders\BookSeeder;
@@ -45,11 +46,17 @@ class RolesTest extends TestCase
     public function test_only_admin_and_website_editor_may_edit_the_website(): void
     {
         $event = Event::factory()->create();
+        $notice = Notice::factory()->create();
 
         $this->assertTrue($this->withRole(Role::Admin)->can('update', $event));
         $this->assertTrue($this->withRole(Role::WebsiteEditor)->can('update', $event));
 
-        foreach ([Role::Treasurer, Role::PujaInCharge, Role::CateringInCharge, Role::NurseryInCharge, Role::Volunteer] as $role) {
+        // The Puja in-charge runs events (M8), but not the rest of the website.
+        $puja = $this->withRole(Role::PujaInCharge);
+        $this->assertTrue($puja->can('update', $event));
+        $this->assertFalse($puja->can('update', $notice));
+
+        foreach ([Role::Treasurer, Role::CateringInCharge, Role::NurseryInCharge, Role::Volunteer] as $role) {
             $user = $this->withRole($role);
             $this->assertTrue($user->can('view', $event), $role->value.' may look');
             $this->assertFalse($user->can('update', $event), $role->value.' may not edit');

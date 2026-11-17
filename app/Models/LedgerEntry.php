@@ -19,7 +19,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * put right with a reversing entry (same book, type and head, reverses_id set), which
  * counts as minus its amount in every total.
  */
-#[Fillable(['book_id', 'entry_date', 'type', 'account', 'head', 'amount', 'note', 'source_type', 'source_id', 'recorded_by', 'reverses_id'])]
+#[Fillable(['book_id', 'event_id', 'entry_date', 'type', 'account', 'head', 'amount', 'note', 'source_type', 'source_id', 'recorded_by', 'reverses_id'])]
 class LedgerEntry extends Model implements HasMedia
 {
     use InteractsWithMedia;
@@ -61,6 +61,16 @@ class LedgerEntry extends Model implements HasMedia
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
+    }
+
+    /**
+     * The event this line belongs to (puja chanda, sponsorship, puja expenses), if any.
+     *
+     * @return BelongsTo<Event, $this>
+     */
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
     }
 
     /**

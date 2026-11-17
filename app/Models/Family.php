@@ -65,6 +65,22 @@ class Family extends Model
     }
 
     /**
+     * @return HasMany<EventRegistration, $this>
+     */
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    /**
+     * @return HasMany<Pass, $this>
+     */
+    public function passes(): HasMany
+    {
+        return $this->hasMany(Pass::class);
+    }
+
+    /**
      * Rupees still owed.
      */
     public function outstanding(): int

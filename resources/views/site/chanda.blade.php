@@ -1,7 +1,9 @@
 @php
     $content = app(\App\Support\PageContent::class);
-    $target = (int) ($chanda['target'] ?? 0);
-    $budget = $chanda['budget'] ?? [];
+    // Shown only when the committee publishes the drive's totals (Console → Puja chanda → Budget).
+    $target = $public ? (int) $event->chanda_target : 0;
+    $collected = $summary['collected'] ?? 0;
+    $budget = $public ? array_map(fn ($b) => ['head' => $b['head'] ?? '', 'head_bn' => $b['head_bn'] ?? null, 'amount' => (int) ($b['amount'] ?? 0)], $event->budget ?? []) : [];
     $budgetTotal = array_sum(array_column($budget, 'amount'));
     $lastPuja = $chanda['last_puja'] ?? null;
     $spendTotal = $lastPuja ? array_sum(array_column($lastPuja['spend'], 'amount')) : 0;
@@ -12,11 +14,11 @@
     <x-page-banner page="chanda" />
 
     <div class="mx-auto max-w-[1160px] px-5 py-14">
-        @if ($target > 0)
+        @if ($public && $target > 0)
             <section class="grid lg:grid-cols-12 gap-8 items-start" aria-labelledby="drive-h">
                 <div class="lg:col-span-5">
                     <p class="gz-kicker">{{ __('Raising now') }}</p>
-                    <h2 id="drive-h" class="mt-2 gz-headline text-[clamp(1.8rem,4vw,2.6rem)]">{{ local_text($chanda['title'] ?? '', $chanda['title_bn'] ?? null) }}</h2>
+                    <h2 id="drive-h" class="mt-2 gz-headline text-[clamp(1.8rem,4vw,2.6rem)]">{{ $event->tr('title') }}</h2>
                     <p class="mt-4 font-display text-[2.6rem] num">{{ rupees($collected) }} <span class="text-[1.2rem] text-ink-2">/ {{ rupees($target) }}</span></p>
                     <div class="mt-3 h-3 rounded-full bg-paper-2 overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $percent }}" aria-label="{{ __('Raised so far') }}">
                         <div class="h-full bg-sindoor rounded-full bar-grow" style="width: {{ $percent }}%"></div>
@@ -41,17 +43,22 @@
                         <caption class="sr-only">{{ __('Chanda collected by lane') }}</caption>
                         <thead><tr><th scope="col" class="pl-16">{{ __('Lane') }}</th><th scope="col">{{ __('Volunteer') }}</th><th scope="col" class="amt">{{ __('Houses visited') }}</th><th scope="col" class="amt">{{ __('Collected') }}</th></tr></thead>
                         <tbody>
-                            @foreach ($chanda['areas'] ?? [] as $area)
+                            @foreach ($areas as $area)
                                 <tr>
-                                    <td class="pl-16">{{ local_text($area['lane'], $area['lane_bn'] ?? null) }}</td>
-                                    <td>{{ $area['volunteer'] }}</td>
-                                    <td class="amt">{{ digits($area['visited']) }} / {{ digits($area['houses']) }}</td>
-                                    <td class="amt">{{ rupees((int) ($byArea[$area['lane']] ?? 0)) }} <span class="text-ink-3">/ {{ rupees((int) $area['target']) }}</span></td>
+                                    <td class="pl-16">{{ $area->tr('name') }}</td>
+                                    <td>{{ $area->collector?->name ?? '—' }}</td>
+                                    <td class="amt">@if ($area->houses){{ digits((int) $area->visited) }} / {{ digits($area->houses) }}@else — @endif</td>
+                                    <td class="amt">{{ rupees((int) ($summary['by_area'][$area->id] ?? 0)) }} <span class="text-ink-3">/ {{ rupees($area->target) }}</span></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+                @if ($donors->isNotEmpty())
+                    <h3 class="mt-8 font-display text-[1.4rem]">{{ __('Thank you') }}</h3>
+                    <p class="mt-1 text-ink-2 text-[15px]">{{ __('Donors who agreed to be named. Everyone else gives quietly, and that is just as welcome.') }}</p>
+                    <p class="mt-3 text-[15px] leading-relaxed">{{ $donors->implode(' · ') }}</p>
+                @endif
             </section>
         @endif
 
@@ -102,7 +109,7 @@
                 <p class="mt-2 text-ink-2">{{ __('Local shops and businesses. Each gets a place at the puja: a banner, a board or a stage mention.') }}</p>
                 <ul class="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($sponsors as $sponsor)
-                        <li class="card p-5"><p class="font-semibold">{{ $sponsor->name }}</p><p class="text-ink-2 text-[14px]">{{ $sponsor->deliverable }}</p><p class="mt-1 font-display text-[1.3rem] num">{{ rupees($sponsor->amount) }}</p></li>
+                        <li class="card p-5"><p class="font-semibold">{{ $sponsor->tr('name') }}</p><p class="text-ink-2 text-[14px]">{{ $sponsor->tr('deliverable') }}</p><p class="mt-1 font-display text-[1.3rem] num">{{ rupees($sponsor->amount) }}</p></li>
                     @endforeach
                 </ul>
                 <a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="mt-5 btn btn-line"><x-icon name="message-circle" /><span>{{ __('I’d like to sponsor') }}</span></a>

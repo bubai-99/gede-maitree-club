@@ -22,6 +22,7 @@ final class Permission
         'reports.view',
         'events.manage',
         'chanda.record',
+        'chanda.manage',
         'passes.manage',
         'passes.scan',
         'catering.manage',

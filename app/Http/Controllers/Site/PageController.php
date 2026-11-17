@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Site;
 
+use App\Chanda\ChandaBook;
 use App\Enums\PlantCategory;
 use App\Http\Controllers\Controller;
 use App\Models\CateringPackage;
@@ -54,18 +55,27 @@ class PageController extends Controller
         ]);
     }
 
-    public function chanda(SiteSettings $site): View
+    /**
+     * The chanda drive. Totals, areas and sponsors are shown only when the committee has chosen
+     * to publish them (events.chanda_public); donors are named only when they agreed.
+     */
+    public function chanda(SiteSettings $site, ChandaBook $book): View
     {
         $chanda = $site->chanda();
-        $event = isset($chanda['event_slug']) ? Event::query()->published()->where('slug', $chanda['event_slug'])->first() : null;
-        $byArea = $event ? ChandaEntry::query()->where('event_id', $event->id)->selectRaw('area, sum(amount) as total')->groupBy('area')->pluck('total', 'area') : collect();
+        $slug = $chanda['event_slug'] ?? null;
+        $event = (is_string($slug) ? Event::query()->published()->collectingChanda()->where('slug', $slug)->first() : null)
+            ?? Event::query()->published()->collectingChanda()->where('chanda_public', true)->first();
+        $public = $event !== null && $event->chanda_public;
 
         return view('site.chanda', [
             'chanda' => $chanda,
             'event' => $event,
-            'collected' => (int) $byArea->sum(),
-            'byArea' => $byArea,
-            'sponsors' => $event ? Sponsor::query()->where('event_id', $event->id)->orderByDesc('amount')->get() : collect(),
+            'public' => $public,
+            'summary' => $public ? $book->summary($event) : null,
+            'areas' => $public ? $event->chandaAreas()->with('collector:id,name')->get() : collect(),
+            'donors' => $public ? ChandaEntry::query()->valid()->where('event_id', $event->id)->where('show_name', true)->whereNull('sponsor_id')
+                ->latest('received_at')->limit(30)->pluck('donor_name') : collect(),
+            'sponsors' => $public ? Sponsor::query()->where('event_id', $event->id)->orderByDesc('amount')->get() : collect(),
         ]);
     }
 

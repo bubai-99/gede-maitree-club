@@ -39,8 +39,8 @@ class TranslationsTest extends TestCase
             "/with\\(\\s*'status',\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             // Enum labels: self::Case => 'English label'
             "/self::\\w+\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'/",
-            // Payment messages shown to people (translated where they are displayed)
-            "/PaymentException\\(\\s*'((?:[^'\\\\]|\\\\.)*)'/",
+            // Payment, registration, gate and chanda messages shown to people (translated where they are displayed)
+            "/(?:Payment|Registration|Gate|Chanda)Exception\\(\\s*'((?:[^'\\\\]|\\\\.)*)'/",
             // Notes on payments and reasons in the bank statement check: const NOTE_X / REASON_X = 'English'
             "/const (?:NOTE|REASON)_\\w+\\s*=\\s*'((?:[^'\\\\]|\\\\.)*)'/",
         ];

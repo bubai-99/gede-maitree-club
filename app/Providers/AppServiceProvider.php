@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\OtpSender;
 use App\Models\CateringPackage;
+use App\Models\ChandaEntry;
 use App\Models\CommitteeMember;
 use App\Models\Event;
 use App\Models\LedgerEntry;
@@ -84,6 +85,11 @@ class AppServiceProvider extends ServiceProvider
         // Console menu: the khata opens for anyone who may see at least one book.
         Gate::define('khata.open', fn (User $user): bool => $user->can('viewAny', LedgerEntry::class));
         Gate::define('reports.open', fn (User $user): bool => $user->can('viewReports', LedgerEntry::class));
+        Gate::define('chanda.open', fn (User $user): bool => $user->can('viewAny', ChandaEntry::class));
+        Gate::define('chanda.cash', fn (User $user): bool => $user->can('receiveCash', ChandaEntry::class));
+
+        // Gate scanner: a busy gate scans a family every few seconds; sync uploads in batches.
+        RateLimiter::for('scanner', fn (Request $request): Limit => Limit::perMinute(240)->by('scan:'.($request->user()?->getAuthIdentifier() ?? $request->ip())));
 
         // Razorpay webhooks: generous, but not unlimited.
         RateLimiter::for('webhooks', fn (Request $request): Limit => Limit::perMinute(120)->by($request->ip()));

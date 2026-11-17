@@ -19,13 +19,14 @@ use Illuminate\Support\Facades\DB;
 class Khata
 {
     /**
-     * @param  array{type: LedgerType, head: LedgerHead, account: LedgerAccount, amount: int, entry_date: string, note: ?string}  $data
+     * @param  array{type: LedgerType, head: LedgerHead, account: LedgerAccount, amount: int, entry_date: string, note: ?string, event_id?: ?int}  $data
      */
     public function record(Book $book, array $data, User $by, ?UploadedFile $bill = null): LedgerEntry
     {
         return DB::transaction(function () use ($book, $data, $by, $bill): LedgerEntry {
             $entry = LedgerEntry::query()->create([
                 'book_id' => $book->id,
+                'event_id' => $data['event_id'] ?? null,
                 'entry_date' => $data['entry_date'],
                 'type' => $data['type'],
                 'account' => $data['type'] === LedgerType::Deposit ? LedgerAccount::Bank : ($data['type'] === LedgerType::Withdrawal ? LedgerAccount::Cash : $data['account']),

@@ -578,3 +578,10 @@ button.pj-cell:hover { border-color: rgba(43,47,54,.35); }
   .app-shell .receipt-paper { border: 1px solid #999 !important; box-shadow: none !important; break-inside: avoid; }
   .app-shell .print-only { display: block !important; }
 }
+
+/* =====================================================================
+   Gate scanner (/admin/scan): the moving line in the viewfinder
+   ===================================================================== */
+@keyframes scan-line { 0%, 100% { top: 6%; } 50% { top: 92%; } }
+.scanline { animation: scan-line 2.4s cubic-bezier(.45, 0, .55, 1) infinite; }
+@media (prefers-reduced-motion: reduce) { .scanline { animation: none; top: 50%; } }

@@ -13,7 +13,6 @@ use App\Enums\PlantLight;
 use App\Enums\PlantWater;
 use App\Enums\PublishStatus;
 use App\Models\CateringPackage;
-use App\Models\ChandaEntry;
 use App\Models\CommitteeMember;
 use App\Models\Due;
 use App\Models\Event;
@@ -23,7 +22,6 @@ use App\Models\Notice;
 use App\Models\Payment;
 use App\Models\Plant;
 use App\Models\SiteSetting;
-use App\Models\Sponsor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
@@ -57,24 +55,23 @@ class SampleDataSeeder extends Seeder
     }
 
     /**
-     * The current puja chanda drive: budget, lane targets and sponsors (SAMPLE figures),
-     * last puja's spending and the club's documents.
+     * The current puja chanda drive (SAMPLE figures): the budget, target and "show on the
+     * website" switch live on the event; last puja's spending and the club's documents are
+     * site settings. Areas, receipts and sponsors are made by SampleEventsSeeder.
      */
     private function chanda(): void
     {
         $drive = $this->data['drive'];
         $event = Event::query()->where('chanda_box', true)->first();
 
+        $event?->update([
+            'chanda_target' => $drive['target'],
+            'chanda_public' => true,
+            'budget' => array_map(fn (array $b): array => ['head' => $b['head'], 'head_bn' => $b['headBn'], 'amount' => $b['amount']], $drive['budget']),
+        ]);
+
         SiteSetting::query()->updateOrCreate(['key' => 'chanda'], ['value' => [
             'event_slug' => $event?->slug,
-            'title' => $drive['event'],
-            'title_bn' => $drive['eventBn'],
-            'target' => $drive['target'],
-            'budget' => array_map(fn (array $b): array => ['head' => $b['head'], 'head_bn' => $b['headBn'], 'amount' => $b['amount']], $drive['budget']),
-            'areas' => array_map(fn (array $a): array => [
-                'lane' => $a['lane'], 'lane_bn' => $a['laneBn'], 'volunteer' => $a['volunteer'],
-                'target' => $a['target'], 'houses' => $a['houses'], 'visited' => $a['visited'],
-            ], $drive['areas']),
             'last_puja' => [
                 'title' => 'Durga Puja 2026',
                 'title_bn' => 'দুর্গাপূজা ২০২৬',
@@ -84,24 +81,6 @@ class SampleDataSeeder extends Seeder
                 'title' => $d['en'], 'title_bn' => $d['bn'], 'note' => $d['note'], 'note_bn' => $d['noteBn'], 'size' => $d['size'], 'size_bn' => $d['sizeBn'],
             ], $this->data['documents']),
         ]]);
-
-        if ($event === null) {
-            return;
-        }
-
-        foreach ($drive['areas'] as $area) {
-            ChandaEntry::query()->updateOrCreate(['event_id' => $event->id, 'area' => $area['lane']], [
-                'donor_name' => 'Sample: lane total so far',
-                'amount' => $area['got'],
-            ]);
-        }
-
-        foreach ($drive['sponsors'] as $sponsor) {
-            Sponsor::query()->updateOrCreate(['event_id' => $event->id, 'name' => $sponsor['name']], [
-                'amount' => $sponsor['amount'],
-                'deliverable' => $sponsor['gives'],
-            ]);
-        }
     }
 
     /**
@@ -144,6 +123,9 @@ class SampleDataSeeder extends Seeder
                 'place' => $row['place'],
                 'place_bn' => $row['placeBn'],
                 'pass_required' => (bool) $row['pass'],
+                'registration_open' => (bool) $row['pass'],
+                'family_limit' => $row['pass'] ? 6 : null,
+                'capacity' => $row['id'] === 'picnic' ? 120 : null,
                 'contact_role' => $info['contact'] ?? 'Secretary',
                 'chanda_box' => (bool) ($info['chanda'] ?? false),
                 'about' => $info['about'] ?? null,

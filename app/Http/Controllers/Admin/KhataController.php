@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LedgerEntryRequest;
 use App\Http\Requests\Admin\ReverseEntryRequest;
 use App\Models\Book;
+use App\Models\Event;
 use App\Models\LedgerEntry;
 use App\Models\User;
 use App\Payments\Khata;
@@ -110,6 +111,9 @@ class KhataController extends Controller
             'heads' => collect(LedgerType::cases())->mapWithKeys(fn (LedgerType $t): array => [
                 $t->value => collect(LedgerHead::forType($t))->map(fn (LedgerHead $h): array => ['value' => $h->value, 'label' => $h->label()])->all(),
             ]),
+            // Events whose spending is tracked against a budget (recent and coming pujas).
+            'events' => Event::query()->where(fn ($q) => $q->where('chanda_box', true)->orWhereNotNull('budget'))
+                ->where('starts_at', '>=', now()->subYear())->orderByDesc('starts_at')->get(['id', 'title', 'title_bn', 'starts_at']),
         ]);
     }
 

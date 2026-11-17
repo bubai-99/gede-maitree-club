@@ -115,9 +115,18 @@ Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(fun
 
     Route::controller(Member\ClubController::class)->group(function () {
         Route::get('/events', 'events')->name('events.index');
+        Route::get('/events/passes', 'passes')->name('events.passes');
+        Route::get('/events/past', 'past')->name('events.past');
+        Route::get('/events/passes/{pass}', 'pass')->whereNumber('pass')->name('passes.show');
         Route::get('/events/{event}', 'event')->name('events.show');
         Route::get('/notices', 'notices')->name('notices.index');
         Route::get('/notices/{notice}', 'notice')->name('notices.show');
+    });
+
+    // Registering the family for an event (limits, seats and cut-off in App\Passes\Registrations).
+    Route::controller(Member\RegistrationController::class)->middleware('throttle:20,1')->group(function () {
+        Route::post('/events/{event}/registration', 'store')->name('events.register');
+        Route::delete('/events/{event}/registration', 'destroy')->name('events.unregister');
     });
 });
 
@@ -147,6 +156,52 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         Route::post("/{$name}/{{$parameter}}/publish", [$controller, 'publish'])->name("{$name}.publish");
         Route::delete("/{$name}/{{$parameter}}/publish", [$controller, 'unpublish'])->name("{$name}.unpublish");
     }
+
+    // Events: who is coming, attendance, cancelling (Puja in-charge and Admin; EventPolicy)
+    Route::controller(Admin\EventRegistrationController::class)->prefix('events/{event}/registrations')->name('events.registrations')->scopeBindings()->group(function () {
+        Route::get('/', 'index');
+        Route::get('/export', 'export')->name('.export');
+        Route::post('/', 'store')->name('.store');
+        Route::post('/{registration}/cancel', 'cancel')->name('.cancel');
+    });
+    Route::get('/events/{event}/cancel', [Admin\EventCancelController::class, 'create'])->name('events.cancel');
+    Route::post('/events/{event}/cancel', [Admin\EventCancelController::class, 'store'])->name('events.cancel.store');
+
+    // Puja chanda book (Puja in-charge, Treasurer, Admin; volunteers in their own area)
+    Route::prefix('chanda')->name('chanda.')->group(function () {
+        Route::get('/', [Admin\ChandaController::class, 'index'])->name('index');
+        Route::get('/cash', [Admin\CashHandoverController::class, 'index'])->name('cash');
+        Route::post('/cash', [Admin\CashHandoverController::class, 'store'])->name('cash.store');
+        Route::get('/receipts/{receipt}', [Admin\ChandaController::class, 'receipt'])->whereNumber('receipt')->name('receipt');
+        Route::post('/receipts/{receipt}/cancel', [Admin\ChandaController::class, 'cancel'])->whereNumber('receipt')->name('receipt.cancel');
+        Route::put('/areas/{area}', [Admin\ChandaSetupController::class, 'updateArea'])->name('areas.update');
+        Route::delete('/areas/{area}', [Admin\ChandaSetupController::class, 'destroyArea'])->name('areas.destroy');
+        Route::post('/sponsors/{sponsor}/receive', [Admin\ChandaSetupController::class, 'receiveSponsor'])->name('sponsors.receive');
+        Route::delete('/sponsors/{sponsor}', [Admin\ChandaSetupController::class, 'destroySponsor'])->name('sponsors.destroy');
+
+        Route::get('/{event}', [Admin\ChandaController::class, 'show'])->name('show');
+        Route::get('/{event}/receipts', [Admin\ChandaController::class, 'receipts'])->name('receipts');
+        Route::get('/{event}/receipts/export', [Admin\ChandaController::class, 'export'])->name('export');
+        Route::get('/{event}/receipts/create', [Admin\ChandaController::class, 'create'])->name('create');
+        Route::post('/{event}/receipts', [Admin\ChandaController::class, 'store'])->middleware('throttle:60,1')->name('store');
+        Route::get('/{event}/budget', [Admin\ChandaSetupController::class, 'editBudget'])->name('budget');
+        Route::put('/{event}/budget', [Admin\ChandaSetupController::class, 'updateBudget'])->name('budget.update');
+        Route::post('/{event}/areas', [Admin\ChandaSetupController::class, 'storeArea'])->name('areas.store');
+        Route::post('/{event}/sponsors', [Admin\ChandaSetupController::class, 'storeSponsor'])->name('sponsors.store');
+    });
+
+    // Gate scanner (Volunteer, Puja in-charge, Admin): JSON for the scanner module, CSRF from the page
+    Route::prefix('scan')->name('scan')->middleware('can:passes.scan')->controller(Admin\ScanController::class)->group(function () {
+        Route::get('/', 'page');
+        Route::middleware('throttle:scanner')->group(function () {
+            Route::get('/{event}/passes', 'passes')->name('.passes');
+            Route::post('/{event}/scans', 'store')->name('.store');
+            Route::patch('/scans/{scan}', 'update')->name('.update');
+            Route::delete('/scans/{scan}', 'destroy')->name('.destroy');
+            Route::post('/{event}/sync', 'sync')->name('.sync');
+            Route::get('/{event}/shift', 'shift')->name('.shift');
+        });
+    });
 
     Route::get('/pages', [Admin\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/{key}', [Admin\PageController::class, 'edit'])->whereIn('key', array_keys(config('pages')))->name('pages.edit');

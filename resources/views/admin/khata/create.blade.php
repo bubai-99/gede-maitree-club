@@ -59,6 +59,19 @@
 
         <x-field name="entry_date" :label="__('Date')" type="date" :value="now()->toDateString()" max="{{ now()->toDateString() }}" class="max-w-xs" required />
         <x-field name="note" :label="__('Note')" :hint="__('For example: CESC bill, October. Or the bank slip number for a deposit.')" maxlength="255" />
+        @if ($events->isNotEmpty())
+            <div class="max-w-md">
+                <label for="f-event_id" class="label">{{ __('For event (optional)') }}</label>
+                <select id="f-event_id" name="event_id" class="field">
+                    <option value="">—</option>
+                    @foreach ($events as $event)
+                        <option value="{{ $event->id }}" @selected((int) old('event_id', request('event')) === $event->id)>{{ $event->tr('title') }} · {{ local_date($event->starts_at, 'j M Y') }}</option>
+                    @endforeach
+                </select>
+                <p class="mt-1.5 text-[13px] text-ink-3">{{ __('Puja expenses marked for an event show as “spent” against its budget.') }}</p>
+                <x-field-error name="event_id" />
+            </div>
+        @endif
 
         <div>
             <p class="label">{{ __('Bill photo') }} <span class="text-ink-3 font-normal">({{ __('optional') }})</span></p>

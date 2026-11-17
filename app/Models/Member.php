@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * A person in a member family (each gets an ID card).
@@ -38,14 +37,6 @@ class Member extends Model
     public function family(): BelongsTo
     {
         return $this->belongsTo(Family::class);
-    }
-
-    /**
-     * @return HasMany<Pass, $this>
-     */
-    public function passes(): HasMany
-    {
-        return $this->hasMany(Pass::class);
     }
 
     public function age(): ?int

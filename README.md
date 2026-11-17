@@ -6,7 +6,7 @@ Kolkata. One Laravel codebase serves four surfaces:
 - **Website** (`/`): public, bilingual (English and Bengali), SEO friendly.
 - **Member app** (`/app`): families see dues, receipts, their ID card, events and notices.
 - **Committee console** (`/admin`): members, fees, events and the website CMS.
-- **Gate scanner** (`/admin/scan`): planned for a later milestone.
+- **Gate scanner** (`/admin/scan`): offline-first pass checking at the puja gate.
 
 The build plan, roles and data model are in [PLAN.md](PLAN.md). The clickable prototype in the
 design repository (`Design/mock`) is the reference for every screen, word and colour.
@@ -309,16 +309,125 @@ Without keys the app keeps working with UPI to the club: set `CLUB_UPI_ID` and `
 UPI ID in Console → Club settings). The sample UPI ID is a placeholder; the app says so while the sample
 data setting is on.
 
+## Events, passes and the gate scanner
+
+### Events and registration (console → Events; Puja in-charge and Admin)
+
+Events are still website content (draft → publish; the website shows published events only), and the
+Puja in-charge may now create, edit and publish them too. The event form has *Registration and passes*:
+families can register in the app (on/off), members need a pass (QR at the gate), members only (active
+families), seats (people, blank = no limit), most people per family (blank = 10) and the date registration
+closes (blank = when the event starts). An event with registrations or chanda receipts cannot be deleted.
+
+- **Who's coming** (`/admin/events/{event}/registrations`): families and people against the seats, who
+  has been scanned in (time, gate, volunteer, head count), attendance by gate, re-entries, scans to look at
+  (offline duplicates), *Download CSV*, *Print list*, and *Register a family* at the desk (the committee may
+  do this after registration closes; seat limits still apply).
+- **Cancel this event and tell everyone**: needs a reason (English, optional Bengali). Registration closes,
+  every pass stops working at the gate, a pinned members-only notice goes into the app, and the page lists a
+  WhatsApp (`wa.me`) link with the message filled in for every registered family. Nothing is sent by the app.
+
+All registration rules live in `App\Passes\Registrations`, which locks the event row while a registration is
+made or changed, so two families cannot both take the last seats.
+
+### Member app: registering and passes
+
+`/app/events` has three tabs: *Upcoming*, *My passes* (`/app/events/passes`) and *Past* (`/app/events/past`).
+On an event the family chooses how many people are coming (up to the family limit, while seats last) and
+can change or cancel until registration closes. When the event needs a pass the family gets **one pass per
+registration**, shown large with the event, date, family number and head count (`/app/events/passes/{pass}`).
+Members only ever see their own family's passes (checked in the controller, so no role can widen it).
+
+**What the QR holds:** `GMP1.` followed by 32 random URL-safe characters (192 bits), nothing else: no family
+number, no name. The database finds a pass by the SHA-256 hash of the token (`passes.token_hash`); the token
+itself is stored encrypted with the app key, only so the app can draw the same QR again. Cancelling and
+registering again gives a new token, so an old screenshot stops working. Pass pages are ordinary pages, so
+the service worker keeps them: once opened they show without internet.
+
+### Gate scanner (`/admin/scan`; Volunteer, Puja in-charge, Admin)
+
+A dark, phone-sized page built as a plain ES module (`resources/js/scan.js`, no Alpine), installable through
+the committee manifest (it has a *Gate scanner* shortcut). Pick the event and name the gate (kept on the
+phone), then point the camera at a **pass QR** or a **member card QR**, or tap *Type family number instead*.
+
+- Results as in the prototype: **Let them in** (green, with a head count you can lower for those actually
+  coming in; it closes by itself after a few seconds), **Already inside** (amber, with the time, gate and
+  volunteer of the first entry, and *Let back in* for someone who stepped out), and red for **no pass for this
+  event**, **pass cancelled**, **pass for another event** and **pass not found**.
+- *Undo last* works for two minutes and only for the person who scanned; undo is in the audit log.
+- *End my shift* shows your scans, people let in and turned away, and signs out (it warns if scans are still
+  waiting to upload).
+- The server marks a pass used inside a transaction with the pass row locked (`SELECT ... FOR UPDATE`), so
+  two gates scanning the same pass at the same moment admit it once; the second gets *Already inside*.
+- JSON endpoints under `/admin/scan/...` use the session and the page's CSRF token, are limited to 240
+  requests a minute per volunteer (`throttle:scanner`), and are never cached by the service worker.
+
+**Camera library:** [`barcode-detector`](https://github.com/Sec-ant/barcode-detector) (MIT), a ponyfill of the
+W3C Barcode Detection API built on ZXing-C++ compiled to WebAssembly (`zxing-wasm`, MIT). It is actively
+maintained (monthly releases in 2026; pinned to 3.2.3), whereas `html5-qrcode` (last release 2023, looking
+for maintainers) and `qr-scanner` (last release 2022) are not. Its `.wasm` file would normally come from a
+CDN; here it is imported with Vite (`zxing-wasm/reader/zxing_reader.wasm?url`), served from this site and
+fetched when the page opens, so the service worker has it for scanning without signal.
+
+**Offline:** when an event is picked the phone downloads its pass list into IndexedDB: for each pass the
+SHA-256 hash of the token, the family number, the members' card numbers, the head count and whether it is
+cancelled or already used (no names, no tokens). Online, each scan goes to the server. If the request fails
+(no signal, timeout, server error) the phone checks the QR against its own list (it hashes the token with
+Web Crypto), shows the result at once with *Checked on this phone*, remembers the pass as used on this
+phone, and queues the scan; head-count changes, *Let back in* and undo are queued too. The header shows
+*Offline · n* and how many scans wait. The queue uploads by itself when the phone comes back online, every
+20 seconds while anything waits, and with *Sync now* (`POST /admin/scan/{event}/sync`, in order, each scan
+with the phone's own id so an upload repeated after a dropped connection is stored once). The server keeps
+what happened at the gate (people the phone let in did go in) and resolves conflicts: the **earliest**
+admission of a pass becomes its entry (first scan wins) and later admissions are marked *duplicate*; a
+pass let in although it had been cancelled is marked too. Duplicates are reported to the phone after a
+sync and listed on *Who's coming* for the committee. If the sign-in has ended, the scans stay on the phone
+until someone signs in again. Camera and Web Crypto need HTTPS (or `localhost`).
+
+## Puja chanda book (console → Puja chanda)
+
+Puja in-charge, Treasurer and Admin see and run everything; a **volunteer** records chanda only in an area
+assigned to them, always as the collector, and sees only their own receipts.
+
+- **Drive at a glance:** collected (door to door and sponsors) against the target and the budget, budget vs
+  collected vs **spent** (khoroch in the khata marked for this event: the khata entry form has *For event*),
+  areas with their volunteer, houses visited and collected against target, sponsors, latest receipts.
+- **Receipts:** every gift (donor, area, amount in whole rupees, cash or UPI with the UTR, who collected it,
+  optional family number and mobile) gets the next number in the **chanda series `CH-26-0001`**
+  (`App\Support\ReceiptNumbers::nextChanda()`, counter row `receipt_counters.book_code = 'chanda'`, locked
+  like the book series). The number is taken in the same transaction that saves the receipt, so a failed save
+  gives it back and the series has no gaps; the register checks the series and a cancelled receipt keeps its
+  number. Printable receipt (same print styles as M7) with a WhatsApp link.
+- **Khata:** each receipt is joma in the **Club book** (head *Puja chanda*, or *Sponsorship* for a sponsor;
+  cash in hand for cash, bank for UPI) tagged with the event. Posting is idempotent (`ChandaBook::post()`
+  locks the receipt and remembers its khata line); cancelling a receipt adds a reversing entry.
+- **Sponsors:** name, amount, what they get, promised or received; *mark received* writes a CH receipt.
+- **Cash handover** (console → Chanda cash; Treasurer and Admin): cash each collector still holds (with an
+  *Over 7 days* flag); the treasurer counts it and records the handover (a different count needs a note).
+  The cash was already joma when the receipts were written; the handover records who holds it.
+- **Website `/chanda`:** the target, totals by area and sponsors show only when the committee ticks *Show on
+  the website* in the budget form; donors are named only when they agreed (a tick on the receipt form).
+
+Online chanda through the payment gateway was left out: `payments` belong to a family and its dues
+(`family_id` is required, confirming marks months paid and writes *Subscription*), so taking chanda from
+non-members would mean reworking the M7 payment code. Chanda by UPI is recorded with its UTR instead.
+
+Sample data (`SampleEventsSeeder`): five SAMPLE volunteers (`volunteer1@example.org` …, random passwords not
+printed; use *Forgot password* to try a volunteer's view), the Saraswati Puja drive with its areas, receipts
+from "Sample donor" names, three sponsors, one handover and two sample puja expenses, and registrations with
+passes for the sample events that need a pass.
+
 ## Not built yet
 
-These are later milestones in [PLAN.md](PLAN.md) and have no routes yet: chanda book, passes and the
-offline gate scanner, catering orders and roster, nursery counter sales and stock, meetings, polls and
-web push, data import and deployment. Also left for later:
+These are later milestones in [PLAN.md](PLAN.md) and have no routes yet: catering orders and roster,
+nursery counter sales and stock, meetings, polls and web push, data import and deployment. Also left for
+later:
 
 - one-time codes by SMS (only the log driver exists until the club has a DLT-registered sender);
 - the committee's second sign-in step shown in the prototype;
 - refunds through the Razorpay API (refund in the Razorpay Dashboard, then cancel the receipt);
-- a second signature for large expenses and cash handovers between collectors (shown in the prototype);
+- online chanda through the payment gateway (see *Puja chanda book*);
+- a second signature for large expenses, and the collector confirming a cash handover on their own phone;
 - receipts for the Catering and Nursery books (they come with their screens in M9);
 - the panjika calendar (placeholder page);
 - editing the gallery albums in the console (they are site settings seeded from the prototype).

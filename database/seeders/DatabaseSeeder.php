@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SampleDataSeeder::class,
             SampleUsersSeeder::class,
             SampleAccountsSeeder::class,
+            SampleEventsSeeder::class,
         ]);
     }
 }
