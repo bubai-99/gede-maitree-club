@@ -50,7 +50,7 @@
                     <div class="text-center leading-none">
                         <span class="block text-[11.5px] font-bold uppercase tracking-[0.16em]">{{ __('Next up') }}</span>
                         <span class="block mt-2 font-display text-[3rem] num">{{ local_date($nextEvent->starts_at, 'd') }}</span>
-                        <span class="block mt-1 text-[13px] font-semibold">{{ local_date($nextEvent->starts_at, 'M') }}</span>
+                        <span class="block mt-1 text-[13px] font-semibold">{{ local_date($nextEvent->starts_at, 'F') }}</span>
                     </div>
                     <div class="min-w-0 border-l border-ink/25 pl-5">
                         <p class="font-display text-[1.6rem] leading-tight"><a href="{{ route('events.show', $nextEvent) }}" class="hover:underline decoration-2">{{ $nextEvent->tr('title') }}</a></p>
@@ -58,8 +58,20 @@
                         <p class="text-[14px] flex items-center gap-1.5"><x-icon name="map-pin" class="w-4 h-4" /><span>{{ $nextEvent->tr('place') }}</span></p>
                     </div>
                 </div>
-                <div class="md:ml-auto flex flex-wrap items-center gap-4 px-6 py-5 border-t md:border-t-0 border-dashed border-ink/30 gz-perf">
-                    <p class="text-[14px] font-semibold num">{{ trans_choice('{0} Today|{1} Tomorrow|[2,*] In :count days', (int) now()->startOfDay()->diffInDays($nextEvent->starts_at->copy()->startOfDay()), ['count' => digits((int) now()->startOfDay()->diffInDays($nextEvent->starts_at->copy()->startOfDay()))]) }}</p>
+                <div class="md:ml-auto flex flex-wrap items-center gap-4 px-6 py-5 border-t md:border-t-0 gz-perf md:border-l-2 border-dashed border-ink/30" style="border-left-style:dashed">
+                    @php
+                        $secs = max(0, $nextEvent->starts_at->getTimestamp() - now()->getTimestamp());
+                        $cd = [[intdiv($secs, 86400), __('days')], [intdiv($secs % 86400, 3600), __('hours')], [intdiv($secs % 3600, 60), __('minutes')]];
+                    @endphp
+                    @if ($secs === 0 || $nextEvent->starts_at->isToday())
+                        <div class="bg-white/60 rounded-[4px] px-3 py-2 font-semibold">{{ __('Happening today') }}</div>
+                    @else
+                        <div class="flex gap-1.5 text-center num" role="timer" aria-label="{{ __(':days days :hours hours to go', ['days' => digits($cd[0][0]), 'hours' => digits($cd[1][0])]) }}">
+                            @foreach ($cd as [$value, $unit])
+                                <div class="bg-white/55 rounded-lg px-2.5 py-1.5 min-w-[56px]" aria-hidden="true"><div class="font-display text-[1.6rem] leading-none">{{ digits(str_pad((string) $value, 2, '0', STR_PAD_LEFT)) }}</div><div class="text-[11.5px] font-semibold mt-0.5 text-ink">{{ $unit }}</div></div>
+                            @endforeach
+                        </div>
+                    @endif
                     <div class="flex gap-2">
                         <a href="{{ route('events.show', $nextEvent) }}" class="btn btn-ink h-11">{{ __('Details') }}</a>
                         <a href="https://wa.me/{{ $site->club()['whatsapp'] }}" target="_blank" rel="noopener" class="btn h-11 border border-ink/30 hover:bg-white/40"><x-icon name="message-circle" /><span>{{ __('Ask') }}</span></a>
@@ -154,12 +166,12 @@
                 <div><p class="gz-kicker">{{ __('From the gallery') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('The para in pictures') }}</h2></div>
                 <a href="{{ route('gallery') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('Open the gallery') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
             </div>
-            <div class="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar px-5 snap-x snap-mandatory">
+            <div class="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar px-5 [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
                 @foreach ($strip as $item)
-                    <figure class="shrink-0 w-[70vw] sm:w-[320px] snap-start">
-                        <div class="relative aspect-[4/3] rounded-[14px] overflow-hidden bg-paper-3"><x-photo :key="$item['photo']" :width="640" sizes="320px" /></div>
-                        <figcaption class="mt-2 text-[13px] text-ink-2">{{ local_text($item['day']['title'], $item['day']['title_bn'] ?? null) }} · <x-photo-credit :key="$item['photo']" class="text-ink-3" /></figcaption>
-                    </figure>
+                    <a href="{{ route('gallery') }}" class="relative shrink-0 w-[210px] sm:w-[260px] aspect-[4/5] rounded-[18px] overflow-hidden group bg-paper-3" aria-label="{{ local_text($item['day']['title'], $item['day']['title_bn'] ?? null) }}">
+                        <x-photo :key="$item['photo']" :width="700" sizes="300px" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                        <span class="absolute left-2 bottom-2 rounded bg-black/45 px-1.5 py-0.5 text-[10.5px] text-white/90"><x-photo-credit :key="$item['photo']" /></span>
+                    </a>
                 @endforeach
             </div>
         </div>
@@ -172,10 +184,29 @@
                 <p class="gz-kicker">{{ __('Open books') }}</p>
                 <h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Where your chanda went') }}</h2>
                 <p class="mt-4 text-[17px] text-ink-2 leading-relaxed max-w-[42ch]">{{ __('How each ₹100 of chanda was spent at :puja. Every bill is entered in the club khata, and the accounts are audited and presented at the AGM.', ['puja' => local_text($lastPuja['title'], $lastPuja['title_bn'] ?? null)]) }}</p>
+                <p class="mt-6 flex items-baseline gap-3"><span class="font-display text-[clamp(2.6rem,6vw,3.6rem)] leading-none text-sindoor num">₹{{ digits(100) }}</span><span class="text-[15px] text-ink-2">{{ __('of chanda, shared out') }}</span></p>
+                <p class="mt-2 text-[14px] text-ink-3">{{ __('The full figures are on the chanda page.') }}</p>
                 <a href="{{ route('chanda') }}" class="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-sindoor hover:underline"><span>{{ __('Full accounts and this year’s chanda') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
             </div>
             <div class="lg:col-span-7">
-                @include('site.partials.spend-ledger', ['spend' => $lastPuja['spend'], 'total' => $spendTotal])
+                @php
+                    // Largest-remainder rounding so the shares add up to exactly ₹100
+                    $raw = array_map(fn ($row) => $row['amount'] * 100 / $spendTotal, $lastPuja['spend']);
+                    $shares = array_map(fn ($r) => (int) floor($r), $raw);
+                    $order = array_keys($raw);
+                    usort($order, fn ($a, $b) => ($raw[$b] - $shares[$b]) <=> ($raw[$a] - $shares[$a]));
+                    foreach (array_slice($order, 0, 100 - array_sum($shares)) as $i) { $shares[$i]++; }
+                @endphp
+                <div class="gz-ledger rounded-[18px] border gz-hair shadow-[0_1px_2px_rgba(0,0,0,.04)] overflow-hidden">
+                    <div class="pl-12 pr-5 h-12 flex items-center justify-between border-b border-ink/25 text-[12.5px] font-bold uppercase tracking-wide text-ink-2"><span>{{ __('Spent on') }}</span><span>{{ __('Of every ₹100') }}</span></div>
+                    <ol class="pl-12 pr-5">
+                        @foreach ($lastPuja['spend'] as $i => $row)
+                            @php $colour = preg_match('/^#[0-9a-fA-F]{6}$/', (string) ($row['colour'] ?? '')) ? $row['colour'] : '#2b2f36'; @endphp
+                            <li class="flex items-center gap-3 text-[15.5px]"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:{{ $colour }}" aria-hidden="true"></span><span class="flex-1 min-w-0">{{ local_text($row['head'], $row['head_bn'] ?? null) }}</span><span class="hidden sm:block w-28 h-1.5 rounded-full bg-ink/10 overflow-hidden" aria-hidden="true"><span class="block h-full" style="width:{{ min(100, $shares[$i] * 2.5) }}%;background:{{ $colour }}"></span></span><span class="w-14 text-right font-semibold num">₹{{ digits($shares[$i]) }}</span></li>
+                        @endforeach
+                        <li class="flex items-center gap-3 font-semibold border-t-2 border-ink/70"><span class="flex-1">{{ __('Total') }}</span><span class="w-14 text-right text-sindoor num">₹{{ digits(100) }}</span></li>
+                    </ol>
+                </div>
             </div>
         </div>
     @endif
@@ -189,7 +220,10 @@
             </div>
             <ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 @foreach ($committee as $person)
-                    @include('site.partials.person', ['person' => $person])
+                    <li class="card p-5 flex items-center gap-4">
+                        <span class="w-12 h-12 shrink-0 rounded-full bg-sindoor-wash text-sindoor-deep grid place-items-center font-semibold" aria-hidden="true">{{ $person->initials() }}</span>
+                        <span class="min-w-0"><span class="block font-semibold leading-snug">{{ $person->tr('name') }}</span><span class="block text-[14px] text-ink-2">{{ $person->tr('role') }}</span></span>
+                    </li>
                 @endforeach
             </ul>
             <p class="mt-4 text-[14px] text-ink-3">{{ __('Elected by members at the AGM every two years. All volunteers.') }}</p>

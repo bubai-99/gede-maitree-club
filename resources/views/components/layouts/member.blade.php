@@ -5,6 +5,7 @@
     $nav = \App\Support\Navigation::groups(\App\Support\Navigation::MEMBER, $user);
     $tabs = \App\Support\Navigation::items(\App\Support\Navigation::MEMBER_TABS, $user);
     $homeUrl = Route::has('member.home') ? route('member.home') : url('/');
+    $owed = $user?->family ? (int) $user->family->dues()->where('status', \App\Enums\DueStatus::Due->value)->sum('amount') : 0;
 @endphp
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
@@ -22,7 +23,7 @@
     <div class="lg:grid lg:grid-cols-[272px_minmax(0,1fr)] min-h-dvh">
         <aside data-no-print class="hidden lg:flex flex-col sticky top-0 h-dvh border-r border-rule bg-paper" aria-label="{{ __('Member app') }}">
             <a href="{{ $homeUrl }}" class="flex items-center gap-3 px-5 h-[72px] shrink-0 border-b border-rule">
-                <x-seal :size="40" :estd="false" aria-hidden="true" />
+                <x-seal :size="40" :rotate="-6" aria-hidden="true" />
                 <span class="min-w-0 leading-tight">
                     <span class="block font-display text-[1.15rem] text-sindoor truncate">{{ __('Gede Maitree Club') }}</span>
                     <span class="block text-[12.5px] text-ink-3">{{ __('Member app') }}</span>
@@ -36,26 +37,18 @@
                     <ul class="space-y-0.5">
                         @foreach ($group['items'] as $item)
                             <li><a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" @endif class="flex items-center gap-3 h-10 px-3 rounded-md text-ink-2 hover:bg-paper-2 hover:text-ink aria-[current=page]:bg-sindoor-wash aria-[current=page]:text-sindoor-deep aria-[current=page]:font-semibold">
-                                <x-icon :name="$item['icon']" class="w-[18px] h-[18px]" /><span class="truncate">{{ __($item['label']) }}</span></a></li>
+                                <x-icon :name="$item['icon']" class="w-[18px] h-[18px] shrink-0" /><span class="truncate">{{ __($item['label']) }}</span>@if ($item['route'] === 'member.pay' && $owed > 0)<span class="ml-auto text-[12.5px] font-semibold text-sindoor-deep num">{{ rupees($owed) }}</span>@endif</a></li>
                         @endforeach
                     </ul>
                 @endforeach
             </nav>
             @if ($user)
-                <div class="border-t border-rule p-3 shrink-0 flex items-center gap-2">
-                    <span class="w-10 h-10 rounded-full bg-ink text-white grid place-items-center font-display" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span>
-                    <span class="min-w-0 flex-1 leading-tight">
-                        <span class="block font-semibold truncate">{{ $user->name }}</span>
-                        @if ($user->family)
-                            <span class="block text-[13px] text-ink-3 num">{{ $user->family->family_no }}</span>
-                        @endif
-                    </span>
-                    @if (Route::has('member.logout'))
-                        <form method="POST" action="{{ route('member.logout') }}">
-                            @csrf
-                            <button type="submit" class="w-9 h-9 grid place-items-center rounded-md hover:bg-paper-2" aria-label="{{ __('Sign out') }}" title="{{ __('Sign out') }}"><x-icon name="log-out" class="w-4 h-4" /></button>
-                        </form>
-                    @endif
+                <div class="border-t border-rule p-3 shrink-0">
+                    <a href="{{ route('member.profile') }}" class="flex items-center gap-3 rounded-lg p-2 hover:bg-paper-2">
+                        <span class="w-10 h-10 text-base rounded-full bg-ink text-white grid place-items-center font-display shrink-0" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span>
+                        <span class="min-w-0 flex-1 leading-tight"><span class="block font-semibold truncate">{{ $user->name }}</span>@if ($user->family)<span class="block text-[13px] text-ink-3 num">{{ $user->family->family_no }}@if ($user->family->head_name === $user->name) · {{ __('Head of family') }}@endif</span>@endif</span>
+                        <x-icon name="chevron-right" class="w-4 h-4 text-ink-3" />
+                    </a>
                 </div>
             @endif
         </aside>
@@ -68,14 +61,17 @@
                         <span class="font-display text-[1.1rem] text-sindoor truncate">{{ __('Gede Maitree Club') }}</span>
                     </a>
                     @if ($user)
-                        <p class="hidden lg:block text-[15px] text-ink-2 min-w-0 truncate">{{ __('Namaskar') }}, <span class="font-semibold text-ink">{{ \Illuminate\Support\Str::before($user->name, ' ') }}</span> · {{ local_date(now(), 'l, j F') }}</p>
+                        <p class="hidden lg:block text-[15px] text-ink-2 min-w-0 truncate">{{ __('Namaskar') }}, <span class="font-semibold text-ink">{{ \Illuminate\Support\Str::before($user->name, ' ') }}</span> · {{ local_date(now(), 'D j M Y') }}</p>
                     @endif
                     <div class="ml-auto flex items-center gap-1">
-                        <x-lang-switch />
+                        <x-lang-switch variant="app" class="mr-1 lg:mr-2" />
+                        @if ($user)
+                            <a href="{{ route('member.profile') }}" class="w-11 h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Family & profile') }}"><span class="w-8 h-8 text-sm rounded-full bg-ink text-white grid place-items-center font-display" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span></a>
+                        @endif
                         @if ($user && Route::has('member.logout'))
-                            <form method="POST" action="{{ route('member.logout') }}" class="lg:hidden">
+                            <form method="POST" action="{{ route('member.logout') }}">
                                 @csrf
-                                <button type="submit" class="w-11 h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Sign out') }}"><x-icon name="log-out" class="w-5 h-5" /></button>
+                                <button type="submit" class="w-11 h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Sign out') }}" title="{{ __('Sign out') }}"><x-icon name="log-out" class="w-5 h-5" /></button>
                             </form>
                         @endif
                     </div>

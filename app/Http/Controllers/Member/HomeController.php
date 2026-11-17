@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use App\Enums\DueStatus;
 use App\Enums\PaymentStatus;
+use App\Enums\RegistrationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Family;
@@ -27,6 +28,10 @@ class HomeController extends Controller
             'dues' => $family->dues()->where('status', DueStatus::Due->value)->get(),
             'lastPayment' => $family->payments()->where('status', PaymentStatus::Confirmed->value)->first(),
             'nextEvent' => Event::query()->published()->upcoming()->first(),
+            'upcoming' => Event::query()->published()->upcoming()->limit(3)->get(),
+            'registered' => $family->registrations()->where('status', RegistrationStatus::Registered->value)->pluck('event_id')->all(),
+            'pending' => $family->payments()->where('status', PaymentStatus::AwaitingConfirmation->value)->first(),
+            'people' => $family->members()->get(),
             'notices' => Notice::query()->forMembers()->limit(3)->get(),
         ]);
     }

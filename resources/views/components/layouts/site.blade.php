@@ -102,6 +102,29 @@
     </main>
 
     <footer class="site-footer bg-ink text-white/75 text-[15px]">
+        {{-- Club news on WhatsApp: the club adds the number by hand, so this opens a chat with the club --}}
+        <div class="news-band relative overflow-hidden">
+            <div class="relative z-[1] mx-auto max-w-[1160px] px-5 py-12 sm:py-14 lg:py-16 grid lg:grid-cols-12 gap-8 lg:gap-14 lg:items-center">
+                <div class="lg:col-span-6 relative">
+                    <p class="flex items-center gap-2 text-[12.5px] leading-none font-semibold uppercase tracking-[0.14em] text-marigold"><span class="w-1.5 h-1.5 rounded-full bg-marigold"></span><span>{{ __('The club letter') }}</span></p>
+                    <h2 class="mt-3 font-display text-white leading-[1.08] text-[clamp(1.9rem,4.2vw,2.75rem)]">{{ __('Never miss a puja, a match or a meeting') }}</h2>
+                    <p class="mt-3 text-white/70 max-w-[46ch]">{{ __('Two or three short notes a month: the date, the time and what to bring. No ads, and your number is never shared.') }}</p>
+                    <ul class="mt-5 flex flex-wrap gap-2 text-[13.5px]">
+                        <li class="news-chip"><x-icon name="flame" class="w-4 h-4 text-marigold" /><span>{{ __('Puja dates') }}</span></li>
+                        <li class="news-chip"><x-icon name="trophy" class="w-4 h-4 text-marigold" /><span>{{ __('Sports and contests') }}</span></li>
+                        <li class="news-chip"><x-icon name="users" class="w-4 h-4 text-marigold" /><span>{{ __('Meeting notices') }}</span></li>
+                    </ul>
+                </div>
+                <div class="lg:col-span-5 lg:col-start-8 relative">
+                    <p class="text-[13.5px] font-semibold text-white/85">{{ __('Get the news on WhatsApp') }}</p>
+                    <div class="mt-3 sm:flex sm:items-center sm:rounded-full sm:bg-white sm:p-1.5">
+                        <p class="flex-1 min-w-0 flex items-center rounded-full bg-white text-ink h-12 px-5 text-[14px] truncate">{{ __('Send “News” to the club and we add you') }}</p>
+                        <a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ rawurlencode(__('Please add me to the club news')) }}" target="_blank" rel="noopener" class="btn btn-primary h-12 px-6 rounded-full shrink-0 w-full sm:w-auto mt-2 sm:mt-0"><x-icon name="message-circle" class="w-4 h-4" /><span>{{ __('Subscribe') }}</span></a>
+                    </div>
+                    <p class="mt-3 flex items-center gap-2 text-[12.5px] text-white/55 sm:pl-5"><x-icon name="shield-check" class="w-4 h-4 shrink-0" /><span>{{ __('Reply STOP any time to leave.') }}</span></p>
+                </div>
+            </div>
+        </div>
         <div class="mx-auto max-w-[1160px] px-5">
             <div class="py-12 grid grid-cols-2 md:grid-cols-12 gap-x-6 gap-y-10">
                 <div class="col-span-2 md:col-span-4">

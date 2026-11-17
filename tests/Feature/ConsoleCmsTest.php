@@ -79,7 +79,7 @@ class ConsoleCmsTest extends TestCase
         Enquiry::factory()->count(3)->create();
         $this->as(Role::Treasurer);
 
-        $this->get('/admin')->assertOk()->assertSee('Website enquiries')->assertSeeInOrder(['Website enquiries', '3']);
+        $this->get('/admin')->assertOk()->assertSee('3 website enquiries to answer');
     }
 
     public function test_a_website_editor_adds_an_event_as_a_draft_then_publishes_it(): void
