@@ -45,13 +45,32 @@ class PageController extends Controller
     public function gallery(Request $request, SiteSettings $site): View
     {
         $albums = $site->galleryAlbums();
-        $request->validate(['album' => ['nullable', Rule::in(array_column($albums, 'key'))]]);
+        $all = $site->galleryDays();
+        $years = array_values(array_unique(array_map(fn (array $day): string => substr((string) $day['date'], 0, 4), $all)));
+
+        $request->validate([
+            'album' => ['nullable', Rule::in(array_column($albums, 'key'))],
+            'type' => ['nullable', Rule::in(['photo', 'video'])],
+            'year' => ['nullable', Rule::in($years)],
+            'open' => ['nullable', Rule::in(array_column($all, 'id'))],
+            'i' => ['nullable', 'integer', 'min:0'],
+        ]);
         $album = $request->string('album')->toString();
+        $year = $request->string('year')->toString();
+
+        // An open album is shown as a watch page: the chosen item large, the album as a playlist.
+        $open = $request->filled('open') ? collect($all)->firstWhere('id', $request->string('open')->toString()) : null;
 
         return view('site.gallery', [
             'albums' => $albums,
             'album' => $album,
-            'days' => array_values(array_filter($site->galleryDays(), fn (array $day): bool => $album === '' || $day['album'] === $album)),
+            'type' => $request->string('type')->toString(),
+            'year' => $year,
+            'years' => $years,
+            'open' => $open,
+            'index' => is_array($open) ? min($request->integer('i'), max(0, count($open['items']) - 1)) : 0,
+            'others' => is_array($open) ? array_slice(array_values(array_filter($all, fn (array $day): bool => $day['id'] !== $open['id'])), 0, 4) : [],
+            'days' => array_values(array_filter($all, fn (array $day): bool => ($album === '' || $day['album'] === $album) && ($year === '' || str_starts_with((string) $day['date'], $year)))),
         ]);
     }
 

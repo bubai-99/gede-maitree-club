@@ -5,14 +5,26 @@ namespace App\Http\Controllers\Site;
 use App\Enums\NoticeAudience;
 use App\Http\Controllers\Controller;
 use App\Models\Notice;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NoticeController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        // Filter chips: each tag in use, with how many notices carry it
+        $tags = Notice::query()->forPublic()->whereNotNull('tag')->get(['tag', 'tag_bn'])
+            ->groupBy('tag')->map(fn ($group): array => ['tag' => (string) $group->first()?->tag, 'label' => (string) $group->first()?->tr('tag'), 'count' => $group->count()])
+            ->values();
+
+        $request->validate(['tag' => ['nullable', 'string', 'max:60']]);
+        $tag = $request->string('tag')->toString();
+
         return view('site.notices.index', [
-            'notices' => Notice::query()->forPublic()->paginate(12),
+            'tags' => $tags,
+            'tag' => $tag,
+            'total' => Notice::query()->forPublic()->count(),
+            'notices' => Notice::query()->forPublic()->when($tag !== '', fn ($q) => $q->where('tag', $tag))->paginate(12)->withQueryString(),
         ]);
     }
 

@@ -189,14 +189,7 @@
                 <a href="{{ route('chanda') }}" class="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-sindoor hover:underline"><span>{{ __('Full accounts and this year’s chanda') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
             </div>
             <div class="lg:col-span-7">
-                @php
-                    // Largest-remainder rounding so the shares add up to exactly ₹100
-                    $raw = array_map(fn ($row) => $row['amount'] * 100 / $spendTotal, $lastPuja['spend']);
-                    $shares = array_map(fn ($r) => (int) floor($r), $raw);
-                    $order = array_keys($raw);
-                    usort($order, fn ($a, $b) => ($raw[$b] - $shares[$b]) <=> ($raw[$a] - $shares[$a]));
-                    foreach (array_slice($order, 0, 100 - array_sum($shares)) as $i) { $shares[$i]++; }
-                @endphp
+                @php $shares = \App\Support\Shares::of100(array_column($lastPuja['spend'], 'amount')); @endphp
                 <div class="gz-ledger rounded-[18px] border gz-hair shadow-[0_1px_2px_rgba(0,0,0,.04)] overflow-hidden">
                     <div class="pl-12 pr-5 h-12 flex items-center justify-between border-b border-ink/25 text-[12.5px] font-bold uppercase tracking-wide text-ink-2"><span>{{ __('Spent on') }}</span><span>{{ __('Of every ₹100') }}</span></div>
                     <ol class="pl-12 pr-5">
