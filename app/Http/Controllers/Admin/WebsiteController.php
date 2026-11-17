@@ -8,6 +8,7 @@ use App\Models\CateringPackage;
 use App\Models\CommitteeMember;
 use App\Models\Event;
 use App\Models\Notice;
+use App\Models\Page;
 use App\Models\Plant;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
@@ -35,6 +36,10 @@ class WebsiteController extends Controller
         }
         unset($section);
 
-        return view('admin.website', ['sections' => $sections]);
+        return view('admin.website', [
+            'sections' => $sections,
+            'definitions' => config('pages'),
+            'pages' => Page::query()->get()->keyBy('key'),
+        ]);
     }
 }

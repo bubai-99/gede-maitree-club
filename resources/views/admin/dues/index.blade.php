@@ -28,12 +28,13 @@
             @endforeach
         </select>
         @if ($status === \App\Enums\DueStatus::Due)
-            <label for="d-min" class="sr-only">{{ __('Months overdue') }}</label>
-            <select id="d-min" name="min" class="field h-9 text-sm w-auto">
+            <input type="hidden" name="min" value="{{ $min }}">
+            <nav class="flex flex-wrap gap-2" aria-label="{{ __('Months overdue') }}">
                 @foreach ($minTabs as $value => $label)
-                    <option value="{{ $value }}" @selected($min === $value)>{{ $label }} ({{ digits($counts[$value]) }})</option>
+                    <a href="{{ route('admin.dues.index', array_filter(['min' => $value, 'area' => $area])) }}" @if ($min === $value) aria-current="page" @endif
+                        class="chip h-9 px-3.5 text-sm border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-paper aria-[current=page]:border-ink">{{ $label }} <span class="opacity-75 num">{{ digits($counts[$value]) }}</span></a>
                 @endforeach
-            </select>
+            </nav>
         @else
             <label for="d-month" class="sr-only">{{ __('Month') }}</label>
             <input id="d-month" type="month" name="month" value="{{ $month?->format('Y-m') }}" class="field h-9 text-sm w-auto">

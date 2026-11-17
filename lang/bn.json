@@ -1632,5 +1632,20 @@
     "Family on this membership": "এই সদস্যপদে পরিবার",
     "Your details": "আপনার বিবরণ",
     "Language and sign-in": "ভাষা ও লগইন",
-    ":count person|:count people": ":count জন|:count জন"
+    ":count person|:count people": ":count জন|:count জন",
+    "This page went to the pandal": "এই পাতা প্যান্ডেলে গেছে",
+    "The link may be old, or the page has moved. Everything else is right where it was.": "লিঙ্কটা পুরনো হতে পারে, বা পাতাটা সরে গেছে। বাকি সব যেখানে ছিল সেখানেই আছে।",
+    "Club home": "ক্লাবের প্রথম পাতা",
+    "Popular pages": "জনপ্রিয় পাতা",
+    "Book the serving team": "পরিবেশন দল বুক করুন",
+    "Looking for your card or dues?": "কার্ড বা বকেয়া খুঁজছেন?",
+    "Open website": "ওয়েবসাইট খুলুন",
+    "Content": "বিষয়বস্তু",
+    "Contact, menu & SEO": "যোগাযোগ, মেনু ও SEO",
+    "Save draft keeps your work private. Publish puts it on the website.": "খসড়া রাখলে কাজ গোপন থাকে। প্রকাশ করলে ওয়েবসাইটে ওঠে।",
+    "The fixed pages of the website. Open one to edit its sections.": "ওয়েবসাইটের স্থায়ী পাতা। অংশ বদলাতে একটি খুলুন।",
+    "Sections": "অংশ",
+    "Last published": "শেষ প্রকাশ",
+    "Original text": "মূল লেখা",
+    "Waiting to be published": "প্রকাশের অপেক্ষায়"
 }

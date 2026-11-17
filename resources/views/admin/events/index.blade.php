@@ -27,7 +27,7 @@
                         </td>
                         <td>
                             @if ($event->pass_required)
-                                <span class="chip border border-ink/40"><x-icon name="ticket" />{{ __('Pass needed') }}</span>
+                                <span class="chip border border-ink/40 whitespace-nowrap"><x-icon name="ticket" />{{ __('Pass needed') }}</span>
                             @else
                                 <span class="text-sm text-ink-3">{{ $event->members_only ? __('Members only') : __('Open to all') }}</span>
                             @endif
