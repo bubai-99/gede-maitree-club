@@ -1,11 +1,11 @@
 <x-layouts.member :title="__('Events & passes')">
-    <h1 class="font-display text-[2rem] leading-tight">{{ __('Events & passes') }}</h1>
+    <h1 class="font-display text-[1.7rem] lg:text-[2.3rem] leading-tight">{{ __('Events & passes') }}</h1>
     <p class="mt-1 text-ink-2">{{ __('Register your family, get passes and add events to your calendar.') }}</p>
 
-    <nav class="mt-5 inline-flex rounded-full border border-rule bg-card p-1 text-[14.5px] font-semibold" aria-label="{{ __('Events view') }}">
+    <nav class="mt-5 inline-grid grid-flow-col auto-cols-fr p-1 rounded-[7px] bg-paper-2 w-full sm:w-auto" aria-label="{{ __('Events view') }}">
         @foreach ([['upcoming', 'member.events.index', __('Upcoming')], ['passes', 'member.events.passes', __('My passes')], ['past', 'member.events.past', __('Past')]] as [$key, $route, $label])
-            <a href="{{ route($route) }}" @if ($tab === $key) aria-current="page" @endif class="px-4 h-9 inline-flex items-center gap-1.5 rounded-full text-ink-2 aria-[current=page]:bg-ink aria-[current=page]:text-paper">
-                {{ $label }}@if ($key === 'passes' && $passCount)<span class="num text-[12px] opacity-80">{{ digits($passCount) }}</span>@endif
+            <a href="{{ route($route) }}" @if ($tab === $key) aria-current="page" @endif class="h-9 px-4 rounded-[5px] text-[14.5px] font-semibold text-ink-2 whitespace-nowrap inline-flex items-center justify-center gap-1.5 aria-[current=page]:bg-white aria-[current=page]:text-ink aria-[current=page]:shadow-[0_1px_2px_rgba(0,0,0,.12)]">
+                {{ $label }}@if ($key === 'passes' && $passCount)<span class="num text-ink-3">{{ digits($passCount) }}</span>@endif
             </a>
         @endforeach
     </nav>

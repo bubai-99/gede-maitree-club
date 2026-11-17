@@ -86,10 +86,16 @@ class ClubController extends Controller
         return view('member.events.pass', ['pass' => $pass]);
     }
 
-    public function notices(): View
+    public function notices(Request $request): View
     {
+        $request->validate(['tag' => ['nullable', 'string', 'max:60']]);
+        $tag = $request->string('tag')->toString();
+
         return view('member.notices.index', [
-            'notices' => Notice::query()->forMembers()->paginate(15),
+            'tag' => $tag,
+            'tags' => Notice::query()->forMembers()->whereNotNull('tag')->get(['tag', 'tag_bn'])
+                ->unique('tag')->map(fn (Notice $n): array => ['tag' => (string) $n->tag, 'label' => (string) $n->tr('tag')])->values(),
+            'notices' => Notice::query()->forMembers()->when($tag !== '', fn ($q) => $q->where('tag', $tag))->paginate(15)->withQueryString(),
         ]);
     }
 
