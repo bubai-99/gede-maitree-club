@@ -30,7 +30,7 @@
         'plants' => $plantData,
         'category' => $category?->value ?? '',
         'whatsapp' => $whatsapp,
-        'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total')],
+        'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total'), 'name' => __('Name'), 'member' => __('Member no.'), 'pickup' => __('Pickup')],
     ];
 @endphp
 <x-layouts.site seo="nursery" :title="$content->text('nursery', 'title')">
@@ -183,6 +183,7 @@
                     <span class="chip h-6 px-2 text-[12.5px] bg-tulsi-wash text-tulsi num" x-text="num(items)"></span>
                     <button type="button" x-ref="cartClose" @click="closeCart()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
                 </header>
+                <form class="flex-1 min-h-0 flex flex-col" @submit.prevent="sendOrder()">
                 <div class="flex-1 overflow-y-auto px-5">
                     <p x-show="! lines.length" class="py-16 text-center text-ink-3">{{ __('Your basket is empty. Tap Add on any plant.') }}</p>
                     <ul class="divide-y divide-rule">
@@ -207,16 +208,38 @@
                             </li>
                         </template>
                     </ul>
+
+                    {{-- Who is ordering: goes into the WhatsApp message (WhatsApp already shows their number);
+                         the name and member number are remembered on this phone --}}
+                    <fieldset x-show="lines.length" class="border-t border-rule pt-5 pb-6 space-y-4">
+                        <legend class="float-left w-full mb-4 font-semibold">{{ __('Your details') }}</legend>
+                        <div class="clear-left">
+                            <label for="buyer-name" class="label">{{ __('Your name') }}</label>
+                            <input id="buyer-name" name="name" class="field" x-model.trim="buyer.name" autocomplete="name" maxlength="80" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="buyer-member" class="label">{{ __('Member no.') }} <span class="font-normal text-ink-3">({{ __('if any') }})</span></label>
+                                <input id="buyer-member" name="member_no" class="field uppercase placeholder:normal-case" x-model.trim="buyer.memberNo" placeholder="MC-0101-1" maxlength="20" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="buyer-pickup" class="label">{{ __('Pickup day') }}</label>
+                                <input id="buyer-pickup" name="pickup" type="date" class="field" x-model="buyer.pickup" :min="today">
+                            </div>
+                        </div>
+                        <p class="text-[12.5px] text-ink-3">{{ __('WhatsApp sends your number with the message, so we can reply.') }}</p>
+                    </fieldset>
                 </div>
                 <footer class="border-t border-rule px-5 py-4 bg-card shrink-0" x-show="lines.length">
                     <dl class="space-y-1 text-[15px]">
                         <div class="flex"><dt class="text-ink-2">{{ __('Total') }}</dt><dd class="ml-auto font-display text-[1.6rem] leading-none num" x-text="rupees(total)"></dd></div>
                         <div class="flex text-[13.5px]"><dt class="text-tulsi">{{ __('Members pay') }}</dt><dd class="ml-auto text-tulsi font-semibold num" x-text="rupees(memberTotal)"></dd></div>
                     </dl>
-                    <a :href="orderLink" target="_blank" rel="noopener" class="mt-4 btn w-full h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="message-circle" />{{ __('Order on WhatsApp') }}</a>
+                    <button type="submit" class="mt-4 btn w-full h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="message-circle" />{{ __('Order on WhatsApp') }}</button>
                     <button type="button" @click="closeCart()" class="mt-2 btn btn-ghost w-full h-10 text-ink-2">{{ __('Keep browsing') }}</button>
                     <p class="mt-2 text-[12.5px] text-ink-3 text-center">{{ __('Nothing is paid now. Collect at the club gate and pay in cash or UPI.') }}</p>
                 </footer>
+                </form>
             </aside>
         </div>
 

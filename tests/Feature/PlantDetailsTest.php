@@ -44,4 +44,16 @@ class PlantDetailsTest extends TestCase
         $this->actingAs($editor)->put("/admin/plants/{$plant->slug}", ['action' => 'publish', 'name' => 'Sample Tulsi', 'slug' => 'sample-tulsi', 'category' => 'medicinal', 'price' => 50, 'member_price' => 45, 'stock' => 5, 'videos' => 'not a link'])
             ->assertSessionHasErrors('videos');
     }
+
+    public function test_the_basket_asks_who_is_ordering(): void
+    {
+        Plant::factory()->create(['slug' => 'sample-tulsi', 'name' => 'Sample Tulsi', 'category' => 'medicinal', 'stock' => 5, 'active' => 1]);
+
+        $this->get('/nursery')->assertOk()
+            ->assertSee('id="buyer-name" name="name"', false)
+            ->assertSee('required', false)
+            ->assertSee('id="buyer-member"', false)
+            ->assertSee('id="buyer-pickup"', false)
+            ->assertSee('"member":"Member no."', false);
+    }
 }

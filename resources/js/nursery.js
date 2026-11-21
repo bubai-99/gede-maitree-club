@@ -3,6 +3,7 @@
 // Plants and words come from the page (site/nursery.blade.php).
 
 const KEY = 'gmc-nursery-basket';
+const BUYER = 'gmc-nursery-buyer'; // name and member number, so a regular buyer types them once
 
 export function nursery() {
     const data = JSON.parse(document.getElementById('nursery-data')?.textContent || '{}');
@@ -14,6 +15,8 @@ export function nursery() {
         cat: data.category || '',
         q: '',
         basket: {},
+        buyer: { name: '', memberNo: '', pickup: '' },
+        today: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10),
         open: null, // slug of the plant in the details panel
         qtyInPanel: 1,
         photoIndex: 0,
@@ -32,6 +35,12 @@ export function nursery() {
                 }
             } catch { /* a broken saved basket is simply dropped */ }
             this.$watch('basket', (b) => localStorage.setItem(KEY, JSON.stringify(b)), { deep: true });
+            try {
+                const b = JSON.parse(localStorage.getItem(BUYER) || '{}');
+                this.buyer.name = String(b.name || '');
+                this.buyer.memberNo = String(b.memberNo || '');
+            } catch { /* start blank */ }
+            this.$watch('buyer', (b) => localStorage.setItem(BUYER, JSON.stringify({ name: b.name, memberNo: b.memberNo })), { deep: true });
             this.$watch('cat', (c) => {
                 const url = new URL(location.href);
                 if (c) url.searchParams.set('category', c); else url.searchParams.delete('category');
@@ -80,8 +89,24 @@ export function nursery() {
         rupees(n) { return '₹' + Number(n).toLocaleString(document.documentElement.lang === 'bn' ? 'bn-IN' : 'en-IN') },
         num(n) { return Number(n).toLocaleString(document.documentElement.lang === 'bn' ? 'bn-IN' : 'en-IN') },
         get orderLink() {
-            const text = `${this.t.hello}\n${this.lines.map((l) => `• ${l.name} × ${l.qty}`).join('\n')}\n${this.t.total}: ${this.rupees(this.total)}`;
+            const b = this.buyer;
+            const pickup = b.pickup ? new Date(`${b.pickup}T00:00:00`).toLocaleDateString(document.documentElement.lang === 'bn' ? 'bn-IN' : 'en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) : '';
+            const text = [
+                this.t.hello,
+                ...this.lines.map((l) => `• ${l.name} × ${l.qty}`),
+                `${this.t.total}: ${this.rupees(this.total)}`,
+                '',
+                `${this.t.name}: ${b.name}`,
+                b.memberNo ? `${this.t.member}: ${b.memberNo.toUpperCase()}` : null,
+                pickup ? `${this.t.pickup}: ${pickup}` : null,
+            ].filter((x) => x !== null).join('\n');
             return `https://wa.me/${this.whatsapp}?text=${encodeURIComponent(text)}`;
+        },
+
+        /** The basket form: forms.js has already checked the name (a missing one stops the submit). */
+        sendOrder() {
+            if (!this.lines.length) return;
+            window.open(this.orderLink, '_blank', 'noopener');
         },
 
         // Details panel
