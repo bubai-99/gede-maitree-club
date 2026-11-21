@@ -23,6 +23,9 @@ class EnsureCommittee
         // Signed in to the member app (both apps share one sign-in): offer the committee sign-in
         // instead of a bare "Forbidden".
         if (! $user->isCommitteeMember()) {
+            // Opening a page: show the committee sign-in. A form post or the scanner's JSON: refuse.
+            abort_unless($request->isMethod('GET') && ! $request->expectsJson(), 403);
+
             return redirect()->route('admin.login');
         }
 

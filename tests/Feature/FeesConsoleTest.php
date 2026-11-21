@@ -96,7 +96,7 @@ class FeesConsoleTest extends TestCase
         $member = User::factory()->forFamily($this->family)->create();
         $member->assignRole(Role::Member->value);
 
-        $this->actingAs($member)->get('/admin/collect')->assertForbidden();
+        $this->actingAs($member)->get('/admin/collect')->assertRedirect(route('admin.login'));
         $this->actingAs($member)->post('/admin/collect', ['family_id' => $this->family->id, 'months' => 1, 'mode' => 'cash'])->assertForbidden();
         $this->assertSame(0, Payment::query()->count());
     }

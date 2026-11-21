@@ -249,7 +249,7 @@ class ConsoleCmsTest extends TestCase
         $member = User::factory()->forFamily()->create();
         $member->assignRole(Role::Member->value);
 
-        $this->actingAs($member)->get('/admin/events')->assertForbidden();
+        $this->actingAs($member)->get('/admin/events')->assertRedirect(route('admin.login'));
         $this->actingAs($member)->post('/admin/notices', [])->assertForbidden();
     }
 }

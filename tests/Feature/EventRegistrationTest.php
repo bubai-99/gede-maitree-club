@@ -295,6 +295,6 @@ class EventRegistrationTest extends TestCase
 
         $this->assertFalse($this->event->refresh()->isCancelled());
         // Members never reach the console.
-        $this->actingAs($this->member())->get('/admin/events/sports-day/registrations')->assertForbidden();
+        $this->actingAs($this->member())->get('/admin/events/sports-day/registrations')->assertRedirect(route('admin.login'));
     }
 }
