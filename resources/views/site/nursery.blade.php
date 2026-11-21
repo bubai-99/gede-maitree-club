@@ -63,31 +63,33 @@
                  (it stops at the end of the list). Instant filter and search: resources/js/nursery.js --}}
             <div>
                 <div x-ref="listTop" aria-hidden="true"></div>
-                <div class="sticky z-20 -mx-5 px-5 py-3 bg-paper/95 backdrop-blur-sm border-b transition-[box-shadow,border-color] duration-200"
+                <div class="sticky z-20 mx-[calc(50%-50vw)] py-3 bg-paper/95 backdrop-blur-sm border-b transition-[box-shadow,border-color] duration-200"
                      :class="stuck ? 'border-rule shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]' : 'border-transparent'" :style="'top: ' + headerH + 'px'" style="top: 64px">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
-                            <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
-                            @foreach (PlantCategory::cases() as $option)
-                                @php
-                                    $n = $plants->where('category', $option)->count();
-                                @endphp
-                                @if ($n)
-                                    <a href="{{ route('nursery', ['category' => $option->value]) }}" @click.prevent="cat = '{{ $option->value }}'" :aria-pressed="(cat === '{{ $option->value }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $option->label() }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
-                                @endif
-                            @endforeach
+                    <div class="mx-auto max-w-[1160px] px-5">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
+                                <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
+                                @foreach (PlantCategory::cases() as $option)
+                                    @php
+                                        $n = $plants->where('category', $option)->count();
+                                    @endphp
+                                    @if ($n)
+                                        <a href="{{ route('nursery', ['category' => $option->value]) }}" @click.prevent="cat = '{{ $option->value }}'" :aria-pressed="(cat === '{{ $option->value }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $option->label() }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
+                                    @endif
+                                @endforeach
+                            </div>
+                            {{-- Search: a box on wide screens, a button that opens one on phones --}}
+                            <label class="relative hidden sm:block sm:w-64 shrink-0"><span class="sr-only">{{ __('Search plants') }}</span><x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" /><input type="search" x-model.debounce.150ms="q" class="field own-clear h-10 pl-9 pr-9" placeholder="{{ __('Search plants') }}"><button type="button" x-show="q" x-cloak @click="q = ''" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded text-ink-3 hover:text-ink" aria-label="{{ __('Clear search') }}"><x-icon name="x" class="w-4 h-4" /></button></label>
+                            <button type="button" class="sm:hidden relative shrink-0 w-10 h-10 rounded-full border border-rule bg-card grid place-items-center" @click="toggleSearch()" :aria-expanded="searchOpen.toString()" aria-controls="nursery-search-m" aria-label="{{ __('Search plants') }}">
+                                <x-icon name="search" class="w-[18px] h-[18px]" /><span x-show="q && ! searchOpen" x-cloak class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-tulsi"></span>
+                            </button>
                         </div>
-                        {{-- Search: a box on wide screens, a button that opens one on phones --}}
-                        <label class="relative hidden sm:block sm:w-64 shrink-0"><span class="sr-only">{{ __('Search plants') }}</span><x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" /><input type="search" x-model.debounce.150ms="q" class="field own-clear h-10 pl-9 pr-9" placeholder="{{ __('Search plants') }}"><button type="button" x-show="q" x-cloak @click="q = ''" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded text-ink-3 hover:text-ink" aria-label="{{ __('Clear search') }}"><x-icon name="x" class="w-4 h-4" /></button></label>
-                        <button type="button" class="sm:hidden relative shrink-0 w-10 h-10 rounded-full border border-rule bg-card grid place-items-center" @click="toggleSearch()" :aria-expanded="searchOpen.toString()" aria-controls="nursery-search-m" aria-label="{{ __('Search plants') }}">
-                            <x-icon name="search" class="w-[18px] h-[18px]" /><span x-show="q && ! searchOpen" x-cloak class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-tulsi"></span>
-                        </button>
-                    </div>
-                    <div id="nursery-search-m" class="sm:hidden mt-2.5 relative" x-show="searchOpen" x-cloak>
-                        <label class="sr-only" for="f-nursery-q">{{ __('Search plants') }}</label>
-                        <x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
-                        <input id="f-nursery-q" x-ref="mobileSearch" type="search" x-model.debounce.150ms="q" class="field own-clear h-10 pl-9 pr-9" placeholder="{{ __('Search plants') }}">
-                        <button type="button" @click="q = ''; toggleSearch()" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded text-ink-3 hover:text-ink" aria-label="{{ __('Close search') }}"><x-icon name="x" class="w-4 h-4" /></button>
+                        <div id="nursery-search-m" class="sm:hidden mt-2.5 relative" x-show="searchOpen" x-cloak>
+                            <label class="sr-only" for="f-nursery-q">{{ __('Search plants') }}</label>
+                            <x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
+                            <input id="f-nursery-q" x-ref="mobileSearch" type="search" x-model.debounce.150ms="q" class="field own-clear h-10 pl-9 pr-9" placeholder="{{ __('Search plants') }}">
+                            <button type="button" @click="q = ''; toggleSearch()" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded text-ink-3 hover:text-ink" aria-label="{{ __('Close search') }}"><x-icon name="x" class="w-4 h-4" /></button>
+                        </div>
                     </div>
                 </div>
             <p class="mt-3 text-[14px] text-ink-3" aria-live="polite"><span x-text="{{ Js::from(__(':count plants')) }}.replace(':count', num(shown))">{{ __(':count plants', ['count' => digits($plants->count())]) }}</span></p>
