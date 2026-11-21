@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\RegistrationStatus;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
+use App\Passes\Registrations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -84,10 +85,11 @@ class EventController extends CmsController
         return $this->saved($request, 'admin.events.index', __('Event'));
     }
 
-    public function update(EventRequest $request, Event $event): RedirectResponse
+    public function update(EventRequest $request, Event $event, Registrations $registrations): RedirectResponse
     {
         $event->update([...$request->eventData(), ...$this->statusFromButton($request, $event)]);
         $this->savePhoto($request, $event);
+        $registrations->issueMissingPasses($event);
 
         return $this->saved($request, 'admin.events.index', __('Event'));
     }

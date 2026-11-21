@@ -257,6 +257,34 @@ class EventRegistrationTest extends TestCase
         $this->assertTrue($event->isPublished());
     }
 
+    public function test_switching_on_passes_later_gives_registered_families_a_pass(): void
+    {
+        $this->event->update(['pass_required' => false]);
+        $registrations = app(Registrations::class);
+        $puja = $this->committee(Role::PujaInCharge);
+        $kept = $registrations->register($this->event, Family::factory()->create(), 2, $puja);
+        $gone = $registrations->register($this->event, Family::factory()->create(), 2, $puja);
+        $registrations->cancel($gone, $puja, true);
+        $this->assertNull($kept->pass()->first());
+
+        $this->actingAs($puja)->put('/admin/events/sports-day', [
+            'action' => 'publish',
+            'title' => 'Annual Sports Day',
+            'slug' => 'sports-day',
+            'kind' => 'sports',
+            'date' => now()->addDays(10)->toDateString(),
+            'time' => '07:00',
+            'pass_required' => '1',
+            'registration_open' => '1',
+        ])->assertRedirect('/admin/events');
+
+        $pass = $kept->pass()->first();
+        $this->assertNotNull($pass);
+        $this->assertTrue($pass->isActive());
+        $this->assertSame(2, $pass->people);
+        $this->assertNull($gone->pass()->first());
+    }
+
     public function test_roles_that_do_not_run_events_are_kept_out(): void
     {
         foreach ([Role::WebsiteEditor, Role::NurseryInCharge, Role::Volunteer] as $role) {

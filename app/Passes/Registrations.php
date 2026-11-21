@@ -175,6 +175,28 @@ class Registrations
     }
 
     /**
+     * When "pass required" is switched on after families registered, give each of them a pass
+     * so nobody is stopped at the gate. Returns how many passes were issued.
+     */
+    public function issueMissingPasses(Event $event): int
+    {
+        if (! $event->pass_required || $event->cancelled_at !== null) {
+            return 0;
+        }
+
+        return DB::transaction(function () use ($event): int {
+            $missing = $event->registrations()
+                ->where('status', RegistrationStatus::Registered->value)
+                ->whereDoesntHave('pass', fn ($pass) => $pass->where('status', PassStatus::Active->value))
+                ->get();
+
+            $missing->each(fn (EventRegistration $registration): Pass => $this->issuePass($registration));
+
+            return $missing->count();
+        });
+    }
+
+    /**
      * One pass per registration. A cancelled pass that comes back gets a new token, so an old
      * screenshot cannot be used.
      */
