@@ -24,15 +24,15 @@
 
         <div class="mx-auto max-w-[1160px] px-5 py-10 pb-36">
             {{-- How buying works: three steps joined by a dashed path (across on wide screens, down on phones) --}}
-            <section class="mb-10 rounded-[22px] bg-tulsi-wash/70 border border-tulsi/15 px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="how-buy">
-                <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[14px]' : 'text-[12.5px] uppercase tracking-[0.16em]' }}">{{ __('How to buy') }}</h2>
-                <ol class="nursery-steps mt-5 grid sm:grid-cols-3 gap-6 sm:gap-8">
+            <section class="mb-8 rounded-[18px] bg-tulsi-wash/70 border border-tulsi/15 px-5 py-4 sm:px-6 sm:py-5" aria-labelledby="how-buy">
+                <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[13px]' : 'text-[11.5px] uppercase tracking-[0.14em]' }}">{{ __('How to buy') }}</h2>
+                <ol class="nursery-steps mt-3 grid sm:grid-cols-3 gap-4 sm:gap-6">
                     @foreach ([['sprout', __('Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as $n => [$icon, $title, $text])
-                        <li class="nursery-step relative flex sm:flex-col gap-4">
-                            <span class="relative z-[1] shrink-0 w-12 h-12 rounded-full bg-tulsi text-white grid place-items-center font-display text-[1.35rem] shadow-[0_0_0_6px_var(--color-tulsi-wash)]" aria-hidden="true">{{ digits($n + 1) }}</span>
-                            <div class="min-w-0 pt-1 sm:pt-0">
-                                <p class="flex items-center gap-2 font-display text-[1.3rem] leading-tight text-ink"><x-icon :name="$icon" class="w-[18px] h-[18px] text-tulsi shrink-0" />{{ $title }}</p>
-                                <p class="mt-1.5 text-[15px] text-ink-2 leading-relaxed">{{ $text }}</p>
+                        <li class="nursery-step relative flex sm:flex-col gap-3 sm:gap-2.5">
+                            <span class="relative z-[1] shrink-0 w-8 h-8 rounded-full bg-tulsi text-white grid place-items-center font-display text-[1rem] shadow-[0_0_0_4px_var(--color-tulsi-wash)]" aria-hidden="true">{{ digits($n + 1) }}</span>
+                            <div class="min-w-0 pt-0.5 sm:pt-0">
+                                <p class="flex items-center gap-1.5 font-semibold text-[15.5px] leading-tight text-ink"><x-icon :name="$icon" class="w-4 h-4 text-tulsi shrink-0" />{{ $title }}</p>
+                                <p class="mt-0.5 text-[14px] text-ink-2 leading-snug">{{ $text }}</p>
                             </div>
                         </li>
                     @endforeach

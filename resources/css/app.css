@@ -641,12 +641,12 @@ label:has(> input[type="checkbox"][required])::after {
 
 /* Nursery "How to buy": a dashed path joining the step numbers — across on wide screens, down on phones */
 .nursery-step:not(:last-child)::after {
-  content: ""; position: absolute; left: 23px; top: 52px; bottom: -28px;
+  content: ""; position: absolute; left: 15px; top: 36px; bottom: -18px;
   border-left: 2px dashed color-mix(in srgb, var(--color-tulsi) 45%, transparent);
 }
 @media (min-width: 640px) {
   .nursery-step:not(:last-child)::after {
-    left: 60px; right: -24px; top: 23px; bottom: auto;
+    left: 44px; right: -18px; top: 15px; bottom: auto;
     border-left: 0; border-top: 2px dashed color-mix(in srgb, var(--color-tulsi) 45%, transparent);
   }
 }
