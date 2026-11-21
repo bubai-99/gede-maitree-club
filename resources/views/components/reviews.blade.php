@@ -97,7 +97,7 @@
                     </figure>
 
                     @if ($data['count'] > 1)
-                        <div class="swiper mt-4 !overflow-visible sm:!overflow-hidden" data-reviews-thumbs aria-label="{{ __('More reviews') }}">
+                        <div class="swiper reviews-thumbs mt-4" data-reviews-thumbs aria-label="{{ __('More reviews') }}">
                             <div class="swiper-wrapper">
                                 @foreach ($items as $i => $r)
                                     <div class="swiper-slide !w-[230px] sm:!w-[220px] !h-auto cursor-pointer text-left rounded-2xl bg-white/70 hover:bg-white border-2 border-transparent p-4 transition-colors [&.swiper-slide-thumb-active]:bg-white [&.swiper-slide-thumb-active]:shadow-sm {{ $c['active'] }}">

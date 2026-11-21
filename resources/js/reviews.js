@@ -5,6 +5,11 @@ import Swiper from 'swiper';
 import { A11y, Autoplay, Navigation, Pagination, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 
+function fade(s) {
+    s.el.classList.toggle('fade-l', !s.isBeginning && !s.isLocked);
+    s.el.classList.toggle('fade-r', !s.isEnd && !s.isLocked);
+}
+
 export function reviewsSlider(root) {
     const main = root.querySelector('[data-reviews-main]');
     if (!main) return;
@@ -19,6 +24,12 @@ export function reviewsSlider(root) {
         watchSlidesProgress: true,
         slideToClickedSlide: true,
         a11y: { enabled: true, slideRole: 'button', itemRoleDescriptionMessage: t('review', 'রিভিউ') },
+        on: {
+            // A soft fade on the side(s) with more cards (app.css .reviews-thumbs)
+            init(s) { fade(s); },
+            progress(s) { fade(s); },
+            resize(s) { fade(s); },
+        },
     }) : null;
 
     const slider = new Swiper(main, {
