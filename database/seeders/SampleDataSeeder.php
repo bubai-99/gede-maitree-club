@@ -8,9 +8,6 @@ use App\Enums\FamilyStatus;
 use App\Enums\NoticeAudience;
 use App\Enums\PaymentMode;
 use App\Enums\PaymentStatus;
-use App\Enums\PlantCategory;
-use App\Enums\PlantLight;
-use App\Enums\PlantWater;
 use App\Enums\PublishStatus;
 use App\Models\CateringPackage;
 use App\Models\CommitteeMember;
@@ -147,15 +144,15 @@ class SampleDataSeeder extends Seeder
             Plant::query()->updateOrCreate(['slug' => Str::slug(Str::before($row['name'], ' ('))], [
                 'name' => $row['name'],
                 'name_bn' => $row['nameBn'],
-                'category' => PlantCategory::from($row['cat']),
+                'category' => $row['cat'],
                 'pot' => $row['pot'],
                 'pot_bn' => $row['potBn'] ?? null,
                 'price' => $row['price'],
                 'member_price' => (int) round($row['price'] * 0.9),
                 'stock' => $row['stock'],
                 'is_new' => (bool) ($row['new'] ?? false),
-                'light' => isset($info['light']) ? PlantLight::from($info['light']) : null,
-                'water' => isset($info['water']) ? PlantWater::from($info['water']) : null,
+                'light' => $info['light'] ?? null,
+                'water' => $info['water'] ?? null,
                 'about' => $info['about'][0] ?? null,
                 'about_bn' => $info['about'][1] ?? null,
                 'tip' => $info['tip'][0] ?? null,

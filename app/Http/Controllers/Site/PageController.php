@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Site;
 
 use App\Chanda\ChandaBook;
-use App\Enums\PlantCategory;
 use App\Http\Controllers\Controller;
 use App\Models\CateringPackage;
 use App\Models\ChandaEntry;
@@ -12,6 +11,7 @@ use App\Models\Event;
 use App\Models\Family;
 use App\Models\Plant;
 use App\Models\Sponsor;
+use App\Support\PlantLists;
 use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -31,8 +31,8 @@ class PageController extends Controller
 
     public function nursery(Request $request): View
     {
-        $request->validate(['category' => ['nullable', Rule::enum(PlantCategory::class)]]);
-        $category = $request->enum('category', PlantCategory::class);
+        $request->validate(['category' => ['nullable', Rule::in(app(PlantLists::class)->keys('category'))]]);
+        $category = $request->string('category')->toString() ?: null;
 
         // Every plant goes to the page; the category chips and the search filter them there,
         // without reloading. ?category= only picks the chip that starts selected.

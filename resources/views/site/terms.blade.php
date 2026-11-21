@@ -6,7 +6,7 @@
         <div class="mt-8 space-y-6 text-[17px] leading-relaxed text-ink-2">
             <p>{{ __('Member cards are not transferable. If one is lost, tell the club; the old QR is cancelled and a new card is issued.') }}</p>
             <p>{{ __('Maitree Serving serves food that the host provides; the club does not cook. A 20% advance books the date, and the final bill is on the actual guest count.') }}</p>
-            <p>{{ __('Plants are sold at the club gate. Members get 10% off. Prices and stock on the website can change.') }}</p>
+            <p>{{ __('Plants are sold at the club gate. Members get :percent% off. Prices and stock on the website can change.', ['percent' => digits(app(\App\Support\SiteSettings::class)->memberDiscount())]) }}</p>
             <p>{{ __('Membership is approved by the committee and follows the club’s bye-laws, adopted at the 2022 AGM.') }}</p>
         </div>
         @include('site.partials.privacy-contact', ['club' => $club])

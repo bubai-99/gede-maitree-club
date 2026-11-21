@@ -28,6 +28,7 @@ class SettingsRequest extends FormRequest
             'contact.upi' => ['nullable', 'string', 'max:100', 'regex:/^[\w.\-]+@[\w.\-]+$/'],
             'contact.address_bn' => ['nullable', 'string', 'max:255'],
             'contact.hours' => ['nullable', 'string', 'max:100'],
+            'contact.member_discount_percent' => ['nullable', 'integer', 'min:0', 'max:90'],
             'contact.hours_bn' => ['nullable', 'string', 'max:100'],
             'contact.facebook' => ['nullable', 'url:https', 'max:255'],
             'contact.instagram' => ['nullable', 'url:https', 'max:255'],
@@ -68,6 +69,9 @@ class SettingsRequest extends FormRequest
         ]);
         unset($contact['facebook'], $contact['instagram'], $contact['youtube']);
         $contact['social'] = $social;
+        if (isset($contact['member_discount_percent'])) {
+            $contact['member_discount_percent'] = (int) $contact['member_discount_percent'];
+        }
 
         $menu = [];
         foreach ((array) $this->validated('menu', []) as $item) {

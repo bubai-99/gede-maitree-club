@@ -7,6 +7,7 @@ use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
 use App\Models\Concerns\LogsChanges;
 use App\Models\Concerns\Publishable;
+use App\Support\SiteSettings;
 use Database\Factories\CateringPackageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,7 +45,7 @@ class CateringPackage extends Model implements PublishesContent
      */
     public function memberRate(): int
     {
-        $discount = (int) config('club.member_discount_percent');
+        $discount = app(SiteSettings::class)->memberDiscount();
 
         return (int) round($this->rate * (100 - $discount) / 100);
     }

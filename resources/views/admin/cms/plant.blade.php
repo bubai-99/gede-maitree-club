@@ -3,10 +3,10 @@
     <div class="grid sm:grid-cols-3 gap-4">
         <x-field name="slug" :label="__('Link name')" :value="$record->slug" required />
         <div>
-            <label for="f-category" class="label">{{ __('Type') }}</label>
+            <label for="f-category" class="label flex items-center">{{ __('Type') }}<a href="{{ route('admin.plant-lists.edit') }}" class="ml-auto font-normal text-[12.5px] text-ink-3 hover:text-ink underline underline-offset-2">{{ __('Edit the lists') }}</a></label>
             <select id="f-category" name="category" class="field">
-                @foreach (\App\Enums\PlantCategory::cases() as $category)
-                    <option value="{{ $category->value }}" @selected(old('category', $record->category?->value) === $category->value)>{{ $category->label() }}</option>
+                @foreach (app(\App\Support\PlantLists::class)->options('category') as $key => $name)
+                    <option value="{{ $key }}" @selected(old('category', $record->category) === $key)>{{ $name }}</option>
                 @endforeach
             </select>
         </div>
@@ -22,16 +22,16 @@
         <div>
             <label for="f-light" class="label">{{ __('Light') }}</label>
             <select id="f-light" name="light" class="field"><option value="">—</option>
-                @foreach (\App\Enums\PlantLight::cases() as $light)
-                    <option value="{{ $light->value }}" @selected(old('light', $record->light?->value) === $light->value)>{{ $light->label() }}</option>
+                @foreach (app(\App\Support\PlantLists::class)->options('light') as $key => $name)
+                    <option value="{{ $key }}" @selected(old('light', $record->light) === $key)>{{ $name }}</option>
                 @endforeach
             </select>
         </div>
         <div>
             <label for="f-water" class="label">{{ __('Water') }}</label>
             <select id="f-water" name="water" class="field"><option value="">—</option>
-                @foreach (\App\Enums\PlantWater::cases() as $water)
-                    <option value="{{ $water->value }}" @selected(old('water', $record->water?->value) === $water->value)>{{ $water->label() }}</option>
+                @foreach (app(\App\Support\PlantLists::class)->options('water') as $key => $name)
+                    <option value="{{ $key }}" @selected(old('water', $record->water) === $key)>{{ $name }}</option>
                 @endforeach
             </select>
         </div>

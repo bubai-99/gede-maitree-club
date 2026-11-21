@@ -2,7 +2,7 @@
     $faq = [
         [__('Who can become a member?'), __('Anyone living in or around Gede Uttarpara. Each member fills the form, and people in the same household can join on one form. The subscription covers the whole household.'), null],
         [__('Can non-members come to the pujas?'), __('Of course. Pujas and the blood donation camp are open to everyone. Only bhog, the picnic and sports day need a member pass.'), null],
-        [__('How do I book the serving team?'), __('Pick a package on the catering page and ask for a quote, or come to the club. We serve, we don’t cook. Members pay 10% less.'), null],
+        [__('How do I book the serving team?'), __('Pick a package on the catering page and ask for a quote, or come to the club. We serve, we don’t cook. Members pay :percent% less.', ['percent' => digits(app(\App\Support\SiteSettings::class)->memberDiscount())]), null],
         [__('How do I pay my subscription?'), __('By UPI in the member app, or in cash at the club. You get a receipt on WhatsApp for every payment.'), null],
     ];
     if (request()->routeIs('contact') && Route::has('chanda')) {

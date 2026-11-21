@@ -1,5 +1,4 @@
 @php
-    use App\Enums\PlantCategory;
     use App\Support\Photo;
 
     $content = app(\App\Support\PageContent::class);
@@ -8,8 +7,8 @@
         'slug' => $p->slug,
         'name' => $p->tr('name'),
         'search' => mb_strtolower($p->tr('name').' '.$p->name.' '.$p->name_bn),
-        'category' => $p->category->value,
-        'categoryName' => $p->category->label(),
+        'category' => $p->category,
+        'categoryName' => $p->categoryName(),
         'pot' => (string) $p->tr('pot'),
         'price' => $p->price,
         'member' => min($p->member_price, $p->price),
@@ -17,8 +16,8 @@
         'isNew' => (bool) $p->is_new,
         'about' => (string) $p->tr('about'),
         'tip' => (string) $p->tr('tip'),
-        'light' => $p->light?->label(),
-        'water' => $p->water?->label(),
+        'light' => $p->lightLabel(),
+        'water' => $p->waterLabel(),
         'photo' => $p->photoUrl(900),
         'thumb' => $p->photoUrl(200),
         'photos' => $p->photos(),
@@ -28,7 +27,7 @@
     ])->values();
     $nurseryData = [
         'plants' => $plantData,
-        'category' => $category?->value ?? '',
+        'category' => $category ?? '',
         'whatsapp' => $whatsapp,
         'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total'), 'name' => __('Name'), 'member' => __('Member no.'), 'pickup' => __('Pickup'), 'memberPrice' => __('Member price')],
     ];
@@ -38,9 +37,9 @@
     <div class="book-nursery" x-data="nursery" @keydown.escape.window="open ? hide() : (cartOpen && closeCart())">
         <x-page-banner page="nursery" :crumb="__('Nursery')" kicker-class="text-[#a8dcb0]">
             <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-white/85">
-                <li class="flex items-center gap-2"><x-icon name="clock" class="w-4 h-4 text-marigold" /><span>{{ __('7–10 am & 5–8 pm') }}</span></li>
-                <li class="flex items-center gap-2"><x-icon name="badge-percent" class="w-4 h-4 text-marigold" /><span>{{ __('Members :percent% off', ['percent' => digits((int) config('club.member_discount_percent'))]) }}</span></li>
-                <li class="flex items-center gap-2"><x-icon name="map-pin" class="w-4 h-4 text-marigold" /><span>{{ __('Collect at the club gate') }}</span></li>
+                <li class="flex items-center gap-2"><x-icon name="clock" class="w-4 h-4 text-marigold" /><span>{{ $content->text('nursery', 'hours') }}</span></li>
+                <li class="flex items-center gap-2"><x-icon name="badge-percent" class="w-4 h-4 text-marigold" /><span>{{ __('Members :percent% off', ['percent' => digits(app(\App\Support\SiteSettings::class)->memberDiscount())]) }}</span></li>
+                <li class="flex items-center gap-2"><x-icon name="map-pin" class="w-4 h-4 text-marigold" /><span>{{ $content->text('nursery', 'pickup') }}</span></li>
             </ul>
         </x-page-banner>
 
@@ -49,7 +48,11 @@
             <div class="mx-auto max-w-[1160px] px-5 py-5 sm:py-6 lg:grid lg:grid-cols-[150px_1fr] lg:gap-8 lg:items-center">
                 <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[13px] lg:text-[1.15rem]' : 'text-[11.5px] uppercase tracking-[0.14em] lg:text-[13px]' }} lg:border-r lg:border-tulsi/20 lg:pr-6 lg:py-2">{{ __('How to buy') }}</h2>
                 <ol class="nursery-steps mt-3 lg:mt-0 grid sm:grid-cols-3 gap-4 sm:gap-6">
-                    @foreach ([['sprout', __('Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as $n => [$icon, $title, $text])
+                    @foreach (['sprout', 'message-circle', 'store'] as $n => $icon)
+                        @php
+                            $title = $content->text('nursery', 'step'.($n + 1).'_title');
+                            $text = $content->text('nursery', 'step'.($n + 1).'_text');
+                        @endphp
                         <li class="nursery-step relative flex sm:flex-col gap-3 sm:gap-2.5">
                             <span class="relative z-[1] shrink-0 w-8 h-8 rounded-full bg-tulsi text-white grid place-items-center font-display text-[1rem] shadow-[0_0_0_4px_var(--color-tulsi-wash)]" aria-hidden="true">{{ digits($n + 1) }}</span>
                             <div class="min-w-0 pt-0.5 sm:pt-0">
@@ -73,12 +76,12 @@
                         <div class="flex items-center gap-2 sm:gap-3">
                             <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
                                 <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
-                                @foreach (PlantCategory::cases() as $option)
+                                @foreach (app(\App\Support\PlantLists::class)->options('category') as $option => $optionName)
                                     @php
                                         $n = $plants->where('category', $option)->count();
                                     @endphp
                                     @if ($n)
-                                        <a href="{{ route('nursery', ['category' => $option->value]) }}" @click.prevent="cat = '{{ $option->value }}'" :aria-pressed="(cat === '{{ $option->value }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $option->label() }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
+                                        <a href="{{ route('nursery', ['category' => $option]) }}" @click.prevent="cat = '{{ $option }}'" :aria-pressed="(cat === '{{ $option }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $optionName }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
                                     @endif
                                 @endforeach
                             </div>

@@ -4,6 +4,7 @@
         <div class="flex flex-wrap items-end gap-3">
             <h1 class="mr-auto font-display text-[2rem] leading-tight">{{ __('Club settings') }}</h1>
             <a href="{{ route('admin.areas.edit') }}" class="btn btn-line btn-sm"><x-icon name="map-pin" />{{ __('Lanes and areas') }}</a>
+            <a href="{{ route('admin.plant-lists.edit') }}" class="btn btn-line btn-sm"><x-icon name="sprout" />{{ __('Plant lists') }}</a>
         </div>
         @unless ($canEdit)
             <p class="mt-3 rounded-lg bg-marigold-wash text-turmeric px-4 py-3 text-[14px]">{{ __('You can look but not change this. Only the Admin and the Website editor edit the website.') }}</p>
@@ -28,6 +29,13 @@
                         <x-field name="contact[instagram]" type="url" label="Instagram" :value="$club['social']['instagram'] ?? ''" />
                         <x-field name="contact[youtube]" type="url" label="YouTube" :value="$club['social']['youtube'] ?? ''" />
                     </div>
+                </section>
+
+                <section class="card p-6" aria-labelledby="discount-h">
+                    <h2 id="discount-h" class="font-display text-[1.5rem]">{{ __('Member discount') }}</h2>
+                    <x-field name="contact[member_discount_percent]" type="number" min="0" max="90" step="1" inputmode="numeric" class="mt-4 [&_input]:max-w-[160px]"
+                        :label="__('Members’ discount (%)')" :value="$club['member_discount_percent'] ?? ''" required
+                        :hint="__('Used for the serving team’s member rate and the “Members :percent% off” lines on the website. Plant member prices are set on each plant.', ['percent' => digits((int) ($club['member_discount_percent'] ?? 0))])" />
                 </section>
 
                 <section class="card p-6" aria-labelledby="menu-h">

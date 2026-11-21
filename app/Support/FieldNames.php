@@ -43,6 +43,7 @@ final class FieldNames
         'contact.facebook' => ['Facebook link', 'ফেসবুক লিঙ্ক'],
         'contact.hours' => ['opening hours', 'খোলার সময়'],
         'contact.instagram' => ['Instagram link', 'ইনস্টাগ্রাম লিঙ্ক'],
+        'contact.member_discount_percent' => ['members’ discount', 'সদস্যদের ছাড়'],
         'contact.phone' => ['phone number', 'ফোন নম্বর'],
         'contact.upi' => ['UPI ID', 'ইউপিআই আইডি'],
         'contact.whatsapp' => ['WhatsApp number', 'হোয়াটসঅ্যাপ নম্বর'],

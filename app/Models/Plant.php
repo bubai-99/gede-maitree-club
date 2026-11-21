@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use App\Contracts\PublishesContent;
-use App\Enums\PlantCategory;
-use App\Enums\PlantLight;
-use App\Enums\PlantWater;
 use App\Enums\PublishStatus;
 use App\Models\Concerns\Bilingual;
 use App\Models\Concerns\HasPhoto;
 use App\Models\Concerns\LogsChanges;
 use App\Models\Concerns\Publishable;
 use App\Support\Photo;
+use App\Support\PlantLists;
 use App\Support\VideoEmbed;
 use Database\Factories\PlantFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -38,14 +36,29 @@ class Plant extends Model implements HasMedia, PublishesContent
     }
 
     /**
+     * The plant's type, sun and water in the page's language (Settings → Plant lists).
+     */
+    public function categoryName(): string
+    {
+        return app(PlantLists::class)->label('category', $this->category) ?? (string) $this->category;
+    }
+
+    public function lightLabel(): ?string
+    {
+        return app(PlantLists::class)->label('light', $this->light);
+    }
+
+    public function waterLabel(): ?string
+    {
+        return app(PlantLists::class)->label('water', $this->water);
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'category' => PlantCategory::class,
-            'light' => PlantLight::class,
-            'water' => PlantWater::class,
             'price' => 'integer',
             'member_price' => 'integer',
             'stock' => 'integer',

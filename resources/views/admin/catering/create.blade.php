@@ -39,7 +39,7 @@
                 </div>
             </div>
             <x-field name="venue" :label="__('Venue')" :value="$prefill['venue']" maxlength="255" />
-            <label class="flex items-center gap-2.5 text-[15px]"><input type="checkbox" name="is_member" value="1" class="w-4 h-4 accent-sindoor" @checked(old('is_member', $prefill['is_member']))> {{ __('Gede Maitree Club member (:percent% off)', ['percent' => digits((int) config('club.member_discount_percent'))]) }}</label>
+            <label class="flex items-center gap-2.5 text-[15px]"><input type="checkbox" name="is_member" value="1" class="w-4 h-4 accent-sindoor" @checked(old('is_member', $prefill['is_member']))> {{ __('Gede Maitree Club member (:percent% off)', ['percent' => digits(app(\App\Support\SiteSettings::class)->memberDiscount())]) }}</label>
             <button class="btn btn-primary h-12 px-6"><x-icon name="plus" /><span>{{ __('Add enquiry') }}</span></button>
         </form>
     </div>

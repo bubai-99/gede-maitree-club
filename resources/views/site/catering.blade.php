@@ -1,6 +1,6 @@
 @php
     $content = app(\App\Support\PageContent::class);
-    $discount = (int) config('club.member_discount_percent');
+    $discount = app(\App\Support\SiteSettings::class)->memberDiscount();
     $packageData = $packages->map(fn ($p) => ['slug' => $p->slug, 'rate' => $p->rate, 'member' => $p->memberRate(), 'min' => $p->min_guests])->values();
     $from = $packages->min('rate');
     // Sample photos for the package cards until the club adds its own
@@ -67,7 +67,7 @@
                     </article>
                 @endforeach
             </div>
-            <p class="mt-4 text-[15px] text-ink-3">{{ $content->text('catering', 'note') }}</p>
+            <p class="mt-4 text-[15px] text-ink-3">{{ str_replace(':percent', digits($discount), $content->text('catering', 'note')) }}</p>
 
             <div class="mt-16 grid lg:grid-cols-12 gap-10 items-start">
                 <div class="lg:col-span-5">

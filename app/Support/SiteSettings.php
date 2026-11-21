@@ -40,6 +40,15 @@ class SiteSettings
     }
 
     /**
+     * Members' discount in percent (Settings → Member discount; config/club.php until saved):
+     * the serving team's member rate, and the "Members 10% off" lines on the website.
+     */
+    public function memberDiscount(): int
+    {
+        return max(0, min(90, (int) ($this->club()['member_discount_percent'] ?? 0)));
+    }
+
+    /**
      * Page title or description in the page's language.
      */
     public function seo(string $page, string $field): string

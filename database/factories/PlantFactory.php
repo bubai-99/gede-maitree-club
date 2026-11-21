@@ -2,9 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\PlantCategory;
-use App\Enums\PlantLight;
-use App\Enums\PlantWater;
 use App\Enums\PublishStatus;
 use App\Models\Plant;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,13 +23,13 @@ class PlantFactory extends Factory
         return [
             'slug' => Str::slug($name),
             'name' => ucfirst($name),
-            'category' => fake()->randomElement(PlantCategory::cases()),
+            'category' => fake()->randomElement(['flowering', 'seasonal', 'fruit', 'medicinal', 'indoor']),
             'pot' => '6"',
             'price' => $price,
             'member_price' => (int) round($price * 0.9),
             'stock' => fake()->numberBetween(0, 50),
-            'light' => PlantLight::Sun,
-            'water' => PlantWater::Moderate,
+            'light' => 'sun',
+            'water' => 'moderate',
             'about' => fake()->sentence(),
             'tip' => fake()->sentence(),
             'active' => true,

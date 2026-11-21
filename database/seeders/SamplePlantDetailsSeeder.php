@@ -39,7 +39,7 @@ class SamplePlantDetailsSeeder extends Seeder
     public function run(): void
     {
         foreach (Plant::query()->whereNull('details')->get() as $plant) {
-            [$en, $bn] = self::GUIDES[$plant->category->value];
+            [$en, $bn] = self::GUIDES[$plant->category] ?? self::GUIDES['flowering'];
             $plant->forceFill([
                 'details' => $en,
                 'details_bn' => $bn,

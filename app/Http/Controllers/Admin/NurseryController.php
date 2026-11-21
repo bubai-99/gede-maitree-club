@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Nursery\NurseryCounter;
 use App\Nursery\NurseryException;
 use App\Passes\GateKeeper;
+use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,7 @@ class NurseryController extends Controller
         return view('admin.nursery.index', [
             'plants' => Plant::query()->where('active', true)->orderBy('sort')->orderBy('name')->get(),
             'sales' => NurserySale::query()->whereDate('created_at', today())->with('family')->latest('id')->get(),
-            'discount' => (int) config('club.member_discount_percent'),
+            'discount' => app(SiteSettings::class)->memberDiscount(),
         ]);
     }
 

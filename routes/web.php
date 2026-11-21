@@ -266,6 +266,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
     Route::put('/settings', [Admin\SettingsController::class, 'update'])->name('settings.update');
     Route::get('/settings/areas', [Admin\AreaController::class, 'edit'])->name('areas.edit');
     Route::put('/settings/areas', [Admin\AreaController::class, 'update'])->name('areas.update');
+    Route::get('/settings/plant-lists', [Admin\PlantListController::class, 'edit'])->name('plant-lists.edit');
+    Route::put('/settings/plant-lists', [Admin\PlantListController::class, 'update'])->name('plant-lists.update');
 
     Route::resource('enquiries', Admin\EnquiryController::class)->only(['index', 'show', 'update']);
     Route::get('/activity', Admin\ActivityController::class)->name('activity');

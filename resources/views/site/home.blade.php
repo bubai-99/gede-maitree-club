@@ -100,7 +100,7 @@
             @foreach ([
                 ['events.index', 'book-club', 'pujaCrowd', '01', 'text-sindoor', __('Club life'), __('Pujas, games and service'), __('Durga, Kali and Saraswati Puja, sports day, blood donation camps and the winter picnic.'), __('See the calendar')],
                 ['catering', 'book-catering', 'feast', '02', 'text-turmeric', __('Maitree Serving'), __('Serving at your occasion'), __('The team that serves bhog to thousands, at your annaprashan or wedding. You bring the food; from ₹35 a guest.'), __('See the packages')],
-                ['nursery', 'book-nursery', 'potted', '03', 'text-tulsi', __('Maitree Nursery'), __('Plants by the club gate'), __('Joba, shiuli, tulsi, fruit saplings and winter flowers. Members get 10% off.'), __('Browse plants')],
+                ['nursery', 'book-nursery', 'potted', '03', 'text-tulsi', __('Maitree Nursery'), __('Plants by the club gate'), __('Joba, shiuli, tulsi, fruit saplings and winter flowers. Members get :percent% off.', ['percent' => digits(app(\App\Support\SiteSettings::class)->memberDiscount())]), __('Browse plants')],
             ] as [$route, $book, $photo, $no, $colour, $kicker, $title, $text, $cta])
                 <a href="{{ route($route) }}" class="{{ $book }} group block">
                     <div class="relative aspect-[4/3] md:aspect-[4/5] rounded-[18px] overflow-hidden bg-paper-3">

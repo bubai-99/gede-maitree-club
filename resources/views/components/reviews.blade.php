@@ -10,10 +10,11 @@
     $c = $nursery
         ? ['text' => 'text-tulsi', 'bar' => 'bg-tulsi', 'panel' => 'bg-tulsi-wash/60', 'soft' => 'bg-tulsi-wash', 'active' => '[&.swiper-slide-thumb-active]:border-tulsi', 'dot' => '[&_.swiper-pagination-bullet-active]:bg-tulsi']
         : ['text' => 'text-turmeric', 'bar' => 'bg-turmeric', 'panel' => 'bg-turmeric-wash/50', 'soft' => 'bg-turmeric-wash', 'active' => '[&.swiper-slide-thumb-active]:border-turmeric', 'dot' => '[&_.swiper-pagination-bullet-active]:bg-turmeric'];
-    $tags = $nursery
-        ? [__('Healthy plants'), __('Care advice'), __('Fair prices'), __('Ready next morning')]
-        : [__('On time'), __('Polite team'), __('Clean tables'), __('Clear bill'), __('Looked after elders')];
-    $photo = $nursery ? 'nurseryTable' : 'catBuffet';
+    // Tags and the side photo come from Website → Pages (the nursery or serving page and its banner photo)
+    $page = $nursery ? 'nursery' : 'catering';
+    $content = app(\App\Support\PageContent::class);
+    $tags = array_values(array_filter(array_map('trim', preg_split('/[,،、]/u', $content->text($page, 'review_tags')) ?: [])));
+    $photoUrl = $content->photoUrl($page, 500);
     $ask = $nursery ? __('Namaskar, I would like to leave a review of the club nursery:') : __('Namaskar, I would like to leave a review of Maitree Serving:');
     $items = $data['items']->map(fn ($r) => [
         'n' => $r->rating,
@@ -51,10 +52,12 @@
                             </li>
                         @endforeach
                     </ul>
-                    <p class="mt-6 text-[13px] font-semibold text-ink-2">{{ __('What people mention') }}</p>
-                    <div class="mt-2 flex flex-wrap gap-1.5">
-                        @foreach ($tags as $tag)<span class="chip h-8 px-3 bg-white text-ink"><x-icon name="check" class="{{ $c['text'] }}" />{{ $tag }}</span>@endforeach
-                    </div>
+                    @if ($tags)
+                        <p class="mt-6 text-[13px] font-semibold text-ink-2">{{ __('What people mention') }}</p>
+                        <div class="mt-2 flex flex-wrap gap-1.5">
+                            @foreach ($tags as $tag)<span class="chip h-8 px-3 bg-white text-ink"><x-icon name="check" class="{{ $c['text'] }}" />{{ $tag }}</span>@endforeach
+                        </div>
+                    @endif
                     <a href="https://wa.me/{{ app(\App\Support\SiteSettings::class)->club()['whatsapp'] }}?text={{ rawurlencode($ask) }}" target="_blank" rel="noopener" class="btn btn-line bg-white mt-7"><x-icon name="message-square-plus" />{{ __('Leave a review') }}</a>
                 </div>
 
@@ -93,7 +96,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="hidden sm:block relative bg-paper-2"><x-photo :key="$photo" :width="500" sizes="200px" class="absolute inset-0 w-full h-full object-cover" /></div>
+                        <div class="hidden sm:block relative bg-paper-2">@if ($photoUrl)<img src="{{ $photoUrl }}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover">@endif</div>
                     </figure>
 
                     @if ($data['count'] > 1)

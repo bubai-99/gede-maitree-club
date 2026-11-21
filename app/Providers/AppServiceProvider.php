@@ -20,6 +20,7 @@ use App\Payments\PaymentGateway;
 use App\Payments\RazorpayGateway;
 use App\Support\Otp\LogOtpSender;
 use App\Support\PageContent;
+use App\Support\PlantLists;
 use App\Support\SiteSettings;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Http\Events\RequestHandled;
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(SiteSettings::class);
         $this->app->scoped(PageContent::class);
+        $this->app->scoped(PlantLists::class);
 
         // Payments: Razorpay when its keys are set, otherwise UPI to the club's own UPI ID.
         $this->app->bind(RazorpayGateway::class, fn (): RazorpayGateway => new RazorpayGateway(
