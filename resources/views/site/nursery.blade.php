@@ -58,7 +58,7 @@
             </div>
         </section>
 
-        <div class="mx-auto max-w-[1160px] px-5 pt-8 pb-36">
+        <div class="mx-auto max-w-[1160px] px-5 pt-8 pb-16">
             {{-- The plant list, with its filter bar pinned under the site header while you scroll the list
                  (it stops at the end of the list). Instant filter and search: resources/js/nursery.js --}}
             <div>
@@ -157,7 +157,7 @@
             </div>
         </div>
 
-        <x-reviews kind="nursery" class="pb-24" />
+        <x-reviews kind="nursery" />
 
         {{-- Basket tab: on the right edge, halfway down the screen; count and total; opens the sidebar --}}
         <button type="button" x-show="items" x-cloak @click="openCart()"

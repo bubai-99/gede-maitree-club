@@ -25,9 +25,10 @@
     $stars = fn (float $n) => collect([1, 2, 3, 4, 5])->map(fn ($i) => $i <= round($n));
 @endphp
 @if ($data['count'] > 0)
-    <section {{ $attributes->merge(['class' => 'mx-auto max-w-[1160px] px-5']) }} aria-labelledby="reviews-{{ $kind->value }}"
+    {{-- A full-width band (edge to edge from inside a page container too), its content in line with the page --}}
+    <section {{ $attributes->merge(['class' => 'mx-[calc(50%-50vw)] '.$c['panel']]) }} aria-labelledby="reviews-{{ $kind->value }}"
              x-data="{ items: {{ Js::from($items) }}, cur: 0, step(d) { this.cur = (this.cur + d + this.items.length) % this.items.length } }">
-        <div class="rounded-[28px] {{ $c['panel'] }} p-5 sm:p-8 lg:p-10">
+        <div class="mx-auto max-w-[1160px] px-5 py-12 sm:py-16">
             <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
                 {{-- Summary --}}
                 <div class="lg:col-span-4">

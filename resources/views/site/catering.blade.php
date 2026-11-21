@@ -92,7 +92,7 @@
             </div>
 
             {{-- What families say (published reviews, console → Reviews) --}}
-            <x-reviews kind="catering" class="!px-0 mt-16" />
+            <x-reviews kind="catering" class="mt-16" />
 
             {{-- Enquiry with a live estimate --}}
             <div id="quote" class="mt-16 grid lg:grid-cols-12 gap-10 scroll-mt-24">
