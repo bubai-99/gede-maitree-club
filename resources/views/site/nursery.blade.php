@@ -140,13 +140,13 @@
 
         <x-reviews kind="nursery" class="pb-24" />
 
-        {{-- Basket button: count and total; opens the sidebar --}}
+        {{-- Basket tab: on the right edge, halfway down the screen; count and total; opens the sidebar --}}
         <button type="button" x-show="items" x-cloak @click="openCart()"
-                x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition duration-200" x-transition:leave-end="opacity-0 translate-y-4"
-                class="basket-fab fixed z-30 right-4 bottom-4 sm:right-6 sm:bottom-6 flex items-center gap-3 rounded-full bg-tulsi text-white pl-4 pr-5 h-14 shadow-[0_14px_34px_-12px_rgba(20,50,28,.7)] hover:bg-[#1f5029]"
+                x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-x-full" x-transition:leave="transition duration-200" x-transition:leave-end="opacity-0 translate-x-full"
+                class="basket-fab fixed z-30 right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 rounded-l-2xl bg-tulsi text-white px-2.5 py-3.5 w-[4.25rem] shadow-[0_14px_34px_-12px_rgba(20,50,28,.7)] hover:bg-[#1f5029] hover:pr-3.5 transition-[padding,background-color]"
                 :aria-label="{{ Js::from(__('Basket: :count plants, :total')) }}.replace(':count', num(items)).replace(':total', rupees(total))">
             <span class="relative"><x-icon name="shopping-basket" class="w-6 h-6" /><span class="absolute -top-2 -right-2.5 min-w-5 h-5 px-1 rounded-full bg-marigold text-ink text-[12px] font-bold grid place-items-center num" x-text="num(items)"></span></span>
-            <span class="font-semibold num" x-text="rupees(total)"></span>
+            <span class="text-[12.5px] font-semibold leading-tight num" x-text="rupees(total)"></span>
         </button>
 
         {{-- Basket sidebar --}}
