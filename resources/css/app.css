@@ -614,3 +614,10 @@ button.pj-cell:hover { border-color: rgba(43,47,54,.35); }
 .news-prose hr { border-color: var(--color-rule); margin: 2.2em 0; }
 .news-prose strong { font-weight: 700; }
 .news-prose .news-video { margin-top: 1.8em; margin-bottom: 1.8em; }
+
+/* FAQ accordion (site/partials/faq): one state, data-open, set by the server and then by Alpine */
+.faq-panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .3s ease-out, opacity .25s ease-out; }
+.faq-panel[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
+.faq-icon { transition: transform .3s ease-out; }
+.faq-icon[data-open="true"] { transform: rotate(45deg); }
+@media (prefers-reduced-motion: reduce) { .faq-panel, .faq-icon { transition: none; } }

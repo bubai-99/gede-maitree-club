@@ -17,12 +17,11 @@
             <button type="button" id="{{ $faqId }}-q{{ $i }}" aria-controls="{{ $faqId }}-a{{ $i }}" :aria-expanded="open.toString()" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}" @click="open = ! open"
                     class="w-full flex items-center justify-between gap-4 py-5 text-left font-semibold text-[17px] hover:text-sindoor-deep transition-colors">
                 <span>{{ $question }}</span>
-                <span class="shrink-0 inline-flex transition-transform duration-300 motion-reduce:transition-none {{ $i === 0 ? 'rotate-45' : '' }}" :class="open ? 'rotate-45' : ''"><x-icon name="plus" class="w-5 h-5" /></span>
+                <span class="faq-icon shrink-0 inline-flex" data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="open.toString()"><x-icon name="plus" class="w-5 h-5" /></span>
             </button>
         </h3>
-        <div id="{{ $faqId }}-a{{ $i }}" role="region" aria-labelledby="{{ $faqId }}-q{{ $i }}"
-             class="grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none {{ $i === 0 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0' }}"
-             :class="open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'" :inert="! open" @if ($i !== 0) inert @endif>
+        <div id="{{ $faqId }}-a{{ $i }}" role="region" aria-labelledby="{{ $faqId }}-q{{ $i }}" class="faq-panel"
+             data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="open.toString()" x-effect="$el.inert = ! open" @if ($i !== 0) inert @endif>
             <div class="overflow-hidden">
                 <p class="pb-5 -mt-1 text-ink-2 max-w-[62ch]"><span>{{ $answer }}</span>@if ($link) <a href="{{ $link }}" class="font-semibold text-sindoor hover:underline">{{ __('See the chanda page') }}</a>@endif</p>
             </div>
