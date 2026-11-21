@@ -284,9 +284,13 @@
 }
 .nav-catering[aria-current="page"] { color: var(--color-turmeric); }
 .nav-nursery[aria-current="page"] { color: var(--color-tulsi); }
-.mnav-link { display: flex; align-items: center; justify-content: space-between; padding: .8rem 0; border-bottom: 1px solid var(--color-rule); }
-.mnav-link[aria-current="page"] { color: var(--color-sindoor); font-weight: 600; }
-.mnav-link[aria-current="page"]::after { content: ""; width: .5rem; height: .5rem; border-radius: 99px; background: currentColor; }
+/* Phone menu (sidebar) links: an icon, the page name; the current page in sindoor with a bar */
+.side-link { position: relative; display: flex; align-items: center; gap: .85rem; min-height: 3rem; padding: 0 .75rem; border-radius: 10px; font-size: 16.5px; color: var(--color-ink); transition: background-color .15s; }
+.side-link svg { color: var(--color-ink-3); flex-shrink: 0; }
+.side-link:hover { background: var(--color-paper-2); }
+.side-link[aria-current="page"] { background: color-mix(in srgb, var(--color-sindoor) 8%, transparent); color: var(--color-sindoor); font-weight: 600; }
+.side-link[aria-current="page"] svg { color: currentColor; }
+.side-link[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: .7rem; bottom: .7rem; width: 3px; border-radius: 3px; background: currentColor; }
 
 /* Screen entry: a short, quiet fade */
 @keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

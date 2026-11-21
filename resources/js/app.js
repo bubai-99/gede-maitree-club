@@ -2,6 +2,7 @@ import Alpine from 'alpinejs';
 import { drawIcons } from './icons';
 import { razorpayCheckout } from './pay';
 import { nursery } from './nursery';
+import { siteHeader } from './site-header';
 import { forgetThisDevice } from './forget';
 import { enhanceForms } from './forms';
 import { imageLoader } from './images';
@@ -10,6 +11,7 @@ window.Alpine = Alpine;
 
 Alpine.data('razorpayCheckout', razorpayCheckout);
 Alpine.data('nursery', nursery);
+Alpine.data('siteHeader', siteHeader);
 
 document.addEventListener('alpine:initialized', () => drawIcons());
 

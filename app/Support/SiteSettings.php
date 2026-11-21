@@ -66,7 +66,7 @@ class SiteSettings
     /**
      * Header menu, ready for the layout.
      *
-     * @return list<array{url: string, label: string, class: string, active: bool}>
+     * @return list<array{route: string, url: string, label: string, class: string, active: bool}>
      */
     public function mainMenu(): array
     {
@@ -81,6 +81,7 @@ class SiteSettings
             }
 
             $items[] = [
+                'route' => $item['route'],
                 'url' => route($item['route']),
                 'label' => local_text($setting['label'] ?? null, $setting['label_bn'] ?? null) ?: __($item['label']),
                 'class' => $item['class'] ?? '',

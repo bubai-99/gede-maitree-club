@@ -17,6 +17,12 @@
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');
     $mainMenu = $site->mainMenu();
+    // Phone menu: an icon for each page
+    $menuIcons = ['events.index' => 'calendar-days', 'notices.index' => 'megaphone', 'news.index' => 'newspaper', 'catering' => 'utensils', 'nursery' => 'sprout', 'gallery' => 'camera', 'committee' => 'users', 'contact' => 'phone', 'panjika' => 'calendar', 'chanda' => 'hand-coins'];
+    $moreMenu = array_values(array_filter([
+        Route::has('panjika') ? ['route' => 'panjika', 'url' => route('panjika'), 'label' => __('Panjika'), 'active' => request()->routeIs('panjika')] : null,
+        Route::has('chanda') ? ['route' => 'chanda', 'url' => route('chanda'), 'label' => __('Chanda & accounts'), 'active' => request()->routeIs('chanda')] : null,
+    ]));
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -53,9 +59,9 @@
 <body class="min-h-dvh site">
     <a href="#main" class="skip-link">{{ __('Skip to content') }}</a>
 
-    <header class="site-header sticky top-0 z-40 bg-paper border-b border-rule" x-data="{ open: false, scrolled: false }"
+    <header class="site-header sticky top-0 z-40 bg-paper border-b border-rule" x-data="siteHeader"
         x-init="scrolled = window.scrollY > 4" @scroll.window.passive="scrolled = window.scrollY > 4" :class="{ 'is-scrolled': scrolled }"
-        @keydown.escape.window="open = false">
+        @keydown.escape.window="close()">
         <div class="mx-auto max-w-[1160px] px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 min-w-0 shrink-0" aria-label="{{ __('Gede Maitree Club home') }}">
                 <x-seal :size="40" :estd="false" class="shrink-0" aria-hidden="true" />
@@ -70,32 +76,55 @@
                 @endforeach
             </nav>
             <div class="flex items-center gap-1 ml-auto lg:ml-1 shrink-0">
-                <x-lang-switch class="hidden lg:flex" />
+                <x-lang-switch />
                 @if (Route::has('join'))
                     <a href="{{ route('join') }}" class="hidden sm:inline-flex btn btn-primary btn-sm ml-1 whitespace-nowrap"><span class="xl:hidden">{{ __('Join') }}</span><span class="hidden xl:inline">{{ __('Become a member') }}</span></a>
                 @endif
-                <button type="button" class="lg:hidden btn btn-ghost btn-sm px-2" @click="open = ! open" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ __('Menu') }}"><x-icon name="menu" /></button>
+                <button type="button" class="lg:hidden btn btn-ghost btn-sm px-2" x-ref="menuButton" @click="open ? close() : show()" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ __('Menu') }}"><x-icon name="menu" /></button>
             </div>
         </div>
-        <nav id="mobile-nav" class="lg:hidden border-t border-rule bg-paper max-h-[calc(100dvh-4rem)] overflow-y-auto" x-show="open" x-cloak x-transition.opacity aria-label="{{ __('Main mobile') }}">
-            <ul class="px-5 py-2 text-[17px] grid sm:grid-cols-2 sm:gap-x-8">
-                @foreach ($mainMenu as $item)
-                    <li><a href="{{ $item['url'] }}" class="mnav-link" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a></li>
-                @endforeach
-                @if (Route::has('chanda'))
-                    <li><a href="{{ route('chanda') }}" class="mnav-link" @if (request()->routeIs('chanda')) aria-current="page" @endif>{{ __('Chanda & accounts') }}</a></li>
-                @endif
-            </ul>
-            <div class="px-5 pt-3 pb-5 flex flex-wrap items-center gap-3 border-t border-rule">
-                @if (Route::has('join'))
-                    <a href="{{ route('join') }}" class="btn btn-primary btn-sm sm:hidden">{{ __('Become a member') }}</a>
-                @endif
-                @if (Route::has('member.login'))
-                    <a href="{{ route('member.login') }}" class="btn btn-line btn-sm"><x-icon name="log-in" /><span>{{ __('Member login') }}</span></a>
-                @endif
-                <x-lang-switch class="ml-auto" long />
+        {{-- Phone and tablet menu: a sidebar from the right (moved to <body> so nothing on the page covers it) --}}
+        <template x-teleport="body">
+            <div class="lg:hidden fixed inset-0 z-[90]" x-show="open" x-cloak @keydown.tab="trap($event)">
+                <div class="absolute inset-0 bg-black/50" x-show="open" x-transition.opacity.duration.250ms @click="close()"></div>
+                <nav id="mobile-nav" x-ref="drawer" aria-label="{{ __('Main mobile') }}"
+                     class="absolute inset-y-0 right-0 w-[min(86vw,360px)] bg-paper shadow-2xl flex flex-col"
+                     x-show="open" x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="translate-x-full" x-transition:leave="transition duration-200 ease-in" x-transition:leave-end="translate-x-full">
+                    <div class="flex items-center gap-2.5 h-16 px-4 border-b border-rule shrink-0">
+                        <x-seal :size="34" :estd="false" class="shrink-0" aria-hidden="true" />
+                        <span class="font-display text-[1.15rem] text-sindoor truncate">{{ $clubName }}</span>
+                        <button type="button" x-ref="drawerClose" @click="close()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center shrink-0" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto overscroll-contain px-3 py-3">
+                        <ul class="space-y-0.5">
+                            @foreach ($mainMenu as $item)
+                                <li><a href="{{ $item['url'] }}" class="side-link" @if ($item['active']) aria-current="page" @endif><x-icon :name="$menuIcons[$item['route']] ?? 'chevron-right'" class="w-[18px] h-[18px]" /><span>{{ $item['label'] }}</span></a></li>
+                            @endforeach
+                        </ul>
+                        @if ($moreMenu)
+                            <p class="mt-4 px-3 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-3">{{ __('More') }}</p>
+                            <ul class="mt-1 space-y-0.5">
+                                @foreach ($moreMenu as $item)
+                                    <li><a href="{{ $item['url'] }}" class="side-link" @if ($item['active']) aria-current="page" @endif><x-icon :name="$menuIcons[$item['route']]" class="w-[18px] h-[18px]" /><span>{{ $item['label'] }}</span></a></li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                    <div class="shrink-0 border-t border-rule px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-2.5">
+                        @if (Route::has('join'))
+                            <a href="{{ route('join') }}" class="btn btn-primary w-full"><x-icon name="user-plus" />{{ __('Become a member') }}</a>
+                        @endif
+                        @if (Route::has('member.login'))
+                            <a href="{{ route('member.login') }}" class="btn btn-line w-full"><x-icon name="log-in" />{{ __('Member login') }}</a>
+                        @endif
+                        <div class="flex items-center gap-4 pt-1.5 text-[14px] text-ink-2">
+                            <a href="tel:{{ preg_replace('/\s+/', '', $club['phone']) }}" class="inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="phone" class="w-4 h-4" /><span class="num">{{ $club['phone'] }}</span></a>
+                            <a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="ml-auto inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="message-circle" class="w-4 h-4" />WhatsApp</a>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </template>
     </header>
 
     <x-flash />
