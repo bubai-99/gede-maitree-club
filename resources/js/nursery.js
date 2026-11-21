@@ -95,6 +95,7 @@ export function nursery() {
                 this.t.hello,
                 ...this.lines.map((l) => `• ${l.name} × ${l.qty}`),
                 `${this.t.total}: ${this.rupees(this.total)}`,
+                b.memberNo ? `${this.t.memberPrice}: ${this.rupees(this.memberTotal)}` : null,
                 '',
                 `${this.t.name}: ${b.name}`,
                 b.memberNo ? `${this.t.member}: ${b.memberNo.toUpperCase()}` : null,

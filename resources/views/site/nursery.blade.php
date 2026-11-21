@@ -30,7 +30,7 @@
         'plants' => $plantData,
         'category' => $category?->value ?? '',
         'whatsapp' => $whatsapp,
-        'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total'), 'name' => __('Name'), 'member' => __('Member no.'), 'pickup' => __('Pickup')],
+        'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total'), 'name' => __('Name'), 'member' => __('Member no.'), 'pickup' => __('Pickup'), 'memberPrice' => __('Member price')],
     ];
 @endphp
 <x-layouts.site seo="nursery" :title="$content->text('nursery', 'title')">
@@ -211,33 +211,42 @@
 
                     {{-- Who is ordering: goes into the WhatsApp message (WhatsApp already shows their number);
                          the name and member number are remembered on this phone --}}
-                    <fieldset x-show="lines.length" class="border-t border-rule pt-5 pb-6 space-y-4">
-                        <legend class="float-left w-full mb-4 font-semibold">{{ __('Your details') }}</legend>
-                        <div class="clear-left">
-                            <label for="buyer-name" class="label">{{ __('Your name') }}</label>
-                            <input id="buyer-name" name="name" class="field" x-model.trim="buyer.name" autocomplete="name" maxlength="80" required>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
+                    <fieldset x-show="lines.length" class="border-t border-rule pt-4 pb-4">
+                        <legend class="float-left w-full mb-2.5 text-[14px] font-semibold">{{ __('Your details') }}</legend>
+                        <div class="clear-left grid grid-cols-2 gap-x-3 gap-y-2.5 [&_.label]:text-[12.5px] [&_.label]:mb-1 [&_.field]:h-10 [&_.field]:text-[14.5px]">
+                            <div class="col-span-2">
+                                <label for="buyer-name" class="label">{{ __('Your name') }}</label>
+                                <input id="buyer-name" name="name" class="field" x-model.trim="buyer.name" autocomplete="name" maxlength="80" required>
+                            </div>
                             <div>
                                 <label for="buyer-member" class="label">{{ __('Member no.') }} <span class="font-normal text-ink-3">({{ __('if any') }})</span></label>
-                                <input id="buyer-member" name="member_no" class="field uppercase placeholder:normal-case" x-model.trim="buyer.memberNo" placeholder="MC-0101-1" maxlength="20" autocomplete="off">
+                                <input id="buyer-member" x-ref="memberNo" name="member_no" class="field uppercase placeholder:normal-case" x-model.trim="buyer.memberNo" placeholder="MC-0101-1" maxlength="20" autocomplete="off">
                             </div>
                             <div>
                                 <label for="buyer-pickup" class="label">{{ __('Pickup day') }}</label>
                                 <input id="buyer-pickup" name="pickup" type="date" class="field" x-model="buyer.pickup" :min="today">
                             </div>
                         </div>
-                        <p class="text-[12.5px] text-ink-3">{{ __('WhatsApp sends your number with the message, so we can reply.') }}</p>
+                        <p class="mt-2 text-[12px] text-ink-3">{{ __('WhatsApp sends your number with the message, so we can reply.') }}</p>
                     </fieldset>
                 </div>
-                <footer class="border-t border-rule px-5 py-4 bg-card shrink-0" x-show="lines.length">
-                    <dl class="space-y-1 text-[15px]">
-                        <div class="flex"><dt class="text-ink-2">{{ __('Total') }}</dt><dd class="ml-auto font-display text-[1.6rem] leading-none num" x-text="rupees(total)"></dd></div>
-                        <div class="flex text-[13.5px]"><dt class="text-tulsi">{{ __('Members pay') }}</dt><dd class="ml-auto text-tulsi font-semibold num" x-text="rupees(memberTotal)"></dd></div>
-                    </dl>
-                    <button type="submit" class="mt-4 btn w-full h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="message-circle" />{{ __('Order on WhatsApp') }}</button>
-                    <button type="button" @click="closeCart()" class="mt-2 btn btn-ghost w-full h-10 text-ink-2">{{ __('Keep browsing') }}</button>
-                    <p class="mt-2 text-[12.5px] text-ink-3 text-center">{{ __('Nothing is paid now. Collect at the club gate and pay in cash or UPI.') }}</p>
+                <footer class="border-t border-rule px-5 pt-3 pb-3 bg-card shrink-0" x-show="lines.length">
+                    {{-- The price: club members (with a member number) pay less; the club checks the number at the gate --}}
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-ink-2" x-text="buyer.memberNo ? {{ Js::from(__('Member price')) }} : {{ Js::from(__('Total')) }}"></span>
+                        <s x-show="buyer.memberNo" class="ml-auto text-[14px] text-ink-3 num" x-text="rupees(total)"></s>
+                        <span class="font-display text-[1.5rem] leading-none num" :class="buyer.memberNo ? 'text-tulsi' : 'ml-auto'" x-text="rupees(buyer.memberNo ? memberTotal : total)"></span>
+                    </div>
+                    <p x-show="! buyer.memberNo && memberTotal < total" class="mt-1 text-[12.5px] text-ink-2">
+                        {{ __('Club member?') }} <span class="text-tulsi font-semibold">{{ __('Pay') }} <span class="num" x-text="rupees(memberTotal)"></span></span>.
+                        <button type="button" class="underline underline-offset-2 text-tulsi" @click="$refs.memberNo.focus()">{{ __('Add your member no.') }}</button>
+                    </p>
+                    <p x-show="buyer.memberNo" class="mt-1 text-[12.5px] text-tulsi">{{ __('You save') }} <span class="num" x-text="rupees(total - memberTotal)"></span> · {{ __('we check the member no. at the gate') }}</p>
+                    <button type="submit" class="mt-3 btn w-full h-11 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="message-circle" />{{ __('Order on WhatsApp') }}</button>
+                    <p class="mt-2 flex items-center gap-2 text-[12px] text-ink-3">
+                        <span class="flex-1">{{ __('Nothing is paid now. Collect at the club gate and pay in cash or UPI.') }}</span>
+                        <button type="button" @click="closeCart()" class="shrink-0 font-semibold text-ink-2 hover:text-ink underline-offset-2 hover:underline">{{ __('Keep browsing') }}</button>
+                    </p>
                 </footer>
                 </form>
             </aside>
