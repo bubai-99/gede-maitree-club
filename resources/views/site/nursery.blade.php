@@ -63,8 +63,8 @@
                  (it stops at the end of the list). Instant filter and search: resources/js/nursery.js --}}
             <div>
                 <div x-ref="listTop" aria-hidden="true"></div>
-                <div class="sticky z-20 mx-[calc(50%-50vw)] py-3 bg-paper/95 backdrop-blur-sm border-b transition-[box-shadow,border-color] duration-200"
-                     :class="stuck ? 'border-rule shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]' : 'border-transparent'" :style="'top: ' + headerH + 'px'" style="top: 64px">
+                <div class="sticky z-20 mx-[calc(50%-50vw)] py-3 bg-paper/95 backdrop-blur-sm transition-shadow duration-200"
+                     :class="stuck && 'shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]'" :style="'top: ' + headerH + 'px'" style="top: 64px">
                     <div class="mx-auto max-w-[1160px] px-5">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
