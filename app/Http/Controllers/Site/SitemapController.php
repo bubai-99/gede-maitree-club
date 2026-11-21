@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\NewsPost;
 use App\Models\Notice;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,7 @@ class SitemapController extends Controller
 {
     /** Website pages listed in the sitemap (only routes that exist). */
     public const PAGES = [
-        'home', 'events.index', 'notices.index', 'catering', 'nursery', 'gallery', 'chanda',
+        'home', 'events.index', 'notices.index', 'news.index', 'catering', 'nursery', 'gallery', 'chanda',
         'committee', 'contact', 'join', 'volunteer', 'panjika', 'privacy', 'terms',
     ];
 
@@ -35,6 +36,10 @@ class SitemapController extends Controller
 
         foreach (Notice::query()->forPublic()->get() as $notice) {
             $urls[] = ['loc' => route('notices.show', $notice), 'lastmod' => $notice->updated_at?->toAtomString()];
+        }
+
+        foreach (NewsPost::query()->published()->get() as $post) {
+            $urls[] = ['loc' => route('news.show', $post), 'lastmod' => $post->updated_at?->toAtomString()];
         }
 
         return response()

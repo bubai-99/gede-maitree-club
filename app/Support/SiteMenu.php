@@ -18,6 +18,7 @@ final class SiteMenu
     public const MAIN = [
         ['route' => 'events.index', 'label' => 'Events'],
         ['route' => 'notices.index', 'label' => 'Notices'],
+        ['route' => 'news.index', 'label' => 'News'],
         ['route' => 'catering', 'label' => 'Catering', 'class' => 'nav-catering'],
         ['route' => 'nursery', 'label' => 'Nursery', 'class' => 'nav-nursery'],
         ['route' => 'gallery', 'label' => 'Gallery'],
@@ -29,6 +30,7 @@ final class SiteMenu
     public const FOOTER_CLUB = [
         ['route' => 'events.index', 'label' => 'Events'],
         ['route' => 'notices.index', 'label' => 'Notices'],
+        ['route' => 'news.index', 'label' => 'News'],
         ['route' => 'panjika', 'label' => 'Panjika'],
         ['route' => 'gallery', 'label' => 'Gallery'],
         ['route' => 'committee', 'label' => 'About & committee'],

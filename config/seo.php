@@ -39,6 +39,14 @@ return [
         'description' => 'The latest notices from Gede Maitree Club: meetings, pujas, sports and service for Netaji Para.',
         'description_bn' => 'গেদে মৈত্রী ক্লাবের সাম্প্রতিক নোটিস: সভা, পূজা, খেলা ও পাড়ার সেবা।',
     ],
+    'news' => [
+        'label' => 'News',
+        'label_bn' => 'খবর',
+        'title' => 'News & stories',
+        'title_bn' => 'খবর ও গল্প',
+        'description' => 'News and stories from Gede Maitree Club, Netaji Para: pujas, sports, service camps, with photos and videos.',
+        'description_bn' => 'গেদে মৈত্রী ক্লাব, নেতাজি পাড়ার খবর ও গল্প: পূজা, খেলা, সেবা শিবির, ছবি ও ভিডিও সহ।',
+    ],
     'catering' => [
         'label' => 'Serving',
         'label_bn' => 'পরিবেশন',

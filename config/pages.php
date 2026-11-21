@@ -111,6 +111,15 @@ return [
             'intro' => ['label' => 'Introduction', 'default' => 'Meetings, events, accounts, lost and found. The same notices that go up on the board at the club gate.', 'long' => true],
         ],
     ],
+    'news' => [
+        'label' => 'News',
+        'photo' => 'pujaCrowd',
+        'fields' => [
+            'kicker' => ['label' => 'Small heading', 'default' => 'From the para'],
+            'title' => ['label' => 'Title', 'default' => 'News & stories'],
+            'intro' => ['label' => 'Introduction', 'default' => 'What happened at the pujas, on the field and at the service camps, with photos and videos.', 'long' => true],
+        ],
+    ],
     'chanda' => [
         'label' => 'Chanda & accounts',
         'photo' => 'diyaTray',

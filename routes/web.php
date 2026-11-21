@@ -32,6 +32,8 @@ Route::get('/', Site\HomeController::class)->name('home');
 
 Route::get('/events', [Site\EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [Site\EventController::class, 'show'])->name('events.show');
+Route::get('/news', [Site\NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{post:slug}', [Site\NewsController::class, 'show'])->name('news.show');
 Route::get('/notices', [Site\NoticeController::class, 'index'])->name('notices.index');
 Route::get('/notices/{notice:slug}', [Site\NoticeController::class, 'show'])->name('notices.show');
 
@@ -159,6 +161,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         'plants' => [Admin\PlantController::class, 'plant'],
         'packages' => [Admin\CateringPackageController::class, 'package'],
         'committee' => [Admin\CommitteeMemberController::class, 'committee'],
+        'news' => [Admin\NewsPostController::class, 'post'],
     ];
 
     foreach ($cms as $name => [$controller, $parameter]) {
@@ -249,6 +252,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         Route::put('/source', 'source')->name('source');
         Route::delete('/{day}', 'destroy')->whereNumber('day')->name('destroy');
     });
+
+    Route::resource('news-categories', Admin\NewsCategoryController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['news-categories' => 'category']);
 
     Route::get('/pages', [Admin\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/{key}', [Admin\PageController::class, 'edit'])->whereIn('key', array_keys(config('pages')))->name('pages.edit');
