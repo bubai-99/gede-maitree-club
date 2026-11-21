@@ -225,6 +225,22 @@ class GateScannerTest extends TestCase
         $this->assertSame(3, PassScan::query()->count());
     }
 
+    public function test_offline_scan_times_sent_in_utc_keep_the_real_time(): void
+    {
+        // The scanner sends new Date().toISOString(), which is UTC ("...Z").
+        $this->travelTo(now()->setTime(10, 30));
+        $uuid = (string) Str::uuid();
+        $this->actingAs($this->volunteer)->postJson('/admin/scan/picnic/sync', ['ops' => [
+            ['op' => 'scan', 'uuid' => $uuid, 'code' => $this->pass->qrText(), 'gate' => 'Gate 1', 'scanned_at' => now()->setTime(10, 0)->utc()->format('Y-m-d\TH:i:s.v\Z'), 'local_result' => 'allowed', 'people' => 3],
+        ]])->assertOk();
+
+        $this->assertSame('10:00', PassScan::query()->where('uuid', $uuid)->sole()->scanned_at->format('H:i'));
+        $this->assertSame('10:00', $this->pass->refresh()->used_at?->format('H:i'));
+
+        // A later online scan at another gate is the duplicate, not the offline one.
+        $this->scan(['code' => $this->pass->qrText(), 'gate' => 'Gate 2'])->assertJsonPath('scan.result', 'already');
+    }
+
     public function test_a_later_offline_scan_is_reported_as_a_duplicate(): void
     {
         $this->scan(['code' => $this->pass->qrText()]);

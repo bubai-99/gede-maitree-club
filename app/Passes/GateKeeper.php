@@ -507,7 +507,9 @@ class GateKeeper
             return now();
         }
 
-        $at = Carbon::instance($at);
+        // Offline clocks send UTC (toISOString). The timestamp columns hold app-timezone
+        // wall time, so convert first or the scan is stored 5½ hours early.
+        $at = Carbon::instance($at)->setTimezone(config('app.timezone'));
 
         return $at->greaterThan(now()) ? now() : $at->max(now()->subDays(2));
     }
