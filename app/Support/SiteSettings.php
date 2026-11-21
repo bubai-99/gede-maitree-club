@@ -143,9 +143,14 @@ class SiteSettings
             )));
         }
 
-        $lanes = array_values(array_filter(array_keys(FormOptions::AREAS), fn (string $key): bool => $key !== self::ELSEWHERE));
+        $lanes = [];
+        foreach (array_keys(FormOptions::AREAS) as $key) {
+            if ($key !== self::ELSEWHERE) {
+                $lanes[] = ['name' => $key, 'name_bn' => null];
+            }
+        }
 
-        return array_map(fn (string $key): array => ['name' => $key, 'name_bn' => null], $lanes);
+        return $lanes;
     }
 
     /**
