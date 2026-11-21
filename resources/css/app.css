@@ -649,3 +649,6 @@ label:has(> input[type="checkbox"][required])::after {
     border-left: 0; border-top: 2px dashed color-mix(in srgb, var(--color-tulsi) 45%, transparent);
   }
 }
+
+/* Search boxes that have their own clear button: hide the browser's */
+.own-clear::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }

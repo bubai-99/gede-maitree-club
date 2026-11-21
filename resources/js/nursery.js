@@ -18,6 +18,9 @@ export function nursery() {
         qtyInPanel: 1,
         cartOpen: false,
         lastFocus: null,
+        stuck: false, // the filter bar is pinned under the header
+        headerH: 64,
+        searchOpen: false, // phones: the search box under the chips
 
         init() {
             try {
@@ -32,10 +35,31 @@ export function nursery() {
                 const url = new URL(location.href);
                 if (c) url.searchParams.set('category', c); else url.searchParams.delete('category');
                 history.replaceState(null, '', url);
+                this.toListTop();
             });
+            this.$watch('q', () => this.toListTop());
+
+            // Pinned filter bar: sits right under the site header; "stuck" adds its shadow.
+            const header = document.querySelector('.site-header');
+            const measure = () => { this.headerH = header ? header.offsetHeight : 0; };
+            measure();
+            window.addEventListener('resize', measure, { passive: true });
+            const check = () => { this.stuck = this.$refs.listTop.getBoundingClientRect().top < this.headerH; };
+            window.addEventListener('scroll', check, { passive: true });
+            check();
         },
 
         plant(slug) { return this.plants.find((p) => p.slug === slug) },
+        /** After a new filter or search while scrolled down the list, show the results from the first plant. */
+        toListTop() {
+            if (!this.stuck) return;
+            const top = this.$refs.listTop.getBoundingClientRect().top + window.scrollY - this.headerH;
+            window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        },
+        toggleSearch() {
+            this.searchOpen = !this.searchOpen;
+            if (this.searchOpen) this.$nextTick(() => this.$refs.mobileSearch?.focus());
+        },
         visible(slug) {
             const p = this.plant(slug);
             const q = this.q.trim().toLowerCase();
