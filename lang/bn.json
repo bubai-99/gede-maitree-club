@@ -1915,5 +1915,8 @@
     "Show this card at the gate": "গেটে এই কার্ড দেখান",
     "For club events and member prices at the nursery and on catering. Not transferable.": "ক্লাবের অনুষ্ঠান আর নার্সারি ও ক্যাটারিংয়ে সদস্য-দামের জন্য। হস্তান্তরযোগ্য নয়।",
     "If found, please return to: :address": "কুড়িয়ে পেলে দয়া করে ফেরত দিন: :address",
-    "Secretary": "সম্পাদক"
+    "Secretary": "সম্পাদক",
+    "Back to the member app": "সদস্য অ্যাপে ফিরুন",
+    "You are signed in as a member: :name": "আপনি সদস্য হিসেবে লগইন করা আছেন: :name",
+    "To open the committee console, sign in below with a committee account.": "কমিটি কনসোল খুলতে নিচে কমিটির অ্যাকাউন্ট দিয়ে লগইন করুন।"
 }

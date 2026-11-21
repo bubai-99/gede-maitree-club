@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +16,16 @@ use Illuminate\View\View;
  */
 class CommitteeLoginController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View|RedirectResponse
     {
-        return view('auth.committee-login');
+        $user = $request->user();
+
+        if ($user instanceof User && $user->isCommitteeMember()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Someone signed in to the member app: say so, and let them sign in with a committee account.
+        return view('auth.committee-login', ['signedInAs' => $user instanceof User ? $user : null]);
     }
 
     public function store(LoginRequest $request): RedirectResponse

@@ -132,9 +132,21 @@ class AuthTest extends TestCase
         $this->get('/admin')->assertRedirect(route('admin.login'));
     }
 
-    public function test_members_cannot_open_the_console(): void
+    public function test_members_cannot_open_the_console_but_may_switch_to_a_committee_account(): void
     {
-        $this->actingAs($this->member())->get('/admin')->assertForbidden();
+        $member = $this->member(['name' => 'Sample Member']);
+
+        // Both apps share one sign-in: a member is offered the committee sign-in, not a bare 403.
+        $this->actingAs($member)->get('/admin')->assertRedirect(route('admin.login'));
+        $this->actingAs($member)->get('/admin/khata')->assertRedirect(route('admin.login'));
+        $this->actingAs($member)->get('/admin/login')->assertOk()->assertSee('You are signed in as a member: Sample Member', false);
+
+        $committee = $this->committee(Role::Treasurer, ['email' => 'treasurer@example.org', 'password' => 'secret-pass-2']);
+        $this->actingAs($member)->post('/admin/login', ['login' => 'treasurer@example.org', 'password' => 'secret-pass-2'])->assertRedirect(route('admin.dashboard'));
+        $this->assertSame($committee->id, auth()->id());
+
+        // Already on the committee: the sign-in page goes straight to the console.
+        $this->actingAs($committee)->get('/admin/login')->assertRedirect(route('admin.dashboard'));
     }
 
     public function test_committee_only_accounts_are_sent_from_the_member_app_to_the_console(): void

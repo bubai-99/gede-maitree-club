@@ -20,7 +20,11 @@ class EnsureCommittee
             return redirect()->guest(route('admin.login'));
         }
 
-        abort_unless($user->isCommitteeMember(), 403);
+        // Signed in to the member app (both apps share one sign-in): offer the committee sign-in
+        // instead of a bare "Forbidden".
+        if (! $user->isCommitteeMember()) {
+            return redirect()->route('admin.login');
+        }
 
         return $next($request);
     }

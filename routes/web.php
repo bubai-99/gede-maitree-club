@@ -71,6 +71,11 @@ Route::get('/robots.txt', [Site\SitemapController::class, 'robots'])->name('robo
 |--------------------------------------------------------------------------
 */
 
+// Committee sign-in is also open to someone signed in to the member app, so they can switch to a
+// committee account (CommitteeLoginController sends committee members straight to the console).
+Route::get('/admin/login', [CommitteeLoginController::class, 'create'])->name('admin.login');
+Route::post('/admin/login', [CommitteeLoginController::class, 'store'])->middleware('throttle:20,1')->name('admin.login.store');
+
 Route::middleware('guest')->group(function () {
     Route::get('/app/login', [MemberLoginController::class, 'create'])->name('member.login');
     Route::post('/app/login', [MemberLoginController::class, 'store'])->name('member.login.store');
@@ -78,9 +83,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/app/login/code', [OtpLoginController::class, 'send'])->middleware('throttle:10,1')->name('member.otp.send');
     Route::get('/app/login/code', [OtpLoginController::class, 'show'])->name('member.otp.show');
     Route::post('/app/login/code/verify', [OtpLoginController::class, 'verify'])->middleware('throttle:10,1')->name('member.otp.verify');
-
-    Route::get('/admin/login', [CommitteeLoginController::class, 'create'])->name('admin.login');
-    Route::post('/admin/login', [CommitteeLoginController::class, 'store'])->name('admin.login.store');
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('throttle:6,1')->name('password.email');
