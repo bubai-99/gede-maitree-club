@@ -53,7 +53,7 @@
                                                     @endfor
                                                 </g>
                                             </svg>
-                                            <span class="idc-art-seal" aria-hidden="true"><x-seal :size="64" :estd="false" color="currentColor" /></span>
+                                            <span class="idc-art-seal" aria-hidden="true"><x-seal :size="96" :rotate="0" :estd="false" color="currentColor" /></span>
                                             <svg class="idc-wave" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C 40 4, 80 24, 120 14 S 200 4, 240 14 S 320 24, 360 14 S 400 8, 400 8 V24 H0Z" fill="currentColor"/></svg>
                                             <div class="idc-photo overflow-hidden"><x-id-photo :member="$member" /></div>
                                             <div class="idc-info">
