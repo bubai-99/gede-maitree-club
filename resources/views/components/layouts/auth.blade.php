@@ -10,7 +10,7 @@
     <link rel="manifest" href="{{ asset($isAdmin ? 'admin.webmanifest' : 'member.webmanifest') }}">
     <link rel="apple-touch-icon" href="{{ asset($isAdmin ? 'icons/admin-180.png' : 'icons/member-180.png') }}">
 </head>
-<body class="min-h-dvh bg-paper">
+<body class="min-h-dvh bg-paper" data-signed-out>
     <div class="min-h-dvh lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <aside class="hidden lg:flex relative bg-ink text-white flex-col justify-between p-12 overflow-hidden isolate" aria-hidden="true">
             <div class="absolute inset-0 -z-10"><x-photo :key="$photo" :width="1200" /></div>

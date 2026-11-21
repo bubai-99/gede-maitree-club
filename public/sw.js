@@ -1,6 +1,7 @@
 // Network first, cache as fallback: pages already opened keep working on a weak network
 // (at the puja gate), and a new version is picked up on the next load.
-// The cache is cleared when someone signs out (see resources/js/app.js and resources/js/scan.js).
+// The cache is cleared on sign-out, on any sign-in page and when a page redirects to sign-in
+// (see resources/js/forget.js).
 //
 // - Member passes (/app/events/passes/...) are ordinary pages: once opened they show offline.
 // - The gate scanner page (/admin/scan) and its script and .wasm are cached the same way; its data
@@ -27,6 +28,11 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(request)
       .then((response) => {
+        // Sent to a sign-in page: the session has ended, so forget the last person's pages.
+        if (response.redirected && new URL(response.url).pathname.endsWith('/login')) {
+          caches.delete(CACHE);
+          return response;
+        }
         if (response.ok && response.type === 'basic') {
           const copy = response.clone();
           caches.open(CACHE).then((cache) => cache.put(request, copy));

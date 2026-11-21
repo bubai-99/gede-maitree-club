@@ -12,6 +12,7 @@
 import { BarcodeDetector, prepareZXingModule } from 'barcode-detector/ponyfill';
 import wasmUrl from 'zxing-wasm/reader/zxing_reader.wasm?url';
 import { drawIcons } from './icons';
+import { forgetThisDevice } from './forget';
 
 const cfgEl = document.getElementById('scan-config');
 const cfg = cfgEl ? JSON.parse(cfgEl.textContent) : null;
@@ -570,9 +571,7 @@ async function endSheet() {
     <button type="button" data-sheet-close class="btn w-full h-12 mt-2 bg-transparent text-paper/80">${t('keepScanning')}</button>`, (b) => {
     $('#end-sync', b)?.addEventListener('click', async () => { await sync(); closeSheet(); endSheet(); });
     $('#end-out', b).addEventListener('click', () => {
-      localStorage.removeItem('gmc-shift-start');
-      navigator.serviceWorker?.controller?.postMessage('clear-cache');
-      $('#logout-form').submit();
+      forgetThisDevice().finally(() => $('#logout-form').submit());
     });
   });
 }
