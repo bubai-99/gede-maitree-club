@@ -22,9 +22,9 @@
             </ul>
         </x-page-banner>
 
-        <div class="mx-auto max-w-[1160px] px-5 py-10 pb-36">
-            {{-- How buying works: three steps joined by a dashed path (across on wide screens, down on phones) --}}
-            <section class="mb-8 rounded-[18px] bg-tulsi-wash/70 border border-tulsi/15 px-5 py-4 sm:px-6 sm:py-5" aria-labelledby="how-buy">
+        {{-- How buying works: a full-width band right under the banner; three steps joined by a dashed path (across on wide screens, down on phones) --}}
+        <section class="bg-tulsi-wash border-b border-tulsi/15" aria-labelledby="how-buy">
+            <div class="mx-auto max-w-[1160px] px-5 py-5 sm:py-6">
                 <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[13px]' : 'text-[11.5px] uppercase tracking-[0.14em]' }}">{{ __('How to buy') }}</h2>
                 <ol class="nursery-steps mt-3 grid sm:grid-cols-3 gap-4 sm:gap-6">
                     @foreach ([['sprout', __('Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as $n => [$icon, $title, $text])
@@ -37,7 +37,10 @@
                         </li>
                     @endforeach
                 </ol>
-            </section>
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-[1160px] px-5 pt-8 pb-36">
             <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                 <nav class="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 flex-1" aria-label="{{ __('Plant types') }}">
                     <a href="{{ route('nursery') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[current=page]:bg-tulsi aria-[current=page]:text-white aria-[current=page]:border-tulsi" @if (! $category) aria-current="page" @endif>{{ __('All') }}</a>
