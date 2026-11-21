@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * A server on the roster for a catering order.
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property string $server_name
+ * @property ?string $phone
+ * @property bool $is_leader
+ * @property int $wage
+ * @property bool $confirmed
  */
 #[Table('catering_roster')]
 #[Fillable(['order_id', 'server_name', 'phone', 'is_leader', 'wage', 'confirmed'])]

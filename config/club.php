@@ -30,6 +30,10 @@ return [
     'admission_fee' => 500,
     'member_discount_percent' => 10,
 
+    // Catering: advance asked for with the quote, and the wage of one server for one booking. SAMPLE.
+    'catering_advance_percent' => 20,
+    'catering_server_wage' => 500,
+
     // SAMPLE numbers shown on the home and About pages until the committee sets them.
     'stats' => [
         'volunteers' => 61,

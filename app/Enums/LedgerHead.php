@@ -33,6 +33,7 @@ enum LedgerHead: string
     case PlantsAndPots = 'plants_and_pots';
     case GatewayFee = 'gateway_fee';
     case BankCharges = 'bank_charges';
+    case Refunds = 'refunds';
     case OtherExpense = 'other_expense';
 
     // Cash moved between the cash box and the bank
@@ -60,6 +61,7 @@ enum LedgerHead: string
             self::PlantsAndPots => 'Plants and pots',
             self::GatewayFee => 'Payment gateway fee',
             self::BankCharges => 'Bank charges',
+            self::Refunds => 'Refunds',
             self::OtherExpense => 'Other expense',
             self::CashTransfer => 'Cash and bank transfer',
         };

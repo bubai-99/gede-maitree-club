@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\LedgerEntry;
 use App\Models\User;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
@@ -20,11 +21,12 @@ class Khata
 {
     /**
      * @param  array{type: LedgerType, head: LedgerHead, account: LedgerAccount, amount: int, entry_date: string, note: ?string, event_id?: ?int}  $data
+     * @param  ?Model  $source  what the entry is for (a catering order, a stock delivery), if anything
      */
-    public function record(Book $book, array $data, User $by, ?UploadedFile $bill = null): LedgerEntry
+    public function record(Book $book, array $data, User $by, ?UploadedFile $bill = null, ?Model $source = null): LedgerEntry
     {
-        return DB::transaction(function () use ($book, $data, $by, $bill): LedgerEntry {
-            $entry = LedgerEntry::query()->create([
+        return DB::transaction(function () use ($book, $data, $by, $bill, $source): LedgerEntry {
+            $entry = new LedgerEntry([
                 'book_id' => $book->id,
                 'event_id' => $data['event_id'] ?? null,
                 'entry_date' => $data['entry_date'],
@@ -35,6 +37,10 @@ class Khata
                 'note' => $data['note'],
                 'recorded_by' => $by->id,
             ]);
+            if ($source !== null) {
+                $entry->source()->associate($source);
+            }
+            $entry->save();
 
             if ($bill !== null) {
                 $entry->addMedia($bill)->usingFileName('bill-'.$entry->id.'.'.$bill->guessExtension())->toMediaCollection('bill');

@@ -2,8 +2,11 @@
 
 namespace App\Support;
 
+use App\Enums\CateringOrderStatus;
 use App\Enums\DueStatus;
+use App\Enums\EnquiryKind;
 use App\Enums\PaymentStatus;
+use App\Models\CateringOrder;
 use App\Models\Due;
 use App\Models\Enquiry;
 use App\Models\Payment;
@@ -72,8 +75,10 @@ final class Navigation
             ['route' => 'admin.chanda.cash', 'icon' => 'wallet', 'label' => 'Chanda cash', 'ability' => 'chanda.cash'],
         ]],
         ['group' => 'Businesses', 'items' => [
-            ['route' => 'admin.packages.index', 'icon' => 'chef-hat', 'label' => 'Catering', 'ability' => 'website.view'],
-            ['route' => 'admin.plants.index', 'icon' => 'sprout', 'label' => 'Nursery', 'ability' => 'website.view'],
+            ['route' => 'admin.catering.index', 'icon' => 'chef-hat', 'label' => 'Catering', 'ability' => 'catering.manage', 'badge' => 'catering'],
+            ['route' => 'admin.nursery.index', 'icon' => 'sprout', 'label' => 'Nursery', 'ability' => 'nursery.manage', 'also' => 'admin.nursery.*'],
+            ['route' => 'admin.packages.index', 'icon' => 'utensils', 'label' => 'Catering packages', 'ability' => 'website.view'],
+            ['route' => 'admin.plants.index', 'icon' => 'flower-2', 'label' => 'Plant catalogue', 'ability' => 'website.view'],
         ]],
         ['group' => 'Club', 'items' => [
             ['route' => 'admin.events.index', 'icon' => 'calendar-days', 'label' => 'Events', 'ability' => 'website.view'],
@@ -146,6 +151,9 @@ final class Navigation
             'enquiries' => Enquiry::query()->open()->count(),
             'dues' => Due::query()->where('status', DueStatus::Due->value)->distinct()->count('family_id'),
             'payments' => Payment::query()->where('status', PaymentStatus::AwaitingConfirmation->value)->count(),
+            // New catering enquiries: on the board but not yet quoted, or from the website and not yet on the board.
+            'catering' => CateringOrder::query()->where('status', CateringOrderStatus::Enquiry->value)->count()
+                + Enquiry::query()->open()->where('kind', EnquiryKind::Catering->value)->count(),
             default => 0,
         };
     }

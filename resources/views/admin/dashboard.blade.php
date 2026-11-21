@@ -145,7 +145,7 @@
                         <span class="w-9 h-9 rounded-full bg-tulsi-wash text-tulsi grid place-items-center shrink-0"><x-icon name="sprout" class="w-[18px] h-[18px]" /></span>
                         <div class="flex-1"><p class="font-semibold leading-snug">{{ trans_choice(':count plant almost out of stock|:count plants almost out of stock', $lowStock->count(), ['count' => digits($lowStock->count())]) }}</p>
                         <p class="text-sm text-ink-3 mt-0.5">{{ $lowStock->map(fn ($p) => $p->tr('name'))->implode(', ') }}</p></div>
-                        <a href="{{ route('admin.plants.index') }}" class="btn btn-line btn-sm shrink-0">{{ __('Restock') }}</a>
+                        <a href="{{ auth()->user()?->can('nursery.manage') ? route('admin.nursery.stock') : route('admin.plants.index') }}" class="btn btn-line btn-sm shrink-0">{{ __('Restock') }}</a>
                     </li>
                 @endif
 

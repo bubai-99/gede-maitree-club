@@ -203,6 +203,35 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         });
     });
 
+    // Catering: orders from enquiry to settled, CT receipts, serving team, expenses (Catering in-charge, Admin)
+    Route::controller(Admin\CateringOrderController::class)->prefix('catering')->name('catering.')->middleware('can:catering.manage')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/receipts/{payment}', 'receipt')->name('receipt');
+        Route::put('/{order}/quote', 'quote')->name('quote');
+        Route::post('/{order}/payments', 'receive')->middleware('throttle:60,1')->name('receive');
+        Route::post('/{order}/served', 'served')->name('served');
+        Route::post('/{order}/lost', 'lost')->name('lost');
+        Route::post('/{order}/cancel', 'cancel')->name('cancel');
+        Route::post('/{order}/expenses', 'expense')->name('expense');
+        Route::post('/{order}/wages', 'wages')->name('wages');
+        Route::post('/{order}/team', 'addServer')->name('team.store');
+        Route::post('/{order}/team/{server}/confirm', 'confirmServer')->name('team.confirm');
+        Route::delete('/{order}/team/{server}', 'removeServer')->name('team.destroy');
+    });
+
+    // Nursery: counter sales in the NS series, stock in and losses (Nursery in-charge, Admin)
+    Route::controller(Admin\NurseryController::class)->prefix('nursery')->name('nursery.')->middleware('can:nursery.manage')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/sales', 'store')->middleware('throttle:60,1')->name('store');
+        Route::get('/sales/{sale}', 'sale')->name('sale');
+        Route::post('/sales/{sale}/cancel', 'cancel')->name('cancel');
+        Route::get('/stock', 'stock')->name('stock');
+        Route::post('/stock/{plant}/in', 'stockIn')->name('stock.in');
+        Route::post('/stock/{plant}/loss', 'loss')->name('stock.loss');
+    });
+
     Route::get('/pages', [Admin\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/{key}', [Admin\PageController::class, 'edit'])->whereIn('key', array_keys(config('pages')))->name('pages.edit');
     Route::put('/pages/{key}', [Admin\PageController::class, 'update'])->whereIn('key', array_keys(config('pages')))->name('pages.update');
