@@ -11,6 +11,8 @@ use App\Models\Concerns\Bilingual;
 use App\Models\Concerns\HasPhoto;
 use App\Models\Concerns\LogsChanges;
 use App\Models\Concerns\Publishable;
+use App\Support\Photo;
+use App\Support\VideoEmbed;
 use Database\Factories\PlantFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,12 +25,17 @@ use Spatie\MediaLibrary\HasMedia;
  */
 #[Fillable([
     'slug', 'name', 'name_bn', 'category', 'pot', 'pot_bn', 'price', 'member_price', 'stock', 'is_new',
-    'light', 'water', 'about', 'about_bn', 'tip', 'tip_bn', 'photo', 'active', 'sort', 'status', 'published_at',
+    'light', 'water', 'about', 'about_bn', 'tip', 'tip_bn', 'details', 'details_bn', 'videos', 'photo', 'gallery',
+    'active', 'sort', 'status', 'published_at',
 ])]
 class Plant extends Model implements HasMedia, PublishesContent
 {
     /** @use HasFactory<PlantFactory> */
-    use Bilingual, HasFactory, HasPhoto, LogsChanges, Publishable;
+    use Bilingual, HasFactory, LogsChanges, Publishable;
+
+    use HasPhoto {
+        HasPhoto::registerMediaCollections as registerPhotoCollection;
+    }
 
     /**
      * @return array<string, string>
@@ -47,7 +54,59 @@ class Plant extends Model implements HasMedia, PublishesContent
             'sort' => 'integer',
             'status' => PublishStatus::class,
             'published_at' => 'datetime',
+            'videos' => 'array',
+            'gallery' => 'array',
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->registerPhotoCollection();
+        $this->addMediaCollection('images')->acceptsMimeTypes(self::PHOTO_MIMES);
+    }
+
+    /**
+     * Every photo of the plant for the details panel, the main one first: the uploaded photos, or
+     * (until the club uploads its own) the sample photos.
+     *
+     * @return list<array{url: string, thumb: string}>
+     */
+    public function photos(): array
+    {
+        $out = [];
+        if ($cover = $this->photoUrl(1200)) {
+            $out[] = ['url' => $cover, 'thumb' => (string) $this->photoUrl(200)];
+        }
+        foreach ($this->getMedia('images') as $media) {
+            $out[] = ['url' => $media->getUrl(), 'thumb' => $media->getUrl()];
+        }
+        if ($this->getMedia('images')->isEmpty()) {
+            foreach ($this->gallery ?? [] as $key) {
+                if (Photo::exists($key)) {
+                    $out[] = ['url' => Photo::url($key, 1200), 'thumb' => Photo::url($key, 200)];
+                }
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * The video links as players, with their captions.
+     *
+     * @return list<array{embed: VideoEmbed, caption: ?string}>
+     */
+    public function embeds(): array
+    {
+        $out = [];
+        foreach ($this->videos ?? [] as $video) {
+            $embed = VideoEmbed::from((string) ($video['url'] ?? ''));
+            if ($embed !== null) {
+                $out[] = ['embed' => $embed, 'caption' => $video['caption'] ?? null];
+            }
+        }
+
+        return $out;
     }
 
     public function getRouteKeyName(): string

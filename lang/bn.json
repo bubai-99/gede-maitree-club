@@ -1972,5 +1972,13 @@
     "Please tell me when :plant is back at the nursery.": ":plant নার্সারিতে এলে আমাকে জানাবেন।",
     "Tell me when it is back": "এলে জানাবেন",
     "Pick up at the club gate. Pay at the gate in cash or UPI.": "ক্লাবের গেট থেকে নিন। গেটে নগদ বা ইউপিআই-এ দাম দিন।",
-    "Close search": "খোঁজা বন্ধ"
+    "Close search": "খোঁজা বন্ধ",
+    "How to care for it": "কীভাবে যত্ন নেবেন",
+    "Previous photo": "আগের ছবি",
+    "Next photo": "পরের ছবি",
+    "Photo :n": ":n নম্বর ছবি",
+    "Care guide": "যত্নের নির্দেশিকা",
+    "Shown in the plant’s details on the website. ## makes a heading, **bold**, - starts a list. A YouTube, Facebook or other video link on a line of its own shows as the video.": "ওয়েবসাইটে গাছের বিস্তারিতে দেখা যায়। ## দিলে শিরোনাম, **মোটা**, - দিয়ে তালিকা। ইউটিউব, ফেসবুক বা অন্য ভিডিওর লিঙ্ক আলাদা লাইনে দিলে ভিডিওটি দেখা যাবে।",
+    "One link per line: YouTube, Facebook, Instagram, Vimeo, Google Drive, Dailymotion, or a .mp4 file. Add a caption after a |.": "প্রতি লাইনে একটি লিঙ্ক: ইউটিউব, ফেসবুক, ইনস্টাগ্রাম, ভিমিও, গুগল ড্রাইভ, ডেইলিমোশন বা .mp4 ফাইল। | চিহ্নের পরে ক্যাপশন দিন।",
+    "Shown with the main photo in the plant’s details. Pick several at once. JPG, PNG or WebP, up to 6 MB each.": "গাছের বিস্তারিতে মূল ছবির সঙ্গে দেখা যাবে। একসঙ্গে কয়েকটি বাছুন। JPG, PNG বা WebP, প্রতিটি ৬ MB পর্যন্ত।"
 }

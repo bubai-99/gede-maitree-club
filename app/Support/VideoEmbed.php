@@ -92,6 +92,37 @@ final class VideoEmbed
     }
 
     /**
+     * A "videos" box from a console form: one link per line, a caption after a "|".
+     * "https://youtu.be/… | Dhunuchi naach" → [['url' => …, 'caption' => 'Dhunuchi naach']].
+     *
+     * @return list<array{url: string, caption: ?string}>
+     */
+    public static function lines(?string $text): array
+    {
+        $out = [];
+        foreach (preg_split('/\R/', (string) $text) ?: [] as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+            [$url, $caption] = array_pad(array_map('trim', explode('|', $line, 2)), 2, null);
+            $out[] = ['url' => (string) $url, 'caption' => $caption !== '' ? $caption : null];
+        }
+
+        return $out;
+    }
+
+    /**
+     * The same list back as text for the form.
+     *
+     * @param  ?list<array{url?: string, caption?: ?string}>  $videos
+     */
+    public static function text(?array $videos): string
+    {
+        return collect($videos ?? [])->map(fn ($v) => trim(($v['url'] ?? '').(! empty($v['caption']) ? ' | '.$v['caption'] : '')))->join("\n");
+    }
+
+    /**
      * "90", "1m30s", "1h2m3s" → seconds.
      */
     private static function seconds(mixed $t): int

@@ -673,3 +673,8 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 .reviews-thumbs { --fl: 0px; --fr: 0px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%); }
 .reviews-thumbs.fade-l { --fl: 56px; }
 .reviews-thumbs.fade-r { --fr: 72px; }
+
+/* Care guide in the plant details panel: a little tighter than a news story */
+.plant-care { font-size: 16px; line-height: 1.65; }
+.plant-care h2 { font-size: 1.15rem; margin-top: 1.4em; font-family: inherit; font-weight: 700; color: var(--color-tulsi); }
+.plant-care > :first-child { margin-top: 0; }

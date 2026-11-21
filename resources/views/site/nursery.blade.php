@@ -21,6 +21,10 @@
         'water' => $p->water?->label(),
         'photo' => $p->photoUrl(900),
         'thumb' => $p->photoUrl(200),
+        'photos' => $p->photos(),
+        // The care guide and videos are drawn here (RichText removes any HTML typed in) and shown in the panel
+        'care' => (string) \App\Support\RichText::render($p->tr('details')),
+        'videos' => collect($p->embeds())->map(fn ($v) => view('partials.video-embed', ['embed' => $v['embed'], 'caption' => $v['caption']])->render())->join(''),
     ])->values();
     $nurseryData = [
         'plants' => $plantData,
@@ -216,56 +220,93 @@
             </aside>
         </div>
 
-        {{-- Plant details: centred on wide screens, a sheet from the bottom on phones --}}
-        <div x-show="open" x-cloak class="fixed inset-0 z-[85] flex items-end sm:items-center justify-center sm:p-6" role="dialog" aria-modal="true" :aria-label="current?.name" @keydown.tab="trap($event, $refs.panel)">
-            <div class="absolute inset-0 bg-black/55" x-show="open" x-transition.opacity @click="hide()"></div>
+        {{-- Plant details: a large panel (photos on the left, details on the right) on wide screens,
+             a full-height sheet on phones. resources/js/nursery.js --}}
+        <div x-show="open" x-cloak class="fixed inset-0 z-[85] flex items-end lg:items-center justify-center lg:p-6" role="dialog" aria-modal="true" :aria-label="current?.name" @keydown.tab="trap($event, $refs.panel)">
+            <div class="absolute inset-0 bg-black/60" x-show="open" x-transition.opacity @click="hide()"></div>
             <template x-if="current">
-                <div x-ref="panel" class="relative w-full sm:max-w-[860px] max-h-[92dvh] overflow-y-auto bg-paper rounded-t-3xl sm:rounded-3xl shadow-2xl grid sm:grid-cols-2"
-                     x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 sm:translate-y-0 sm:scale-95">
-                    <div class="relative aspect-[4/3] sm:aspect-auto sm:min-h-[480px] bg-tulsi-wash">
-                        <img :src="current.photo" :alt="current.name" class="absolute inset-0 w-full h-full object-cover" x-show="current.photo">
-                        <span class="absolute left-3 top-3 flex gap-1.5">
-                            <span class="chip h-6 px-2 text-[12px] bg-marigold text-ink" x-show="current.isNew">{{ __('New') }}</span>
-                        </span>
-                    </div>
-                    <div class="p-6 sm:p-8 flex flex-col">
-                        <div class="flex items-start gap-3">
-                            <div class="min-w-0">
-                                <p class="eyebrow text-tulsi" x-text="current.categoryName"></p>
-                                <h2 class="mt-2 font-display text-[1.9rem] leading-tight" x-text="current.name"></h2>
-                            </div>
-                            <button type="button" x-ref="panelClose" @click="hide()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center shrink-0" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
-                        </div>
-                        <p class="mt-4 text-[16px] text-ink-2 leading-relaxed" x-show="current.about" x-text="current.about"></p>
-                        <ul class="mt-5 grid grid-cols-3 gap-2 text-center">
-                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.light"><x-icon name="sun" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.light"></span></li>
-                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.water"><x-icon name="droplets" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.water"></span></li>
-                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.pot"><x-icon name="ruler" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.pot"></span></li>
-                        </ul>
-                        <p class="mt-4 text-[14.5px] text-ink-2 flex gap-2" x-show="current.tip"><x-icon name="lightbulb" class="w-[18px] h-[18px] text-marigold shrink-0 mt-0.5" /><span x-text="current.tip"></span></p>
-                        <div class="mt-auto pt-6">
-                            <div class="pt-5 border-t border-rule flex items-end justify-between gap-3">
+                <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[94dvh] lg:h-[min(88dvh,800px)] bg-paper rounded-t-3xl lg:rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
+                     x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 lg:translate-y-0 lg:scale-95">
+                    <button type="button" x-ref="panelClose" @click="hide()" class="absolute right-3 top-3 z-20 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow hover:bg-white" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+
+                    {{-- Photos: swipe or arrows; thumbnails below --}}
+                    <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[46%]">
+                        <div class="relative flex-1 min-h-0">
+                            <ul x-ref="gallery" @scroll.debounce.60ms="photoIndex = Math.round($el.scrollLeft / $el.clientWidth)" class="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar" aria-label="{{ __('Photos') }}">
+                                <template x-for="(ph, i) in current.photos" :key="i">
+                                    <li class="relative shrink-0 w-full h-full snap-center"><img :src="ph.url" :alt="current.name + ' · ' + (i + 1)" class="absolute inset-0 w-full h-full object-cover" :loading="i ? 'lazy' : 'eager'"></li>
+                                </template>
+                            </ul>
+                            <span class="absolute left-3 top-3 z-10 flex gap-1.5"><span class="chip h-6 px-2 text-[12px] bg-marigold text-ink" x-show="current.isNew">{{ __('New') }}</span></span>
+                            <template x-if="current.photos.length > 1">
                                 <div>
-                                    <p class="font-display text-[2rem] leading-none num" x-text="rupees(current.price)"></p>
-                                    <p class="mt-1.5 text-[13.5px] text-tulsi font-semibold" x-show="current.member < current.price" x-text="{{ Js::from(__('Members :price')) }}.replace(':price', rupees(current.member))"></p>
+                                    <button type="button" @click="goPhoto(photoIndex - 1)" :disabled="photoIndex === 0" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow disabled:opacity-0 transition-opacity" aria-label="{{ __('Previous photo') }}"><x-icon name="chevron-left" class="w-5 h-5" /></button>
+                                    <button type="button" @click="goPhoto(photoIndex + 1)" :disabled="photoIndex >= current.photos.length - 1" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow disabled:opacity-0 transition-opacity" aria-label="{{ __('Next photo') }}"><x-icon name="chevron-right" class="w-5 h-5" /></button>
+                                    <span class="absolute right-3 bottom-3 z-10 chip h-7 px-2.5 bg-black/55 text-white text-[12.5px] num" x-text="num(photoIndex + 1) + ' / ' + num(current.photos.length)"></span>
                                 </div>
-                                <p class="text-[13.5px] font-semibold" :class="current.stock === 0 ? 'text-ink-3' : (current.stock <= 10 ? 'text-sindoor-deep' : 'text-tulsi')"
-                                   x-text="current.stock === 0 ? {{ Js::from(__('Out of stock')) }} : (current.stock <= 10 ? {{ Js::from(__('Only :count left')) }}.replace(':count', num(current.stock)) : {{ Js::from(__('In stock')) }})"></p>
-                            </div>
-                            <template x-if="current.stock > 0">
-                                <div class="mt-5 flex items-center gap-3">
-                                    <div class="flex items-center rounded-xl border border-rule h-12" role="group" aria-label="{{ __('Quantity') }}">
-                                        <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.max(1, qtyInPanel - 1)" :disabled="qtyInPanel <= 1" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-4 h-4" /></button>
-                                        <span class="w-8 text-center font-semibold num" aria-live="polite" x-text="num(qtyInPanel)"></span>
-                                        <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.min(current.stock, qtyInPanel + 1)" :disabled="qtyInPanel >= current.stock" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
+                            </template>
+                        </div>
+                        <template x-if="current.photos.length > 1">
+                            <ul class="flex gap-2 p-3 overflow-x-auto no-scrollbar bg-white/60 shrink-0" aria-label="{{ __('More photos') }}">
+                                <template x-for="(ph, i) in current.photos" :key="'t' + i">
+                                    <li class="shrink-0"><button type="button" @click="goPhoto(i)" class="block w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors" :class="photoIndex === i ? 'border-tulsi' : 'border-transparent opacity-75 hover:opacity-100'" :aria-label="{{ Js::from(__('Photo :n')) }}.replace(':n', num(i + 1))" :aria-current="photoIndex === i ? 'true' : null"><img :src="ph.thumb" alt="" class="w-full h-full object-cover"></button></li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+
+                    {{-- Details: price and basket first, then care, then videos --}}
+                    <div class="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+                        <div class="p-6 sm:p-8">
+                            <p class="eyebrow text-tulsi" x-text="current.categoryName"></p>
+                            <h2 class="mt-2 pr-10 font-display text-[2rem] sm:text-[2.3rem] leading-tight" x-text="current.name"></h2>
+                            <p class="mt-3 text-[16.5px] text-ink-2 leading-relaxed" x-show="current.about" x-text="current.about"></p>
+
+                            <ul class="mt-5 grid grid-cols-3 gap-2 text-center">
+                                <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.light"><x-icon name="sun" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.light"></span></li>
+                                <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.water"><x-icon name="droplets" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.water"></span></li>
+                                <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.pot"><x-icon name="ruler" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.pot"></span></li>
+                            </ul>
+
+                            {{-- Price and basket --}}
+                            <div class="mt-6 rounded-2xl border border-rule bg-card p-4 sm:p-5">
+                                <div class="flex items-end justify-between gap-3">
+                                    <div>
+                                        <p class="font-display text-[2rem] leading-none num" x-text="rupees(current.price)"></p>
+                                        <p class="mt-1.5 text-[13.5px] text-tulsi font-semibold" x-show="current.member < current.price" x-text="{{ Js::from(__('Members :price')) }}.replace(':price', rupees(current.member))"></p>
                                     </div>
-                                    <button type="button" @click="putInBasket()" class="btn flex-1 h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="shopping-basket" /><span x-text="(qty(current.slug) ? {{ Js::from(__('Update basket')) }} : {{ Js::from(__('Add to basket')) }}) + ' · ' + rupees(qtyInPanel * current.price)"></span></button>
+                                    <p class="text-[13.5px] font-semibold" :class="current.stock === 0 ? 'text-ink-3' : (current.stock <= 10 ? 'text-sindoor-deep' : 'text-tulsi')"
+                                       x-text="current.stock === 0 ? {{ Js::from(__('Out of stock')) }} : (current.stock <= 10 ? {{ Js::from(__('Only :count left')) }}.replace(':count', num(current.stock)) : {{ Js::from(__('In stock')) }})"></p>
                                 </div>
-                            </template>
-                            <template x-if="current.stock === 0">
-                                <a :href="'https://wa.me/{{ $whatsapp }}?text=' + encodeURIComponent({{ Js::from(__('Please tell me when :plant is back at the nursery.')) }}.replace(':plant', current.name))" target="_blank" rel="noopener" class="btn btn-line h-12 mt-5 w-full"><x-icon name="bell" />{{ __('Tell me when it is back') }}</a>
-                            </template>
-                            <p class="mt-4 text-[13px] text-ink-3">{{ __('Pick up at the club gate. Pay at the gate in cash or UPI.') }}</p>
+                                <template x-if="current.stock > 0">
+                                    <div class="mt-4 flex items-center gap-3">
+                                        <div class="flex items-center rounded-xl border border-rule h-12" role="group" aria-label="{{ __('Quantity') }}">
+                                            <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.max(1, qtyInPanel - 1)" :disabled="qtyInPanel <= 1" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-4 h-4" /></button>
+                                            <span class="w-8 text-center font-semibold num" aria-live="polite" x-text="num(qtyInPanel)"></span>
+                                            <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.min(current.stock, qtyInPanel + 1)" :disabled="qtyInPanel >= current.stock" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
+                                        </div>
+                                        <button type="button" @click="putInBasket()" class="btn flex-1 h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="shopping-basket" /><span class="whitespace-nowrap" x-text="qty(current.slug) ? {{ Js::from(__('Update basket')) }} : {{ Js::from(__('Add to basket')) }}"></span><span class="hidden sm:inline whitespace-nowrap num" x-text="'· ' + rupees(qtyInPanel * current.price)"></span></button>
+                                    </div>
+                                </template>
+                                <template x-if="current.stock === 0">
+                                    <a :href="'https://wa.me/{{ $whatsapp }}?text=' + encodeURIComponent({{ Js::from(__('Please tell me when :plant is back at the nursery.')) }}.replace(':plant', current.name))" target="_blank" rel="noopener" class="btn btn-line h-12 mt-4 w-full"><x-icon name="bell" />{{ __('Tell me when it is back') }}</a>
+                                </template>
+                                <p class="mt-3 text-[13px] text-ink-3">{{ __('Pick up at the club gate. Pay at the gate in cash or UPI.') }}</p>
+                            </div>
+
+                            <p class="mt-5 text-[14.5px] text-ink-2 flex gap-2 rounded-xl bg-marigold-wash/60 p-3.5" x-show="current.tip"><x-icon name="lightbulb" class="w-[18px] h-[18px] text-turmeric shrink-0 mt-0.5" /><span x-text="current.tip"></span></p>
+
+                            {{-- How to care for it --}}
+                            <section class="mt-8" x-show="current.care" aria-labelledby="care-h">
+                                <h3 id="care-h" class="flex items-center gap-2 font-display text-[1.5rem]"><x-icon name="sprout" class="w-5 h-5 text-tulsi" />{{ __('How to care for it') }}</h3>
+                                <div class="mt-3 news-prose plant-care" x-html="current.care"></div>
+                            </section>
+
+                            {{-- Videos --}}
+                            <section class="mt-8" x-show="current.videos" aria-labelledby="videos-h">
+                                <h3 id="videos-h" class="flex items-center gap-2 font-display text-[1.5rem]"><x-icon name="play" class="w-5 h-5 text-tulsi" />{{ __('Videos') }}</h3>
+                                <div class="mt-1" x-html="current.videos"></div>
+                            </section>
                         </div>
                     </div>
                 </div>

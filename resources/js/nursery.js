@@ -16,6 +16,7 @@ export function nursery() {
         basket: {},
         open: null, // slug of the plant in the details panel
         qtyInPanel: 1,
+        photoIndex: 0,
         cartOpen: false,
         lastFocus: null,
         stuck: false, // the filter bar is pinned under the header
@@ -88,6 +89,7 @@ export function nursery() {
         show(slug) {
             this.lastFocus = document.activeElement;
             this.open = slug;
+            this.photoIndex = 0;
             this.qtyInPanel = Math.max(1, this.qty(slug) || 1);
             document.documentElement.style.overflow = 'hidden';
             this.$nextTick(() => this.$refs.panelClose?.focus());
@@ -96,6 +98,12 @@ export function nursery() {
             this.open = null;
             document.documentElement.style.overflow = this.cartOpen ? 'hidden' : '';
             this.lastFocus?.focus?.();
+        },
+        goPhoto(i) {
+            const g = this.$refs.gallery;
+            if (!g || !this.current) return;
+            this.photoIndex = Math.max(0, Math.min(this.current.photos.length - 1, i));
+            g.scrollTo({ left: this.photoIndex * g.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         },
         putInBasket() {
             const p = this.current;

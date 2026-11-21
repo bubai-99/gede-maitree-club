@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             SamplePanjikaSeeder::class,
             SampleNewsSeeder::class,
             SampleReviewsSeeder::class,
+            SamplePlantDetailsSeeder::class,
         ]);
     }
 }

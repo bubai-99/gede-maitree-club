@@ -67,23 +67,11 @@ class NewsPostRequest extends WebsiteContentRequest
     }
 
     /**
-     * "https://youtu.be/… | Dhunuchi naach" lines → [{url, caption}].
-     *
      * @return list<array{url: string, caption: ?string}>
      */
     public function videoLines(): array
     {
-        $out = [];
-        foreach (preg_split('/\R/', (string) $this->input('videos')) ?: [] as $line) {
-            $line = trim($line);
-            if ($line === '') {
-                continue;
-            }
-            [$url, $caption] = array_pad(array_map('trim', explode('|', $line, 2)), 2, null);
-            $out[] = ['url' => (string) $url, 'caption' => $caption !== '' ? $caption : null];
-        }
-
-        return $out;
+        return VideoEmbed::lines((string) $this->input('videos'));
     }
 
     /**

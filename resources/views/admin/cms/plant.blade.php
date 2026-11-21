@@ -42,5 +42,37 @@
     </div>
     <x-admin.bilingual name="about" :label="__('About')" :record="$record" textarea />
     <x-admin.bilingual name="tip" :label="__('Care tip')" :record="$record" textarea />
+
+    <div class="card p-5 space-y-3">
+        <p class="font-semibold">{{ __('Care guide') }}</p>
+        <p class="text-[13.5px] text-ink-3">{{ __('Shown in the plant’s details on the website. ## makes a heading, **bold**, - starts a list. A YouTube, Facebook or other video link on a line of its own shows as the video.') }}</p>
+        <x-admin.bilingual name="details" :label="__('Text')" :record="$record" textarea :rows="8" />
+    </div>
+
+    <div class="card p-5">
+        <x-field name="videos" :label="__('Videos')" textarea :rows="3" :value="old('videos', \App\Support\VideoEmbed::text($record->videos))" placeholder="https://youtu.be/… | How to repot a tulsi" :hint="__('One link per line: YouTube, Facebook, Instagram, Vimeo, Google Drive, Dailymotion, or a .mp4 file. Add a caption after a |.')" />
+    </div>
+
     <x-admin.photo-field :record="$record" />
+
+    @php
+        $images = $record->exists ? $record->getMedia('images') : collect();
+    @endphp
+    <div class="card p-5">
+        <p class="label">{{ __('More photos') }}</p>
+        @if ($images->isNotEmpty())
+            <ul class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+                @foreach ($images as $image)
+                    <li>
+                        <img src="{{ $image->getUrl() }}" alt="" class="w-full aspect-square object-cover rounded-md bg-paper-2">
+                        <label class="mt-1 flex items-center gap-1.5 text-[12.5px]"><input type="checkbox" name="remove_images[]" value="{{ $image->id }}" class="accent-sindoor"> {{ __('Remove') }}</label>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+        <label for="f-images_upload" class="sr-only">{{ __('Add photos') }}</label>
+        <input id="f-images_upload" type="file" name="images_upload[]" multiple accept="image/jpeg,image/png,image/webp" class="block text-[14px]">
+        <p class="mt-1 text-[13px] text-ink-3">{{ __('Shown with the main photo in the plant’s details. Pick several at once. JPG, PNG or WebP, up to 6 MB each.') }}</p>
+        <x-field-error name="images_upload" />
+    </div>
 </x-admin.form-shell>

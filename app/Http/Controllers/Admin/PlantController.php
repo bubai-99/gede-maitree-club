@@ -60,6 +60,7 @@ class PlantController extends CmsController
     {
         $plant = Plant::query()->create([...$request->plantData(), ...$this->statusFromButton($request)]);
         $this->savePhoto($request, $plant);
+        $this->saveImages($request, $plant);
 
         return $this->saved($request, 'admin.plants.index', __('Plant'));
     }
@@ -68,7 +69,21 @@ class PlantController extends CmsController
     {
         $plant->update([...$request->plantData(), ...$this->statusFromButton($request, $plant)]);
         $this->savePhoto($request, $plant);
+        $this->saveImages($request, $plant);
 
         return $this->saved($request, 'admin.plants.index', __('Plant'));
+    }
+
+    /**
+     * More photos for the details panel: add the uploaded ones, remove the ticked ones.
+     */
+    private function saveImages(PlantRequest $request, Plant $plant): void
+    {
+        $remove = array_map('intval', (array) $request->input('remove_images', []));
+        $plant->getMedia('images')->whereIn('id', $remove)->each->delete();
+
+        foreach ((array) $request->file('images_upload', []) as $file) {
+            $plant->addMedia($file)->toMediaCollection('images');
+        }
     }
 }
