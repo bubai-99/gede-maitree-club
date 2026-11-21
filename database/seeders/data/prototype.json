@@ -2,12 +2,12 @@
  "club": {
   "name": "Gede Maitree Club",
   "nameBn": "গেদে মৈত্রী ক্লাব",
-  "para": "Netaji Para",
-  "paraBn": "নেতাজি পাড়া",
+  "para": "Gede Uttarpara",
+  "paraBn": "গেদে উত্তরপাড়া",
   "estd": 2014,
   "regNo": "S-0027153 / 2022-23",
-  "address": "14/2 Netaji Subhas Road, Netaji Para, Kolkata 700 084",
-  "addressBn": "১৪/২ নেতাজি সুভাষ রোড, নেতাজি পাড়া, কলকাতা ৭০০ ০৮৪",
+  "address": "14/2 Netaji Subhas Road, Gede Uttarpara, Kolkata 700 084",
+  "addressBn": "১৪/২ নেতাজি সুভাষ রোড, গেদে উত্তরপাড়া, কলকাতা ৭০০ ০৮৪",
   "phone": "+91 98300 12345",
   "whatsapp": "919830012345",
   "upi": "maitriclub@sbi",
@@ -39,8 +39,8 @@
    "title": "Annual Sports Day",
    "titleBn": "বার্ষিক ক্রীড়া",
    "time": "7 am onwards",
-   "place": "Netaji Para ground",
-   "placeBn": "নেতাজি পাড়া মাঠ",
+   "place": "Gede Uttarpara ground",
+   "placeBn": "গেদে উত্তরপাড়া মাঠ",
    "kind": "sports",
    "pass": true,
    "timeBn": "সকাল ৭টা থেকে"
@@ -1695,10 +1695,10 @@
    "home",
    "Home page",
    "হোম পাতা",
-   "Gede Maitree Club · Netaji Para",
-   "গেদে মৈত্রী ক্লাব · নেতাজি পাড়া",
-   "Gede Maitree Club, Netaji Para, est. 2014, Reg. No. S-0027153 / 2022-23. Pujas, sports, a serving team for family occasions and a neighbourhood nursery.",
-   "গেদে মৈত্রী ক্লাব, নেতাজি পাড়া, প্রতিষ্ঠা ২০১৪, রেজি. নং S-0027153 / 2022-23। পূজা, খেলা, পারিবারিক অনুষ্ঠানে পরিবেশন আর পাড়ার নার্সারি।"
+   "Gede Maitree Club · Gede Uttarpara",
+   "গেদে মৈত্রী ক্লাব · গেদে উত্তরপাড়া",
+   "Gede Maitree Club, Gede Uttarpara, est. 2014, Reg. No. S-0027153 / 2022-23. Pujas, sports, a serving team for family occasions and a neighbourhood nursery.",
+   "গেদে মৈত্রী ক্লাব, গেদে উত্তরপাড়া, প্রতিষ্ঠা ২০১৪, রেজি. নং S-0027153 / 2022-23। পূজা, খেলা, পারিবারিক অনুষ্ঠানে পরিবেশন আর পাড়ার নার্সারি।"
   ],
   [
    "committee",
@@ -1715,7 +1715,7 @@
    "অনুষ্ঠান",
    "Events",
    "অনুষ্ঠান",
-   "Pujas, sports day, the blood camp and more at Gede Maitree Club, Netaji Para. Dates, times and what to bring.",
+   "Pujas, sports day, the blood camp and more at Gede Maitree Club, Gede Uttarpara. Dates, times and what to bring.",
    "গেদে মৈত্রী ক্লাবের পূজা, ক্রীড়া দিবস, রক্তদান শিবির ও আরও অনেক কিছু। তারিখ, সময় আর কী আনবেন।"
   ],
   [
@@ -1724,7 +1724,7 @@
    "নোটিস",
    "Notices",
    "নোটিস",
-   "The latest notices from Gede Maitree Club: meetings, pujas, sports and service for Netaji Para.",
+   "The latest notices from Gede Maitree Club: meetings, pujas, sports and service for Gede Uttarpara.",
    "গেদে মৈত্রী ক্লাবের সাম্প্রতিক নোটিস: সভা, পূজা, খেলা ও পাড়ার সেবা।"
   ],
   [
@@ -1769,8 +1769,8 @@
    "যোগাযোগ",
    "Contact & directions",
    "যোগাযোগ ও পথ",
-   "Find the Gede Maitree Club room on Netaji Subhas Road, Netaji Para, Kolkata 700084. Open 6 to 9 pm every day.",
-   "নেতাজি সুভাষ রোড, নেতাজি পাড়া, কলকাতা ৭০০০৮৪-এ গেদে মৈত্রী ক্লাব ঘর। রোজ সন্ধ্যা ৬টা থেকে ৯টা খোলা।"
+   "Find the Gede Maitree Club room on Netaji Subhas Road, Gede Uttarpara, Kolkata 700084. Open 6 to 9 pm every day.",
+   "নেতাজি সুভাষ রোড, গেদে উত্তরপাড়া, কলকাতা ৭০০০৮৪-এ গেদে মৈত্রী ক্লাব ঘর। রোজ সন্ধ্যা ৬টা থেকে ৯টা খোলা।"
   ],
   [
    "join",
@@ -1778,8 +1778,8 @@
    "সদস্য হোন",
    "Become a member",
    "সদস্য হোন",
-   "Join Gede Maitree Club for ₹100 a month. Open to every family in Netaji Para.",
-   "মাসে ₹১০০-তে গেদে মৈত্রী ক্লাবের সদস্য হোন। নেতাজি পাড়ার সব পরিবারের জন্য খোলা।"
+   "Join Gede Maitree Club for ₹100 a month. Open to every family in Gede Uttarpara.",
+   "মাসে ₹১০০-তে গেদে মৈত্রী ক্লাবের সদস্য হোন। গেদে উত্তরপাড়ার সব পরিবারের জন্য খোলা।"
   ],
   [
    "volunteer",

@@ -25,7 +25,7 @@
                         : __('Your card, dues, passes and notices, all in one app. Sign in with a password or a one-time code.') }}
                 </p>
             </div>
-            <p class="text-[14px] uppercase tracking-wide text-white/75">{{ __('Netaji Para · since 2014') }}</p>
+            <p class="text-[14px] uppercase tracking-wide text-white/75">{{ __('Gede Uttarpara · since 2014') }}</p>
         </aside>
 
         <div class="flex flex-col">

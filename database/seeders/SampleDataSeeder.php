@@ -249,7 +249,7 @@ class SampleDataSeeder extends Seeder
             $family = Family::query()->updateOrCreate(['family_no' => $row['no']], [
                 'head_name' => $row['head'],
                 'head_name_bn' => $row['headBn'],
-                'address' => $row['lane'].', Netaji Para',
+                'address' => $row['lane'].', Gede Uttarpara',
                 'area' => $row['lane'],
                 'area_bn' => $row['laneBn'],
                 'phone' => $row['phone'],

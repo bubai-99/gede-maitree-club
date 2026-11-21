@@ -1,7 +1,7 @@
 <x-layouts.auth :title="__('Member sign-in')" portal="member">
     <div x-data="{ tab: '{{ $errors->has('phone') ? 'code' : 'password' }}' }">
         <h1 class="font-display text-[2.3rem] leading-tight">{{ __('Sign in') }}</h1>
-        <p class="mt-2 text-[15px] text-ink-2">{{ __('Members of Gede Maitree Club, Netaji Para.') }}</p>
+        <p class="mt-2 text-[15px] text-ink-2">{{ __('Members of Gede Maitree Club, Gede Uttarpara.') }}</p>
 
         <div class="mt-8 grid grid-cols-2 p-1 rounded-[7px] bg-paper-2" role="tablist" aria-label="{{ __('How to sign in') }}">
             <button type="button" role="tab" id="tab-password" aria-controls="panel-password" :aria-selected="(tab === 'password').toString()" @click="tab = 'password'"

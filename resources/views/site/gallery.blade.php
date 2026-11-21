@@ -56,7 +56,7 @@
                     <h1 class="mt-4 text-[1.3rem] sm:text-[1.5rem] font-bold leading-snug">{{ $isVideo($item) ? local_text($item['caption'] ?? '', $item['caption_bn'] ?? null) : $title($open) }}</h1>
                     <div class="mt-3 flex flex-wrap items-center gap-3">
                         <span class="w-10 h-10 rounded-full bg-white border border-rule grid place-items-center shrink-0"><x-seal :size="36" :rotate="-6" aria-hidden="true" /></span>
-                        <div class="min-w-0 mr-auto"><p class="font-semibold leading-tight">{{ $clubName }}</p><p class="text-[13px] text-ink-3">{{ __('Netaji Para, since 2014') }}</p></div>
+                        <div class="min-w-0 mr-auto"><p class="font-semibold leading-tight">{{ $clubName }}</p><p class="text-[13px] text-ink-3">{{ __('Gede Uttarpara, since 2014') }}</p></div>
                         <div class="flex gap-2">
                             <a href="https://wa.me/?text={{ rawurlencode($title($open).' · '.$link(['open' => $open['id']])) }}" target="_blank" rel="noopener" class="btn btn-line btn-sm rounded-full"><x-icon name="share-2" />{{ __('Share') }}</a>
                             <a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ rawurlencode(__('I have photos for the album: :album', ['album' => $open['title']])) }}" target="_blank" rel="noopener" class="btn btn-ink btn-sm rounded-full"><x-icon name="image-plus" />{{ __('Add yours') }}</a>

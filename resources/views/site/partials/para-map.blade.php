@@ -1,5 +1,5 @@
 {{-- Sketch map of the para (from the prototype). Not to scale; replaced by a real map once the club confirms the location. --}}
-<svg viewBox="0 0 640 400" class="block w-full h-auto" role="img" aria-label="{{ __('Sketch map of Netaji Para showing the club room beside School Road, at the north corner of the para ground') }}" font-family="Anek Bangla Variable, sans-serif">
+<svg viewBox="0 0 640 400" class="block w-full h-auto" role="img" aria-label="{{ __('Sketch map of Gede Uttarpara showing the club room beside School Road, at the north corner of the para ground') }}" font-family="Anek Bangla Variable, sans-serif">
     <rect width="640" height="400" fill="#f2f1ef"/>
     <g fill="#e2e0dc">
         <rect x="20" y="20" width="80" height="200" rx="3"/><rect x="160" y="20" width="70" height="90" rx="3"/><rect x="160" y="130" width="70" height="90" rx="3"/>

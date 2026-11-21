@@ -58,7 +58,7 @@
                 <x-seal :size="40" :estd="false" class="shrink-0" aria-hidden="true" />
                 <span class="leading-none min-w-0">
                     <span class="block font-display text-[18px] sm:text-[22px] text-sindoor whitespace-nowrap">{{ $clubName }}</span>
-                    <span class="block text-[11px] sm:text-[11.5px] font-semibold tracking-[0.14em] text-ink-2 mt-0.5 uppercase truncate">{{ __('Netaji Para · Est. 2014') }}</span>
+                    <span class="block text-[11px] sm:text-[11.5px] font-semibold tracking-[0.14em] text-ink-2 mt-0.5 uppercase truncate">{{ __('Gede Uttarpara · Est. 2014') }}</span>
                 </span>
             </a>
             <nav class="hidden lg:flex items-center gap-0.5 ml-auto text-[15px] font-medium" aria-label="{{ __('Main') }}">
@@ -154,7 +154,7 @@
                 <div class="col-span-2 md:col-span-4">
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3 text-white">
                         <x-seal :size="52" :estd="false" color="#fff" aria-hidden="true" />
-                        <span><span class="block font-display text-[22px] leading-none">{{ $clubName }}</span><span class="block mt-1 text-[12px] uppercase tracking-[0.12em] text-white/55">{{ __('Netaji Para · since 2014') }}</span></span>
+                        <span><span class="block font-display text-[22px] leading-none">{{ $clubName }}</span><span class="block mt-1 text-[12px] uppercase tracking-[0.12em] text-white/55">{{ __('Gede Uttarpara · since 2014') }}</span></span>
                     </a>
                     <p class="mt-5 max-w-[36ch] text-white/65">{{ __('Run by neighbours, for neighbours. Pujas, sports, a serving team and the para’s own nursery.') }}</p>
                     <p class="mt-6 text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Follow the club') }}</p>
@@ -199,7 +199,7 @@
             </div>
 
             <div class="py-6 border-t border-white/10 flex flex-col md:flex-row gap-3 md:items-center md:justify-between text-[13px] text-white/55">
-                <p>© <span class="num">{{ digits(now()->year) }}</span> {{ __('Gede Maitree Club, Netaji Para') }} · {{ __('Reg. No.') }} <span class="num">{{ $club['reg_no'] }}</span></p>
+                <p>© <span class="num">{{ digits(now()->year) }}</span> {{ __('Gede Maitree Club, Gede Uttarpara') }} · {{ __('Reg. No.') }} <span class="num">{{ $club['reg_no'] }}</span></p>
                 <div class="flex flex-wrap gap-x-5 gap-y-2">
                     @if (Route::has('privacy'))
                         <a href="{{ route('privacy') }}" class="hover:text-white">{{ __('Privacy') }}</a>

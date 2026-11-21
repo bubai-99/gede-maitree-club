@@ -1,6 +1,6 @@
 <ol class="{{ $class ?? '' }} relative border-l-2 border-rule ml-2 space-y-8">
     @foreach ([
-        ['2014', 'bg-sindoor', __('The club begins'), __('Twelve members in a rented room on Netaji Para.')],
+        ['2014', 'bg-sindoor', __('The club begins'), __('Twelve members in a rented room on Gede Uttarpara.')],
         ['2015', 'bg-marigold', __('First Durga Puja'), __('A small pandal on the para ground, where it still stands.')],
         ['2022', 'bg-ink', __('A registered society'), __('The accounts are audited every year and presented at the AGM.')],
         ['2023', 'bg-turmeric', __('Maitree Serving begins'), __('The bhog serving team starts serving at the para’s family occasions.')],
