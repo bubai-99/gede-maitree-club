@@ -40,7 +40,8 @@
 
         <form method="POST" action="{{ route('forms.join') }}" class="lg:col-span-7 card p-5 sm:p-8"
             x-data="{ step: {{ $errorStep }}, members: {{ Js::from(array_values(is_array($oldMembers) ? $oldMembers : [])) }},
-                next() { const box = $el.querySelector('[data-step=\'' + this.step + '\']'); const bad = [...box.querySelectorAll('input, select, textarea')].find(f => ! f.checkValidity()); if (bad) { bad.reportValidity(); return } this.step++; $el.scrollIntoView({ block: 'start', behavior: 'smooth' }) } }">
+                next() { const box = $el.querySelector('[data-step=\'' + this.step + '\']'); if (window.checkFields && ! window.checkFields(box)) return; this.step++; $el.scrollIntoView({ block: 'start', behavior: 'smooth' }) } }"
+            @field-invalid="const box = $event.target.closest('[data-step]'); if (box) step = Number(box.dataset.step)">
             @csrf
             @include('site.partials.honeypot', ['form' => 'join'])
             {{-- Progress --}}

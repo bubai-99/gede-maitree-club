@@ -1920,15 +1920,7 @@
     "You are signed in as a member: :name": "আপনি সদস্য হিসেবে লগইন করা আছেন: :name",
     "To open the committee console, sign in below with a committee account.": "কমিটি কনসোল খুলতে নিচে কমিটির অ্যাকাউন্ট দিয়ে লগইন করুন।",
     "Please check this and try again:|Please check these :count things and try again:": "এটি দেখে আবার চেষ্টা করুন:|এই :countটি জিনিস দেখে আবার চেষ্টা করুন:",
-    "Please fill in this field.": "এই ঘরটি পূরণ করুন।",
-    "Please choose one.": "একটি বাছুন।",
-    "Please tick this box.": "এই ঘরে টিক দিন।",
     "Enter a real email address, like name@example.com.": "সঠিক ইমেল ঠিকানা দিন, যেমন name@example.com।",
     "Enter a full link, starting with https://.": "পুরো লিঙ্ক দিন, https:// দিয়ে শুরু।",
-    "Please write at least :min characters.": "অন্তত :min অক্ষর লিখুন।",
-    "Please write at most :max characters.": "বড়জোর :max অক্ষর লিখুন।",
-    "Must be at least :min.": "অন্তত :min হতে হবে।",
-    "Must be at most :max.": "বড়জোর :max হতে পারে।",
-    "This is not in the right format.": "ঠিক ধাঁচে নেই।",
-    "Enter a number.": "একটি সংখ্যা দিন।"
+    "this field": "এই ঘর"
 }

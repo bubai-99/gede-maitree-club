@@ -34,22 +34,29 @@
         </div>
     </div>
 @endif
-{{-- The browser's own "please fill in this field" messages, in the page's language --}}
-@if (app()->getLocale() === 'bn')
-    @php
-        $formMessages = [
-        'valueMissing' => __('Please fill in this field.'),
-        'selectMissing' => __('Please choose one.'),
-        'checkMissing' => __('Please tick this box.'),
-        'email' => __('Enter a real email address, like name@example.com.'),
-        'url' => __('Enter a full link, starting with https://.'),
-        'tooShort' => __('Please write at least :min characters.'),
-        'tooLong' => __('Please write at most :max characters.'),
-        'rangeUnderflow' => __('Must be at least :min.'),
-        'rangeOverflow' => __('Must be at most :max.'),
-        'pattern' => __('This is not in the right format.'),
-        'number' => __('Enter a number.'),
+{{-- Laravel's own validation messages and field names (lang/*/validation.php), for resources/js/forms.js
+     to check fields before a form is sent. The server still checks every form with the same rules. --}}
+@php
+    $rule = fn (string $key): string => (string) trans('validation.'.$key, ['attribute' => ':attribute']);
+    $formMessages = [
+        'required' => $rule('required'),
+        'choose' => $rule('custom.kind.required'),
+        'tick' => $rule('accepted'),
+        'email' => $rule('email'),
+        'url' => $rule('url'),
+        'tooShort' => $rule('min.string'),
+        'tooLong' => $rule('max.string'),
+        'min' => $rule('min.numeric'),
+        'max' => $rule('max.numeric'),
+        'dateMin' => $rule('after_or_equal'),
+        'dateMax' => $rule('before_or_equal'),
+        'number' => $rule('numeric'),
+        'whole' => $rule('integer'),
+        'date' => $rule('date'),
+        'format' => $rule('regex'),
+        'file' => $rule('uploaded'),
+        'thisField' => __('this field'),
+        'attributes' => trans('validation.attributes'),
     ];
-    @endphp
-    <script type="application/json" id="form-messages">{!! json_encode($formMessages, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
-@endif
+@endphp
+<script type="application/json" id="form-messages">{!! json_encode($formMessages, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>

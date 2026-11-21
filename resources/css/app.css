@@ -624,3 +624,17 @@ button.pj-cell:hover { border-color: rgba(43,47,54,.35); }
 .faq-icon { transition: transform .3s ease-out; }
 .faq-icon[data-open="true"] { transform: rotate(45deg); }
 @media (prefers-reduced-motion: reduce) { .faq-panel, .faq-icon { transition: none; } }
+
+/* Required fields: a red star after the label (the field's own "required" is what screen readers announce) */
+:is(div, fieldset):has(> :is(input, select, textarea)[required]) > .label::after,
+div:has(> .relative > input[required]) > .label::after,
+fieldset:has(input[required]) > legend.label::after,
+label:has(> input[type="checkbox"][required])::after {
+  content: " *" / "";
+  color: var(--color-sindoor);
+  font-weight: 700;
+}
+/* Messages shown by resources/js/forms.js before a form is sent */
+.field-error[data-client] { animation: field-error-in .18s ease-out; }
+@keyframes field-error-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .field-error[data-client] { animation: none; } }
