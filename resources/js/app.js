@@ -4,6 +4,7 @@ import { razorpayCheckout } from './pay';
 import { nursery } from './nursery';
 import { forgetThisDevice } from './forget';
 import { enhanceForms } from './forms';
+import { imageLoader } from './images';
 
 window.Alpine = Alpine;
 
@@ -24,6 +25,7 @@ new MutationObserver((changes) => {
     }
 }).observe(document.body, { childList: true, subtree: true });
 enhanceForms();
+imageLoader();
 
 // Installable apps (member app, committee console): register the service worker named by the layout.
 const serviceWorker = document.body?.dataset.sw;

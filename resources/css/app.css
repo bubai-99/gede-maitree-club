@@ -657,3 +657,14 @@ label:has(> input[type="checkbox"][required])::after {
 .reviews-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(43,47,54,.2); cursor: pointer; transition: width .25s, background-color .25s; }
 .reviews-dot.is-active { width: 22px; }
 .reviews-dots .reviews-dot.is-active { background: currentColor; }
+
+/* Photos loading (resources/js/images.js): a soft moving shimmer where the photo will be, then a fade-in */
+html.js:not(.img-fallback) :is(main, [role="dialog"], aside) img:not(.is-loaded) { opacity: 0; }
+:is(main, [role="dialog"], aside) img { transition: opacity .45s ease; }
+html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-loaded)) {
+  background-image: linear-gradient(100deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.55) 50%, rgba(255,255,255,0) 80%);
+  background-size: 220% 100%;
+  animation: img-shimmer 1.3s ease-in-out infinite;
+}
+@keyframes img-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+@media (prefers-reduced-motion: reduce) { html.js :is(main, [role="dialog"], aside) :has(> img:not(.is-loaded)) { animation: none; } :is(main, [role="dialog"], aside) img { transition: none; } }

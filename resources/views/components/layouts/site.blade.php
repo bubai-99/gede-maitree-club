@@ -22,6 +22,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    {{-- Photos: a shimmer until each one has loaded (resources/js/images.js); shown anyway after 4 s if scripts fail --}}
+    <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('img-fallback')},4000)</script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#ffffff">
     <title>{{ $pageTitle }}</title>
