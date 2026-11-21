@@ -1,19 +1,37 @@
 @php
+    use App\Enums\PlantCategory;
+    use App\Support\Photo;
+
     $content = app(\App\Support\PageContent::class);
     $whatsapp = $site->club()['whatsapp'];
-    $plantData = $plants->map(fn ($p) => ['slug' => $p->slug, 'name' => $p->tr('name'), 'price' => $p->price, 'stock' => (int) $p->stock])->values();
+    $plantData = $plants->map(fn ($p) => [
+        'slug' => $p->slug,
+        'name' => $p->tr('name'),
+        'search' => mb_strtolower($p->tr('name').' '.$p->name.' '.$p->name_bn),
+        'category' => $p->category->value,
+        'categoryName' => $p->category->label(),
+        'pot' => (string) $p->tr('pot'),
+        'price' => $p->price,
+        'member' => min($p->member_price, $p->price),
+        'stock' => (int) $p->stock,
+        'isNew' => (bool) $p->is_new,
+        'about' => (string) $p->tr('about'),
+        'tip' => (string) $p->tr('tip'),
+        'light' => $p->light?->label(),
+        'water' => $p->water?->label(),
+        'photo' => $p->photoUrl(900),
+        'thumb' => $p->photoUrl(200),
+    ])->values();
+    $nurseryData = [
+        'plants' => $plantData,
+        'category' => $category?->value ?? '',
+        'whatsapp' => $whatsapp,
+        'text' => ['hello' => __('Hello, I would like these plants:'), 'total' => __('Total')],
+    ];
 @endphp
 <x-layouts.site seo="nursery" :title="$content->text('nursery', 'title')">
-    <div class="book-nursery"
-        x-data="{ plants: {{ Js::from($plantData) }}, basket: {}, q: '',
-            add(slug) { const p = this.plants.find(p => p.slug === slug); this.basket[slug] = Math.min(p ? p.stock : 99, (this.basket[slug] || 0) + 1) },
-            remove(slug) { if (this.basket[slug] > 1) this.basket[slug]--; else delete this.basket[slug] },
-            qty(slug) { return this.basket[slug] || 0 },
-            get lines() { return Object.entries(this.basket).map(([slug, qty]) => ({ ...this.plants.find(p => p.slug === slug), qty })) },
-            get count() { return this.lines.reduce((t, l) => t + l.qty, 0) },
-            get total() { return this.lines.reduce((t, l) => t + l.price * l.qty, 0) },
-            get message() { return {{ Js::from(__('Hello, I would like these plants:')) }} + '\n' + this.lines.map(l => '• ' + l.name + ' × ' + l.qty).join('\n') + '\n' + {{ Js::from(__('Total')) }} + ': ₹' + this.total },
-            matches(name) { return name.toLowerCase().includes(this.q.toLowerCase()) } }">
+    <script type="application/json" id="nursery-data">{!! json_encode($nurseryData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
+    <div class="book-nursery" x-data="nursery" @keydown.escape.window="open ? hide() : (cartOpen && closeCart())">
         <x-page-banner page="nursery" :crumb="__('Nursery')" kicker-class="text-[#a8dcb0]">
             <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-white/85">
                 <li class="flex items-center gap-2"><x-icon name="clock" class="w-4 h-4 text-marigold" /><span>{{ __('7–10 am & 5–8 pm') }}</span></li>
@@ -41,29 +59,37 @@
         </section>
 
         <div class="mx-auto max-w-[1160px] px-5 pt-8 pb-36">
+            {{-- Filter and search: instant, no reload (resources/js/nursery.js) --}}
             <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                <nav class="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 flex-1" aria-label="{{ __('Plant types') }}">
-                    <a href="{{ route('nursery') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[current=page]:bg-tulsi aria-[current=page]:text-white aria-[current=page]:border-tulsi" @if (! $category) aria-current="page" @endif>{{ __('All') }}</a>
-                    @foreach (\App\Enums\PlantCategory::cases() as $option)
-                        <a href="{{ route('nursery', ['category' => $option->value]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[current=page]:bg-tulsi aria-[current=page]:text-white aria-[current=page]:border-tulsi" @if ($category === $option) aria-current="page" @endif>{{ $option->label() }}</a>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 flex-1" role="group" aria-label="{{ __('Plant types') }}">
+                    <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
+                    @foreach (PlantCategory::cases() as $option)
+                        @php
+                            $n = $plants->where('category', $option)->count();
+                        @endphp
+                        @if ($n)
+                            <a href="{{ route('nursery', ['category' => $option->value]) }}" @click.prevent="cat = '{{ $option->value }}'" :aria-pressed="(cat === '{{ $option->value }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $option->label() }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
+                        @endif
                     @endforeach
-                </nav>
-                <label class="relative sm:w-64 shrink-0"><span class="sr-only">{{ __('Search plants') }}</span><x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" /><input type="search" x-model="q" class="field h-10 pl-9" placeholder="{{ __('Search plants') }}"></label>
+                </div>
+                <label class="relative sm:w-64 shrink-0"><span class="sr-only">{{ __('Search plants') }}</span><x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" /><input type="search" x-model.debounce.150ms="q" class="field h-10 pl-9 pr-9" placeholder="{{ __('Search plants') }}"><button type="button" x-show="q" x-cloak @click="q = ''" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded text-ink-3 hover:text-ink" aria-label="{{ __('Clear search') }}"><x-icon name="x" class="w-4 h-4" /></button></label>
             </div>
+            <p class="mt-3 text-[14px] text-ink-3" aria-live="polite"><span x-text="{{ Js::from(__(':count plants')) }}.replace(':count', num(shown))">{{ __(':count plants', ['count' => digits($plants->count())]) }}</span></p>
 
-            <ul class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 sm:gap-x-6 gap-y-8">
-                @forelse ($plants as $plant)
+            <ul class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 sm:gap-x-6 gap-y-8">
+                @foreach ($plants as $plant)
                     @php
                         $key = $plant->samplePhotoKey();
                         $url = $key ? null : $plant->photoUrl(500);
                         $out = ! $plant->inStock();
+                        $slug = $plant->slug;
                     @endphp
-                    <li class="group flex flex-col" x-show="matches({{ Js::from($plant->tr('name').' '.$plant->name) }})">
-                        <div class="relative block aspect-square rounded-2xl overflow-hidden bg-tulsi-wash">
+                    <li class="group flex flex-col" x-show="visible('{{ $slug }}')" @if ($category && $plant->category !== $category) style="display: none" @endif>
+                        <button type="button" @click="show('{{ $slug }}')" class="relative block aspect-square rounded-2xl overflow-hidden bg-tulsi-wash text-left focus-visible:outline-2 focus-visible:outline-tulsi focus-visible:outline-offset-2" aria-label="{{ __(':name: details', ['name' => $plant->tr('name')]) }}">
                             @if ($key)
                                 <x-photo :key="$key" :width="500" sizes="(min-width: 1024px) 260px, 50vw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] {{ $out ? 'grayscale opacity-70' : '' }}" />
                             @elseif ($url)
-                                <img src="{{ $url }}" alt="{{ $plant->tr('name') }}" class="absolute inset-0 w-full h-full object-cover {{ $out ? 'grayscale opacity-70' : '' }}" loading="lazy">
+                                <img src="{{ $url }}" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] {{ $out ? 'grayscale opacity-70' : '' }}" loading="lazy">
                             @else
                                 <span class="absolute inset-0 grid place-items-center text-tulsi"><x-icon name="sprout" class="w-10 h-10" /></span>
                             @endif
@@ -75,12 +101,13 @@
                                     <span class="chip h-6 px-2 text-[12px] bg-white text-sindoor-deep">{{ __('Only :count left', ['count' => digits($plant->stock)]) }}</span>
                                 @endif
                             </span>
+                            <span class="absolute right-2.5 bottom-2.5 chip h-7 px-2.5 text-[12.5px] bg-white/95 text-ink opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all"><x-icon name="eye" class="w-3.5 h-3.5" />{{ __('Details') }}</span>
                             @if ($key)
-                                <span class="absolute right-2 bottom-2 rounded bg-black/45 px-1.5 text-[10.5px] text-white/90 opacity-0 group-hover:opacity-100 transition-opacity"><x-photo-credit :key="$key" /></span>
+                                <span class="absolute left-2 bottom-2 rounded bg-black/45 px-1.5 text-[10.5px] text-white/90 opacity-0 group-hover:opacity-100 transition-opacity"><x-photo-credit :key="$key" plain /></span>
                             @endif
-                        </div>
+                        </button>
                         <div class="mt-3 flex-1">
-                            <p class="font-semibold leading-snug">{{ $plant->tr('name') }}</p>
+                            <button type="button" @click="show('{{ $slug }}')" class="text-left font-semibold leading-snug hover:text-tulsi">{{ $plant->tr('name') }}</button>
                             <p class="text-[13.5px] text-ink-3 mt-0.5">{{ $plant->tr('pot') }}</p>
                         </div>
                         <div class="mt-2.5 flex items-center justify-between gap-2">
@@ -88,19 +115,21 @@
                             @if ($out)
                                 <span class="text-[13px] text-ink-3">{{ __('Back soon') }}</span>
                             @else
-                                <button type="button" x-show="! qty('{{ $plant->slug }}')" class="btn btn-sm border border-tulsi/40 text-tulsi hover:bg-tulsi-wash" @click="add('{{ $plant->slug }}')" aria-label="{{ __('Add :name', ['name' => $plant->tr('name')]) }}"><x-icon name="plus" />{{ __('Add') }}</button>
-                                <div x-show="qty('{{ $plant->slug }}')" x-cloak class="flex items-center rounded-lg bg-tulsi text-white" role="group" aria-label="{{ $plant->tr('name') }}">
-                                    <button type="button" class="w-9 h-9 grid place-items-center" @click="remove('{{ $plant->slug }}')" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-4 h-4" /></button>
-                                    <span class="w-6 text-center font-semibold num" aria-live="polite" x-text="qty('{{ $plant->slug }}')"></span>
-                                    <button type="button" class="w-9 h-9 grid place-items-center disabled:opacity-40" @click="add('{{ $plant->slug }}')" :disabled="qty('{{ $plant->slug }}') >= {{ (int) $plant->stock }}" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
+                                <button type="button" x-show="! qty('{{ $slug }}')" class="btn btn-sm border border-tulsi/40 text-tulsi hover:bg-tulsi-wash" @click="add('{{ $slug }}')" aria-label="{{ __('Add :name', ['name' => $plant->tr('name')]) }}"><x-icon name="plus" />{{ __('Add') }}</button>
+                                <div x-show="qty('{{ $slug }}')" x-cloak class="flex items-center rounded-lg bg-tulsi text-white" role="group" aria-label="{{ $plant->tr('name') }}">
+                                    <button type="button" class="w-9 h-9 grid place-items-center" @click="less('{{ $slug }}')" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-4 h-4" /></button>
+                                    <span class="w-6 text-center font-semibold num" aria-live="polite" x-text="num(qty('{{ $slug }}'))"></span>
+                                    <button type="button" class="w-9 h-9 grid place-items-center disabled:opacity-40" @click="add('{{ $slug }}')" :disabled="qty('{{ $slug }}') >= {{ (int) $plant->stock }}" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
                                 </div>
                             @endif
                         </div>
                     </li>
-                @empty
-                    <li class="col-span-2 lg:col-span-3 py-10 text-center text-ink-3">{{ __('No plants in this group right now.') }}</li>
-                @endforelse
+                @endforeach
             </ul>
+            <div x-show="shown === 0" x-cloak class="py-14 text-center">
+                <p class="text-ink-2">{{ __('No plant matches. Ask at the gate; we may have it in the back.') }}</p>
+                <button type="button" @click="q = ''; cat = ''" class="mt-4 btn btn-line btn-sm">{{ __('Show all plants') }}</button>
+            </div>
 
             <div class="mt-14 grid md:grid-cols-3 gap-5 text-[15px]">
                 @foreach ([1 => 'snowflake', 2 => 'droplets', 3 => 'gift'] as $n => $icon)
@@ -109,18 +138,119 @@
             </div>
         </div>
 
-        {{-- Basket: order on WhatsApp --}}
-        <div class="fixed inset-x-0 bottom-0 z-30 transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)]" x-show="lines.length" x-cloak x-transition:enter-start="translate-y-full" x-transition:leave-end="translate-y-full" role="region" aria-label="{{ __('Your plants') }}">
-            <div class="mx-auto max-w-[1160px] px-5 pb-4">
-                <div class="bg-tulsi text-white rounded-lg p-4 flex items-center gap-4 shadow-[0_12px_32px_-12px_rgba(20,50,28,.6)]">
-                    <div class="min-w-0">
-                        <p class="font-semibold num" x-text="{{ Js::from(__('Plants in your list')) }} + ': ' + count"></p>
-                        <p class="text-sm text-white/80 truncate" x-text="lines.map(l => l.name + ' × ' + l.qty).join(', ')"></p>
-                    </div>
-                    <p class="ml-auto font-display text-2xl num">₹<span x-text="total"></span></p>
-                    <a :href="'https://wa.me/{{ $whatsapp }}?text=' + encodeURIComponent(message)" target="_blank" rel="noopener" class="btn bg-white text-tulsi hover:bg-tulsi-wash shrink-0"><x-icon name="message-circle" /><span class="hidden sm:inline">{{ __('Order on WhatsApp') }}</span><span class="sm:hidden">{{ __('Order') }}</span></a>
+        <x-reviews kind="nursery" class="pb-24" />
+
+        {{-- Basket button: count and total; opens the sidebar --}}
+        <button type="button" x-show="items" x-cloak @click="openCart()"
+                x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition duration-200" x-transition:leave-end="opacity-0 translate-y-4"
+                class="fixed z-30 right-4 bottom-4 sm:right-6 sm:bottom-6 flex items-center gap-3 rounded-full bg-tulsi text-white pl-4 pr-5 h-14 shadow-[0_14px_34px_-12px_rgba(20,50,28,.7)] hover:bg-[#1f5029]"
+                :aria-label="{{ Js::from(__('Basket: :count plants, :total')) }}.replace(':count', num(items)).replace(':total', rupees(total))">
+            <span class="relative"><x-icon name="shopping-basket" class="w-6 h-6" /><span class="absolute -top-2 -right-2.5 min-w-5 h-5 px-1 rounded-full bg-marigold text-ink text-[12px] font-bold grid place-items-center num" x-text="num(items)"></span></span>
+            <span class="font-semibold num" x-text="rupees(total)"></span>
+        </button>
+
+        {{-- Basket sidebar --}}
+        <div x-show="cartOpen" x-cloak class="fixed inset-0 z-[80]" role="dialog" aria-modal="true" aria-labelledby="basket-h" @keydown.tab="trap($event, $refs.cart)">
+            <div class="absolute inset-0 bg-black/45" x-show="cartOpen" x-transition.opacity @click="closeCart()"></div>
+            <aside x-ref="cart" class="absolute right-0 top-0 h-full w-full max-w-[420px] bg-paper shadow-2xl flex flex-col"
+                   x-show="cartOpen" x-transition:enter="transition duration-300 ease-[cubic-bezier(.16,1,.3,1)]" x-transition:enter-start="translate-x-full" x-transition:leave="transition duration-200 ease-in" x-transition:leave-end="translate-x-full">
+                <header class="flex items-center gap-3 px-5 h-16 border-b border-rule shrink-0">
+                    <x-icon name="shopping-basket" class="w-5 h-5 text-tulsi" />
+                    <h2 id="basket-h" class="font-display text-[1.4rem]">{{ __('Your plants') }}</h2>
+                    <span class="chip h-6 px-2 text-[12.5px] bg-tulsi-wash text-tulsi num" x-text="num(items)"></span>
+                    <button type="button" x-ref="cartClose" @click="closeCart()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+                </header>
+                <div class="flex-1 overflow-y-auto px-5">
+                    <p x-show="! lines.length" class="py-16 text-center text-ink-3">{{ __('Your basket is empty. Tap Add on any plant.') }}</p>
+                    <ul class="divide-y divide-rule">
+                        <template x-for="line in lines" :key="line.slug">
+                            <li class="py-4 flex gap-3">
+                                <button type="button" @click="closeCart(); show(line.slug)" class="w-16 h-16 rounded-xl overflow-hidden bg-tulsi-wash shrink-0"><img :src="line.thumb" alt="" class="w-full h-full object-cover" x-show="line.thumb"></button>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-start gap-2">
+                                        <p class="font-semibold leading-snug flex-1" x-text="line.name"></p>
+                                        <button type="button" @click="drop(line.slug)" class="text-ink-3 hover:text-sindoor-deep -mt-1 w-8 h-8 grid place-items-center rounded" :aria-label="{{ Js::from(__('Remove :name')) }}.replace(':name', line.name)"><x-icon name="trash-2" class="w-4 h-4" /></button>
+                                    </div>
+                                    <p class="text-[13px] text-ink-3" x-text="line.pot"></p>
+                                    <div class="mt-2 flex items-center justify-between">
+                                        <div class="flex items-center rounded-lg border border-rule h-9" role="group" :aria-label="line.name">
+                                            <button type="button" class="w-9 h-full grid place-items-center" @click="less(line.slug)" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-3.5 h-3.5" /></button>
+                                            <span class="w-7 text-center font-semibold num" x-text="num(line.qty)"></span>
+                                            <button type="button" class="w-9 h-full grid place-items-center disabled:opacity-35" @click="add(line.slug)" :disabled="line.qty >= line.stock" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-3.5 h-3.5" /></button>
+                                        </div>
+                                        <span class="font-semibold num" x-text="rupees(line.price * line.qty)"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
                 </div>
-            </div>
+                <footer class="border-t border-rule px-5 py-4 bg-card shrink-0" x-show="lines.length">
+                    <dl class="space-y-1 text-[15px]">
+                        <div class="flex"><dt class="text-ink-2">{{ __('Total') }}</dt><dd class="ml-auto font-display text-[1.6rem] leading-none num" x-text="rupees(total)"></dd></div>
+                        <div class="flex text-[13.5px]"><dt class="text-tulsi">{{ __('Members pay') }}</dt><dd class="ml-auto text-tulsi font-semibold num" x-text="rupees(memberTotal)"></dd></div>
+                    </dl>
+                    <a :href="orderLink" target="_blank" rel="noopener" class="mt-4 btn w-full h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="message-circle" />{{ __('Order on WhatsApp') }}</a>
+                    <button type="button" @click="closeCart()" class="mt-2 btn btn-ghost w-full h-10 text-ink-2">{{ __('Keep browsing') }}</button>
+                    <p class="mt-2 text-[12.5px] text-ink-3 text-center">{{ __('Nothing is paid now. Collect at the club gate and pay in cash or UPI.') }}</p>
+                </footer>
+            </aside>
+        </div>
+
+        {{-- Plant details: centred on wide screens, a sheet from the bottom on phones --}}
+        <div x-show="open" x-cloak class="fixed inset-0 z-[85] flex items-end sm:items-center justify-center sm:p-6" role="dialog" aria-modal="true" :aria-label="current?.name" @keydown.tab="trap($event, $refs.panel)">
+            <div class="absolute inset-0 bg-black/55" x-show="open" x-transition.opacity @click="hide()"></div>
+            <template x-if="current">
+                <div x-ref="panel" class="relative w-full sm:max-w-[860px] max-h-[92dvh] overflow-y-auto bg-paper rounded-t-3xl sm:rounded-3xl shadow-2xl grid sm:grid-cols-2"
+                     x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 sm:translate-y-0 sm:scale-95">
+                    <div class="relative aspect-[4/3] sm:aspect-auto sm:min-h-[480px] bg-tulsi-wash">
+                        <img :src="current.photo" :alt="current.name" class="absolute inset-0 w-full h-full object-cover" x-show="current.photo">
+                        <span class="absolute left-3 top-3 flex gap-1.5">
+                            <span class="chip h-6 px-2 text-[12px] bg-marigold text-ink" x-show="current.isNew">{{ __('New') }}</span>
+                        </span>
+                    </div>
+                    <div class="p-6 sm:p-8 flex flex-col">
+                        <div class="flex items-start gap-3">
+                            <div class="min-w-0">
+                                <p class="eyebrow text-tulsi" x-text="current.categoryName"></p>
+                                <h2 class="mt-2 font-display text-[1.9rem] leading-tight" x-text="current.name"></h2>
+                            </div>
+                            <button type="button" x-ref="panelClose" @click="hide()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center shrink-0" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+                        </div>
+                        <p class="mt-4 text-[16px] text-ink-2 leading-relaxed" x-show="current.about" x-text="current.about"></p>
+                        <ul class="mt-5 grid grid-cols-3 gap-2 text-center">
+                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.light"><x-icon name="sun" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.light"></span></li>
+                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.water"><x-icon name="droplets" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.water"></span></li>
+                            <li class="rounded-xl bg-paper-2 px-2 py-3" x-show="current.pot"><x-icon name="ruler" class="w-5 h-5 mx-auto text-tulsi" /><span class="block mt-1.5 text-[13px] font-semibold leading-tight" x-text="current.pot"></span></li>
+                        </ul>
+                        <p class="mt-4 text-[14.5px] text-ink-2 flex gap-2" x-show="current.tip"><x-icon name="lightbulb" class="w-[18px] h-[18px] text-marigold shrink-0 mt-0.5" /><span x-text="current.tip"></span></p>
+                        <div class="mt-auto pt-6">
+                            <div class="pt-5 border-t border-rule flex items-end justify-between gap-3">
+                                <div>
+                                    <p class="font-display text-[2rem] leading-none num" x-text="rupees(current.price)"></p>
+                                    <p class="mt-1.5 text-[13.5px] text-tulsi font-semibold" x-show="current.member < current.price" x-text="{{ Js::from(__('Members :price')) }}.replace(':price', rupees(current.member))"></p>
+                                </div>
+                                <p class="text-[13.5px] font-semibold" :class="current.stock === 0 ? 'text-ink-3' : (current.stock <= 10 ? 'text-sindoor-deep' : 'text-tulsi')"
+                                   x-text="current.stock === 0 ? {{ Js::from(__('Out of stock')) }} : (current.stock <= 10 ? {{ Js::from(__('Only :count left')) }}.replace(':count', num(current.stock)) : {{ Js::from(__('In stock')) }})"></p>
+                            </div>
+                            <template x-if="current.stock > 0">
+                                <div class="mt-5 flex items-center gap-3">
+                                    <div class="flex items-center rounded-xl border border-rule h-12" role="group" aria-label="{{ __('Quantity') }}">
+                                        <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.max(1, qtyInPanel - 1)" :disabled="qtyInPanel <= 1" aria-label="{{ __('Remove one') }}"><x-icon name="minus" class="w-4 h-4" /></button>
+                                        <span class="w-8 text-center font-semibold num" aria-live="polite" x-text="num(qtyInPanel)"></span>
+                                        <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.min(current.stock, qtyInPanel + 1)" :disabled="qtyInPanel >= current.stock" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
+                                    </div>
+                                    <button type="button" @click="putInBasket()" class="btn flex-1 h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="shopping-basket" /><span x-text="(qty(current.slug) ? {{ Js::from(__('Update basket')) }} : {{ Js::from(__('Add to basket')) }}) + ' · ' + rupees(qtyInPanel * current.price)"></span></button>
+                                </div>
+                            </template>
+                            <template x-if="current.stock === 0">
+                                <a :href="'https://wa.me/{{ $whatsapp }}?text=' + encodeURIComponent({{ Js::from(__('Please tell me when :plant is back at the nursery.')) }}.replace(':plant', current.name))" target="_blank" rel="noopener" class="btn btn-line h-12 mt-5 w-full"><x-icon name="bell" />{{ __('Tell me when it is back') }}</a>
+                            </template>
+                            <p class="mt-4 text-[13px] text-ink-3">{{ __('Pick up at the club gate. Pay at the gate in cash or UPI.') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </x-layouts.site>

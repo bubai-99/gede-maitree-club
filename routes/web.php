@@ -164,6 +164,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         'packages' => [Admin\CateringPackageController::class, 'package'],
         'committee' => [Admin\CommitteeMemberController::class, 'committee'],
         'news' => [Admin\NewsPostController::class, 'post'],
+        'reviews' => [Admin\ReviewController::class, 'review'],
     ];
 
     foreach ($cms as $name => [$controller, $parameter]) {

@@ -91,6 +91,9 @@
                 <p class="mt-4 text-[15px] text-ink-2">{{ __('Vegetarian and shraddha meals are served with separate utensils and a separate team.') }}</p>
             </div>
 
+            {{-- What families say (published reviews, console → Reviews) --}}
+            <x-reviews kind="catering" class="!px-0 mt-16" />
+
             {{-- Enquiry with a live estimate --}}
             <div id="quote" class="mt-16 grid lg:grid-cols-12 gap-10 scroll-mt-24">
                 <div class="lg:col-span-5">

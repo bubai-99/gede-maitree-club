@@ -8,9 +8,12 @@ use App\Models\ChandaEntry;
 use App\Models\CommitteeMember;
 use App\Models\Event;
 use App\Models\LedgerEntry;
+use App\Models\NewsCategory;
+use App\Models\NewsPost;
 use App\Models\Notice;
 use App\Models\PanjikaDay;
 use App\Models\Plant;
+use App\Models\Review;
 use App\Models\User;
 use App\Payments\ManualUpiGateway;
 use App\Payments\PaymentGateway;
@@ -83,6 +86,9 @@ class AppServiceProvider extends ServiceProvider
         Route::model('committee', CommitteeMember::class);
         Route::model('entry', LedgerEntry::class);
         Route::model('day', PanjikaDay::class);
+        Route::model('post', NewsPost::class);
+        Route::model('category', NewsCategory::class);
+        Route::model('review', Review::class);
 
         // Console menu: the khata opens for anyone who may see at least one book.
         Gate::define('khata.open', fn (User $user): bool => $user->can('viewAny', LedgerEntry::class));

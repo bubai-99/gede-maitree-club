@@ -1,17 +1,28 @@
 import Alpine from 'alpinejs';
 import { drawIcons } from './icons';
 import { razorpayCheckout } from './pay';
+import { nursery } from './nursery';
 import { forgetThisDevice } from './forget';
 import { enhanceForms } from './forms';
 
 window.Alpine = Alpine;
 
 Alpine.data('razorpayCheckout', razorpayCheckout);
+Alpine.data('nursery', nursery);
 
 document.addEventListener('alpine:initialized', () => drawIcons());
 
 Alpine.start();
 drawIcons();
+
+// Icons in content Alpine adds later (x-if, x-for: a details panel, basket rows) are drawn as they appear.
+new MutationObserver((changes) => {
+    for (const change of changes) {
+        for (const node of change.addedNodes) {
+            if (node instanceof Element && (node.matches('i[data-lucide]') || node.querySelector('i[data-lucide]'))) drawIcons(node.parentElement ?? node);
+        }
+    }
+}).observe(document.body, { childList: true, subtree: true });
 enhanceForms();
 
 // Installable apps (member app, committee console): register the service worker named by the layout.

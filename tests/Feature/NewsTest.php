@@ -72,6 +72,12 @@ class NewsTest extends TestCase
             ->assertSee('Bijoya');
         $this->assertStringNotContainsString('<p>https://youtu.be', $page->getContent());
 
+        // The console opens, unpublishes and deletes an existing story
+        $this->actingAs($this->editor)->get("/admin/news/{$post->slug}/edit")->assertOk()->assertSee('Durga Puja 2026');
+        $this->actingAs($this->editor)->delete("/admin/news/{$post->slug}/publish")->assertRedirect();
+        $this->assertFalse($post->refresh()->isPublished());
+        $this->actingAs($this->editor)->post("/admin/news/{$post->slug}/publish")->assertRedirect();
+
         // Remove one photo
         $first = $post->getMedia('images')->first();
         $this->actingAs($this->editor)->put("/admin/news/{$post->slug}", $this->story(['remove_images' => [$first?->id]]))->assertRedirect();

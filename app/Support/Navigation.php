@@ -86,6 +86,7 @@ final class Navigation
             ['route' => 'admin.panjika.index', 'icon' => 'moon-star', 'label' => 'Panjika', 'ability' => 'website.view'],
             ['route' => 'admin.notices.index', 'icon' => 'megaphone', 'label' => 'Notices & meetings', 'ability' => 'website.view'],
             ['route' => 'admin.news.index', 'icon' => 'newspaper', 'label' => 'News', 'ability' => 'website.view', 'also' => 'admin.news-categories.*'],
+            ['route' => 'admin.reviews.index', 'icon' => 'star', 'label' => 'Reviews', 'ability' => 'website.view'],
             ['route' => 'admin.website', 'icon' => 'globe', 'label' => 'Website', 'ability' => 'website.view', 'also' => 'admin.pages.*'],
             ['route' => 'admin.committee.index', 'icon' => 'users', 'label' => 'Committee', 'ability' => 'website.view'],
         ]],

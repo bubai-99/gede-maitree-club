@@ -34,11 +34,11 @@ class PageController extends Controller
         $request->validate(['category' => ['nullable', Rule::enum(PlantCategory::class)]]);
         $category = $request->enum('category', PlantCategory::class);
 
+        // Every plant goes to the page; the category chips and the search filter them there,
+        // without reloading. ?category= only picks the chip that starts selected.
         return view('site.nursery', [
             'category' => $category,
-            'plants' => Plant::query()->published()->where('active', true)
-                ->when($category, fn ($q) => $q->where('category', $category?->value))
-                ->orderBy('sort')->orderBy('name')->get(),
+            'plants' => Plant::query()->published()->where('active', true)->orderBy('sort')->orderBy('name')->get(),
         ]);
     }
 

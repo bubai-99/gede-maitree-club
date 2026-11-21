@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             SampleEventsSeeder::class,
             SamplePanjikaSeeder::class,
             SampleNewsSeeder::class,
+            SampleReviewsSeeder::class,
         ]);
     }
 }
