@@ -259,7 +259,7 @@
             <template x-if="current">
                 <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[100dvh] lg:h-[min(88dvh,800px)] bg-paper lg:rounded-3xl shadow-2xl max-lg:overflow-y-auto max-lg:overscroll-contain lg:overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
                      x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 lg:translate-y-0 lg:scale-95">
-                    <button type="button" x-ref="panelClose" @click="hide()" class="fixed lg:absolute right-3 top-3 z-30 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow hover:bg-white" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+                    <button type="button" x-ref="panelClose" @click="hide()" class="fixed lg:absolute right-3 top-[max(.75rem,env(safe-area-inset-top))] lg:right-5 lg:top-5 z-30 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow lg:shadow-none lg:border lg:border-rule lg:bg-card hover:bg-white lg:hover:bg-paper-2" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
 
                     {{-- Photos: swipe, arrows or the thumbnails over the photo --}}
                     <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[min(92vw,460px)]">
@@ -269,7 +269,7 @@
                                     <li class="relative shrink-0 w-full h-full snap-center"><img :src="ph.url" :alt="current.name + ' · ' + (i + 1)" class="absolute inset-0 w-full h-full object-cover" :loading="i ? 'lazy' : 'eager'"></li>
                                 </template>
                             </ul>
-                            <span class="absolute left-3 top-3 z-10 flex gap-1.5"><span class="chip h-7 px-2.5 text-[12px] bg-marigold text-ink" x-show="current.isNew">{{ __('New') }}</span><span class="chip h-7 px-2.5 bg-black/55 text-white text-[12.5px] num" x-show="current.photos.length > 1" x-text="num(photoIndex + 1) + ' / ' + num(current.photos.length)"></span></span>
+                            <span class="absolute left-3 top-[calc(max(.75rem,env(safe-area-inset-top))+6px)] lg:top-[26px] z-10 flex gap-1.5"><span class="chip h-7 px-2.5 text-[12px] bg-marigold text-ink" x-show="current.isNew">{{ __('New') }}</span><span class="chip h-7 px-2.5 bg-black/55 text-white text-[12.5px] num" x-show="current.photos.length > 1" x-text="num(photoIndex + 1) + ' / ' + num(current.photos.length)"></span></span>
                             <template x-if="current.photos.length > 1">
                                 <div>
                                     <button type="button" @click="goPhoto(photoIndex - 1)" :disabled="photoIndex === 0" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow disabled:opacity-0 transition-opacity" aria-label="{{ __('Previous photo') }}"><x-icon name="chevron-left" class="w-5 h-5" /></button>
@@ -290,7 +290,7 @@
                     <div class="lg:flex-1 lg:min-h-0 flex flex-col max-lg:grow">
                     <div class="grow lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
                         <div class="p-6 sm:p-8">
-                            <p class="eyebrow text-tulsi" x-text="current.categoryName"></p>
+                            <p class="eyebrow text-tulsi lg:pr-12" x-text="current.categoryName"></p>
                             <h2 class="mt-2 pr-10 font-display text-[2rem] sm:text-[2.3rem] leading-tight" x-text="current.name"></h2>
                             <p class="mt-3 text-[16.5px] text-ink-2 leading-relaxed" x-show="current.about" x-text="current.about"></p>
 
@@ -337,7 +337,7 @@
                                     <span class="w-8 text-center font-semibold num" aria-live="polite" x-text="num(qtyInPanel)"></span>
                                     <button type="button" class="w-11 h-full grid place-items-center disabled:opacity-35" @click="qtyInPanel = Math.min(current.stock, qtyInPanel + 1)" :disabled="qtyInPanel >= current.stock" aria-label="{{ __('Add one') }}"><x-icon name="plus" class="w-4 h-4" /></button>
                                 </div>
-                                <button type="button" @click="putInBasket()" class="btn flex-1 h-12 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="shopping-basket" /><span class="whitespace-nowrap" x-text="qty(current.slug) ? {{ Js::from(__('Update basket')) }} : {{ Js::from(__('Add to basket')) }}"></span><span class="hidden sm:inline whitespace-nowrap num" x-text="'· ' + rupees(qtyInPanel * current.price)"></span></button>
+                                <button type="button" @click="putInBasket()" class="btn flex-1 min-w-0 h-12 px-3 gap-2 bg-tulsi text-white hover:bg-[#1f5029]"><x-icon name="shopping-basket" /><span class="whitespace-nowrap" x-text="qty(current.slug) ? {{ Js::from(__('Update basket')) }} : {{ Js::from(__('Add to basket')) }}"></span><span class="w-px h-5 bg-white/35 mx-0.5" aria-hidden="true"></span><span class="whitespace-nowrap num font-semibold" x-text="rupees(qtyInPanel * current.price)"></span></button>
                             </div>
                         </template>
                         <template x-if="current.stock === 0">
