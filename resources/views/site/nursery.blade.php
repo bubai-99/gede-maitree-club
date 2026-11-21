@@ -24,9 +24,9 @@
 
         {{-- How buying works: a full-width band right under the banner; three steps joined by a dashed path (across on wide screens, down on phones) --}}
         <section class="bg-tulsi-wash border-b border-tulsi/15" aria-labelledby="how-buy">
-            <div class="mx-auto max-w-[1160px] px-5 py-5 sm:py-6">
-                <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[13px]' : 'text-[11.5px] uppercase tracking-[0.14em]' }}">{{ __('How to buy') }}</h2>
-                <ol class="nursery-steps mt-3 grid sm:grid-cols-3 gap-4 sm:gap-6">
+            <div class="mx-auto max-w-[1160px] px-5 py-5 sm:py-6 lg:grid lg:grid-cols-[150px_1fr] lg:gap-8 lg:items-center">
+                <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[13px] lg:text-[1.15rem]' : 'text-[11.5px] uppercase tracking-[0.14em] lg:text-[13px]' }} lg:border-r lg:border-tulsi/20 lg:pr-6 lg:py-2">{{ __('How to buy') }}</h2>
+                <ol class="nursery-steps mt-3 lg:mt-0 grid sm:grid-cols-3 gap-4 sm:gap-6">
                     @foreach ([['sprout', __('Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as $n => [$icon, $title, $text])
                         <li class="nursery-step relative flex sm:flex-col gap-3 sm:gap-2.5">
                             <span class="relative z-[1] shrink-0 w-8 h-8 rounded-full bg-tulsi text-white grid place-items-center font-display text-[1rem] shadow-[0_0_0_4px_var(--color-tulsi-wash)]" aria-hidden="true">{{ digits($n + 1) }}</span>
