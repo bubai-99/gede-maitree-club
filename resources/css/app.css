@@ -638,3 +638,15 @@ label:has(> input[type="checkbox"][required])::after {
 .field-error[data-client] { animation: field-error-in .18s ease-out; }
 @keyframes field-error-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .field-error[data-client] { animation: none; } }
+
+/* Nursery "How to buy": a dashed path joining the step numbers — across on wide screens, down on phones */
+.nursery-step:not(:last-child)::after {
+  content: ""; position: absolute; left: 23px; top: 52px; bottom: -28px;
+  border-left: 2px dashed color-mix(in srgb, var(--color-tulsi) 45%, transparent);
+}
+@media (min-width: 640px) {
+  .nursery-step:not(:last-child)::after {
+    left: 60px; right: -24px; top: 23px; bottom: auto;
+    border-left: 0; border-top: 2px dashed color-mix(in srgb, var(--color-tulsi) 45%, transparent);
+  }
+}

@@ -23,11 +23,21 @@
         </x-page-banner>
 
         <div class="mx-auto max-w-[1160px] px-5 py-10 pb-36">
-            <ol class="grid sm:grid-cols-3 gap-4 mb-10">
-                @foreach ([['sprout', __('1. Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('2. Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('3. Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as [$icon, $title, $text])
-                    <li class="flex gap-3 items-start card p-5"><span class="w-9 h-9 rounded-full bg-tulsi text-white grid place-items-center shrink-0"><x-icon :name="$icon" class="w-[18px] h-[18px]" /></span><div><p class="font-semibold">{{ $title }}</p><p class="text-sm text-ink-2">{{ $text }}</p></div></li>
-                @endforeach
-            </ol>
+            {{-- How buying works: three steps joined by a dashed path (across on wide screens, down on phones) --}}
+            <section class="mb-10 rounded-[22px] bg-tulsi-wash/70 border border-tulsi/15 px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="how-buy">
+                <h2 id="how-buy" class="font-bold text-tulsi {{ app()->getLocale() === 'bn' ? 'text-[14px]' : 'text-[12.5px] uppercase tracking-[0.16em]' }}">{{ __('How to buy') }}</h2>
+                <ol class="nursery-steps mt-5 grid sm:grid-cols-3 gap-6 sm:gap-8">
+                    @foreach ([['sprout', __('Pick plants'), __('Add them below; the total updates as you go.')], ['message-circle', __('Send on WhatsApp'), __('Sutapa-di sets them aside and replies.')], ['store', __('Collect & pay'), __('Cash or UPI at the gate, with a receipt.')]] as $n => [$icon, $title, $text])
+                        <li class="nursery-step relative flex sm:flex-col gap-4">
+                            <span class="relative z-[1] shrink-0 w-12 h-12 rounded-full bg-tulsi text-white grid place-items-center font-display text-[1.35rem] shadow-[0_0_0_6px_var(--color-tulsi-wash)]" aria-hidden="true">{{ digits($n + 1) }}</span>
+                            <div class="min-w-0 pt-1 sm:pt-0">
+                                <p class="flex items-center gap-2 font-display text-[1.3rem] leading-tight text-ink"><x-icon :name="$icon" class="w-[18px] h-[18px] text-tulsi shrink-0" />{{ $title }}</p>
+                                <p class="mt-1.5 text-[15px] text-ink-2 leading-relaxed">{{ $text }}</p>
+                            </div>
+                        </li>
+                    @endforeach
+                </ol>
+            </section>
             <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                 <nav class="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 flex-1" aria-label="{{ __('Plant types') }}">
                     <a href="{{ route('nursery') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[current=page]:bg-tulsi aria-[current=page]:text-white aria-[current=page]:border-tulsi" @if (! $category) aria-current="page" @endif>{{ __('All') }}</a>

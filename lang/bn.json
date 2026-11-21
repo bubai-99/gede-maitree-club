@@ -1494,9 +1494,6 @@
     "7–10 am & 5–8 pm": "সকাল ৭–১০ ও বিকেল ৫–৮",
     "Members :percent% off": "সদস্যদের :percent% ছাড়",
     "Collect at the club gate": "ক্লাবের গেট থেকে নিন",
-    "1. Pick plants": "১. গাছ বাছুন",
-    "2. Send on WhatsApp": "২. হোয়াটসঅ্যাপে পাঠান",
-    "3. Collect & pay": "৩. গেট থেকে নিন",
     "Out of stock": "স্টক নেই",
     "Only :count left": "মাত্র :countটি",
     "Add :name": ":name যোগ করুন",
@@ -1929,5 +1926,6 @@
     "Move up": "উপরে",
     "Move down": "নিচে",
     "Add a lane or area": "গলি বা এলাকা যোগ করুন",
-    "Lanes and areas saved. The join, volunteer and chanda forms use them now.": "গলি ও এলাকা সেভ হয়েছে। সদস্য, স্বেচ্ছাসেবক ও চাঁদার ফর্মে এখন এগুলোই দেখা যাবে।"
+    "Lanes and areas saved. The join, volunteer and chanda forms use them now.": "গলি ও এলাকা সেভ হয়েছে। সদস্য, স্বেচ্ছাসেবক ও চাঁদার ফর্মে এখন এগুলোই দেখা যাবে।",
+    "How to buy": "কীভাবে কিনবেন"
 }
