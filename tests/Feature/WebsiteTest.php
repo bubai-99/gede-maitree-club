@@ -41,7 +41,7 @@ class WebsiteTest extends TestCase
             'contact' => ['/contact', 'Write to us'],
             'join' => ['/join', 'Send application'],
             'volunteer' => ['/volunteer', 'Sign up to volunteer'],
-            'panjika' => ['/panjika', 'Pujas and parbon'],
+            'panjika' => ['/panjika', 'Pujas, parbon and club events'],
             'privacy' => ['/privacy', 'What we keep'],
             'terms' => ['/terms', 'Member cards are not transferable.'],
         ];

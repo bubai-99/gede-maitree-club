@@ -92,6 +92,9 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+// An ID card photo: the family in the member app, or the committee members who manage members (checked in the controller).
+Route::get('/app/members/{member}/photo', [Member\MemberPhotoController::class, 'show'])->middleware('auth')->name('member.photos.show');
+
 Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(function () {
     Route::get('/', Member\HomeController::class)->name('home');
     Route::post('/logout', [MemberLoginController::class, 'destroy'])->name('logout');
@@ -122,6 +125,12 @@ Route::prefix('app')->name('member.')->middleware(['auth', 'member'])->group(fun
         Route::get('/events/{event}', 'event')->name('events.show');
         Route::get('/notices', 'notices')->name('notices.index');
         Route::get('/notices/{notice}', 'notice')->name('notices.show');
+    });
+
+    // ID card photos of the family (private: served only to the family and the committee)
+    Route::controller(Member\MemberPhotoController::class)->prefix('members/{member}/photo')->name('photos.')->group(function () {
+        Route::post('/', 'store')->middleware('throttle:20,1')->name('store');
+        Route::delete('/', 'destroy')->name('destroy');
     });
 
     // Registering the family for an event (limits, seats and cut-off in App\Passes\Registrations).

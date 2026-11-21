@@ -47,7 +47,7 @@
 
             <div class="mt-16 grid lg:grid-cols-12 gap-8 lg:gap-10">
                 <div class="lg:col-span-7">
-                    <p class="gz-kicker">{{ __('Pujas and parbon') }}</p>
+                    <p class="gz-kicker">{{ __('Pujas, parbon and club events') }}</p>
                     <h2 class="mt-2 gz-headline text-[clamp(1.9rem,4vw,2.6rem)]">{{ __('Coming up') }}</h2>
                     <ol class="mt-6 border-t border-rule" id="pj-pujas"></ol>
                 </div>

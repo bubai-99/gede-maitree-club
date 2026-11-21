@@ -43,7 +43,7 @@
                                             <span class="idc-kind">{{ $member->is_head ? __('HEAD') : __('FAMILY') }}</span>
                                         </div>
                                         <div class="idc-body">
-                                            <div class="idc-photo"><span class="idc-initials">{{ mb_substr((string) $member->tr('name'), 0, 1) }}</span></div>
+                                            <div class="idc-photo overflow-hidden"><x-id-photo :member="$member" /></div>
                                             <div class="idc-info">
                                                 <p class="idc-name">{{ $member->tr('name') }}</p>
                                                 <p class="idc-rel">{{ local_text($member->relation, $member->relation_bn) }}</p>

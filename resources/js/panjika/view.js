@@ -143,6 +143,7 @@ function drawMonth() {
         <span class="pj-b num">${p.bengali.firstDay ? `${N(1)} ${L(BN_MONTHS[p.bengali.month][0].slice(0, 3), BN_MONTHS[p.bengali.month][1])}` : N(p.bengali.day)}</span>
       </span>
       <span class="pj-t">${tag === 'purnima' ? '<span class="pj-moon-full"></span>' : tag === 'amavasya' ? '<span class="pj-moon-new"></span>' : ''}<span class="truncate">${L(...tithiName(p.tithi.i))}</span></span>
+      ${marks.length ? `<span class="pj-marks">${marks.slice(0, 2).map((x) => `<span class="pj-mark ${chipCls(x.kind)}">${esc(L(x.en, x.bn))}</span>`).join('')}${marks.length > 2 ? `<span class="pj-more">+${N(marks.length - 2)}</span>` : ''}</span>` : ''}
       ${marks.length ? `<span class="pj-dots">${marks.map((x) => `<span class="${dotCls(x.kind)}"></span>`).join('')}</span>` : ''}
     </button>`);
     }
@@ -151,23 +152,32 @@ function drawMonth() {
 
 function drawLists() {
     const today = todayKey();
-    const pujas = D.days.filter((p) => p.kind !== 'wedding' && p.date >= today).slice(0, 6);
+    // Pujas and parbon from the panjika, and the club's own events, in date order.
+    const pujas = [
+        ...D.days.filter((p) => p.kind !== 'wedding' && p.date >= today),
+        ...D.events.filter((e) => e.date >= today).map((e) => ({ ...e, kind: 'event' })),
+    ].sort((a, b) => a.date.localeCompare(b.date)).slice(0, 8);
     $(root, '#pj-pujas').innerHTML = pujas.map((p) => {
         const d = panjikaDay(p.date);
         let times;
-        if (p.tithi !== null && p.tithi !== undefined) {
+        if (p.kind === 'event') {
+            times = `${L('Club event', 'ক্লাবের অনুষ্ঠান')} · ${L('Details and registration', 'বিস্তারিত ও নাম লেখানো')} →`;
+        } else if (p.tithi !== null && p.tithi !== undefined) {
             const span = d.tithi.i === p.tithi ? d.tithi : tithiAt(new Date(Date.parse(`${p.date}T12:00:00+05:30`)));
             times = `${L(...tithiName(p.tithi))}: ${L('begins', 'শুরু')} ${gDate(keyOf(span.start))}, ${clock(span.start)} · ${L('ends', 'শেষ')} ${gDate(keyOf(span.end))}, ${clock(span.end)}`;
         } else {
             times = `${L('Sunrise', 'সূর্যোদয়')} ${clock(d.sun.rise)} · ${L('Sunset', 'সূর্যাস্ত')} ${clock(d.sun.set)}`;
         }
         const { m, d: day } = parseKey(p.date);
+        // A club event opens its page; a puja or parbon picks its day on this page.
+        const open = p.kind === 'event' ? `<a href="${esc(p.url)}"` : `<button type="button" data-pj-day="${p.date}"`;
+        const close = p.kind === 'event' ? '</a>' : '</button>';
         return `<li class="border-b gz-hair">
-      <button type="button" data-pj-day="${p.date}" class="w-full text-left py-4 grid grid-cols-[64px_1fr_auto] gap-4 items-center hover:bg-paper-2/60 -mx-2 px-2 rounded-lg">
+      ${open} class="w-full text-left py-4 grid grid-cols-[64px_1fr_auto] gap-4 items-center hover:bg-paper-2/60 -mx-2 px-2 rounded-lg">
         <span class="text-center leading-none"><span class="block font-display text-[2rem] num">${N(day)}</span><span class="block mt-1 text-[12.5px] font-semibold uppercase">${L(G_MONTHS[m - 1][0].slice(0, 3), G_MONTHS[m - 1][1])}</span></span>
         <span class="min-w-0"><span class="block font-semibold text-[17px] leading-snug">${esc(L(p.en, p.bn))}</span><span class="block text-[14px] text-ink-2">${bDate(d.bengali)} · ${L(...WEEKDAYS[d.weekday])}</span><span class="block mt-0.5 text-[13.5px] text-ink-3">${times}</span></span>
         <span class="w-3 h-3 rounded-full ${dotCls(p.kind)}" aria-hidden="true"></span>
-      </button>
+      ${close}
     </li>`;
     }).join('') || `<li class="py-6 text-ink-3">${L('No pujas entered yet.', 'এখনও কোনো পূজার দিন দেওয়া হয়নি।')}</li>`;
     const weds = D.days.filter((p) => p.kind === 'wedding' && p.date >= today).slice(0, 6);

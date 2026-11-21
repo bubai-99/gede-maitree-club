@@ -1845,7 +1845,6 @@
     "Parbon, sankranti": "পার্বণ, সংক্রান্তি",
     "Wedding day": "বিয়ের দিন",
     "Club event": "ক্লাবের অনুষ্ঠান",
-    "Pujas and parbon": "পূজা ও পার্বণ",
     "Wedding days": "বিয়ের দিন",
     "Dates and lagna": "বিয়ের তারিখ ও লগ্ন",
     "Book Maitree Serving": "মৈত্রী পরিবেশন বুক করুন",
@@ -1866,5 +1865,15 @@
     "Ekadashi": "একাদশী",
     "Dwadashi": "দ্বাদশী",
     "Trayodashi": "ত্রয়োদশী",
-    "Chaturdashi": "চতুর্দশী"
+    "Chaturdashi": "চতুর্দশী",
+    "Pujas, parbon and club events": "পূজা, পার্বণ ও ক্লাবের অনুষ্ঠান",
+    "Photo of :name": ":name-এর ছবি",
+    "No photo yet": "এখনও ছবি নেই",
+    "Change photo": "ছবি বদলান",
+    "Add photo": "ছবি দিন",
+    "Photo of :name for the ID card": "পরিচয়পত্রের জন্য :name-এর ছবি",
+    "Remove the photo of :name": ":name-এর ছবি সরান",
+    "A clear face photo, like a passport photo, goes on each person’s ID card. To add someone or change details, ask the secretary at the club room.": "প্রত্যেকের পরিচয়পত্রে পাসপোর্ট ছবির মতো মুখের পরিষ্কার একটি ছবি থাকবে। কাউকে যোগ করতে বা তথ্য বদলাতে ক্লাব ঘরে সম্পাদককে বলুন।",
+    "Photo saved. It is on the ID card now.": "ছবি সেভ হয়েছে। এখন পরিচয়পত্রে আছে।",
+    "Photo removed.": "ছবি সরানো হয়েছে।"
 }

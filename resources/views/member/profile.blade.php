@@ -29,16 +29,32 @@
                 </div>
                 <ul class="rounded-lg border border-rule bg-card divide-y divide-rule">
                     @foreach ($members as $i => $member)
-                        <li class="flex items-center gap-3 px-4 py-3">
-                            <span class="w-10 h-10 rounded-full grid place-items-center font-display shrink-0 {{ $i ? 'bg-paper-2 text-ink' : 'bg-ink text-white' }}" aria-hidden="true">{{ mb_substr((string) $member->tr('name'), 0, 1) }}</span>
+                        <li class="flex flex-wrap items-center gap-3 px-4 py-3">
+                            <span class="w-12 h-16 rounded-md overflow-hidden border border-rule shrink-0 bg-paper-2"><x-id-photo :member="$member" /></span>
                             <span class="min-w-0 flex-1">
                                 <span class="block font-semibold truncate">{{ $member->tr('name') }}</span>
                                 <span class="block text-[13.5px] text-ink-2 num">{{ local_text($member->relation, $member->relation_bn) }}@if ($member->age() !== null) · {{ __(':age years', ['age' => digits($member->age())]) }}@endif @if ($member->blood_group)· {{ $member->blood_group }}@endif</span>
                             </span>
+                            <span class="flex items-center gap-1.5 shrink-0">
+                                <form method="POST" action="{{ route('member.photos.store', $member) }}" enctype="multipart/form-data">
+                                    @csrf
+                                    <label class="btn btn-line btn-sm cursor-pointer">
+                                        <x-icon name="camera" class="w-4 h-4" /><span>{{ $member->hasPhoto() ? __('Change photo') : __('Add photo') }}</span>
+                                        <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="this.form.submit()" aria-label="{{ __('Photo of :name for the ID card', ['name' => $member->tr('name')]) }}">
+                                    </label>
+                                </form>
+                                @if ($member->hasPhoto())
+                                    <form method="POST" action="{{ route('member.photos.destroy', $member) }}">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-ghost btn-sm px-2 text-ink-3" aria-label="{{ __('Remove the photo of :name', ['name' => $member->tr('name')]) }}"><x-icon name="trash-2" class="w-4 h-4" /></button>
+                                    </form>
+                                @endif
+                            </span>
                         </li>
                     @endforeach
                 </ul>
-                <p class="mt-3 text-[14px] text-ink-3">{{ __('To add someone or change details, ask the secretary at the club room.') }}</p>
+                @error('photo')<p class="mt-3 text-[14px] text-sindoor-deep" role="alert">{{ $message }}</p>@enderror
+                <p class="mt-3 text-[14px] text-ink-3">{{ __('A clear face photo, like a passport photo, goes on each person’s ID card. To add someone or change details, ask the secretary at the club room.') }}</p>
             </section>
 
             {{-- Your details --}}
