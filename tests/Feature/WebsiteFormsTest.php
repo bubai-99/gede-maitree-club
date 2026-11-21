@@ -154,6 +154,7 @@ class WebsiteFormsTest extends TestCase
             'topic' => 'Choose topic.',
             'message' => 'Enter your message.',
         ]);
-        $this->get('/contact')->assertSee('Please check these', false)->assertSee('data-error-summary', false);
+        $this->from('/contact')->followingRedirects()->post('/contact', [])
+            ->assertSee('Please check these', false)->assertSee('data-error-summary', false)->assertSee('Enter your name.', false);
     }
 }
