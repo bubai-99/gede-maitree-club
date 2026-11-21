@@ -302,7 +302,9 @@
 .to-top svg { width: 20px; height: 20px; }
 .to-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
 .to-top:hover { background: var(--color-ink-2); }
-body[data-basket="on"]:has([data-screen="nursery"].is-active) .to-top { bottom: 6.5rem; }
+/* Nursery basket button showing (x-show leaves no display:none): back-to-top moves up above it, same right edge */
+body:has(.basket-fab:not([style*="display: none"])) .to-top { bottom: calc(1rem + 3.5rem + .75rem); }
+@media (min-width: 640px) { body:has(.basket-fab:not([style*="display: none"])) .to-top { right: 1.5rem; bottom: calc(1.5rem + 3.5rem + .75rem); } }
 
 /* Search dialog */
 .search-dialog { position: fixed; inset: 0; z-index: 90; display: flex; justify-content: center; align-items: flex-start; padding: 4.5rem 1rem 1rem; }
