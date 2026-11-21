@@ -120,8 +120,8 @@
                 <div class="sm:col-span-2">
                     <label for="f-area" class="label">{{ __('Lane / area') }}</label>
                     <select id="f-area" name="area" class="field" required>
-                        @foreach (\App\Support\FormOptions::AREAS as $value => $option)
-                            <option value="{{ $value }}" @selected(old('area') === $value)>{{ __($option['label']) }}</option>
+                        @foreach ($site->areas() as $value => $areaName)
+                            <option value="{{ $value }}" @selected(old('area') === $value)>{{ $areaName }}</option>
                         @endforeach
                     </select>
                 </div>

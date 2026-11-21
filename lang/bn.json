@@ -1922,5 +1922,12 @@
     "Please check this and try again:|Please check these :count things and try again:": "এটি দেখে আবার চেষ্টা করুন:|এই :countটি জিনিস দেখে আবার চেষ্টা করুন:",
     "Enter a real email address, like name@example.com.": "সঠিক ইমেল ঠিকানা দিন, যেমন name@example.com।",
     "Enter a full link, starting with https://.": "পুরো লিঙ্ক দিন, https:// দিয়ে শুরু।",
-    "this field": "এই ঘর"
+    "this field": "এই ঘর",
+    "Lanes and areas": "গলি ও এলাকা",
+    "The choices for “Where you live” on the join, volunteer and chanda forms, in this order. “Somewhere else” is always added at the end.": "সদস্য, স্বেচ্ছাসেবক ও চাঁদার ফর্মে “কোন গলিতে থাকেন”-এর বিকল্প, এই ক্রমে। “অন্য কোথাও” সবসময় শেষে থাকে।",
+    "always last": "সবসময় শেষে",
+    "Move up": "উপরে",
+    "Move down": "নিচে",
+    "Add a lane or area": "গলি বা এলাকা যোগ করুন",
+    "Lanes and areas saved. The join, volunteer and chanda forms use them now.": "গলি ও এলাকা সেভ হয়েছে। সদস্য, স্বেচ্ছাসেবক ও চাঁদার ফর্মে এখন এগুলোই দেখা যাবে।"
 }

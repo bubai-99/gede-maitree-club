@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Site;
 
 use App\Support\FormOptions;
+use App\Support\SiteSettings;
 use Illuminate\Validation\Rule;
 
 class ChandaPledgeRequest extends PublicFormRequest
@@ -14,7 +15,7 @@ class ChandaPledgeRequest extends PublicFormRequest
     {
         return [
             ...$this->baseRules(),
-            'area' => ['required', Rule::in(FormOptions::keys(FormOptions::AREAS))],
+            'area' => ['required', Rule::in(array_keys(app(SiteSettings::class)->areas()))],
             'amount' => ['required', 'integer', 'min:10', 'max:1000000'],
             'pay_by' => ['required', Rule::in(FormOptions::keys(FormOptions::PAY_BY))],
             'anonymous' => ['sometimes', 'boolean'],

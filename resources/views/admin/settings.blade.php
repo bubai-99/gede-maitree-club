@@ -1,7 +1,10 @@
 @php($canEdit = auth()->user()?->can('create', \App\Models\SiteSetting::class))
 <x-layouts.admin :title="__('Club settings')">
     <div class="max-w-[960px]">
-        <h1 class="font-display text-[2rem] leading-tight">{{ __('Club settings') }}</h1>
+        <div class="flex flex-wrap items-end gap-3">
+            <h1 class="mr-auto font-display text-[2rem] leading-tight">{{ __('Club settings') }}</h1>
+            <a href="{{ route('admin.areas.edit') }}" class="btn btn-line btn-sm"><x-icon name="map-pin" />{{ __('Lanes and areas') }}</a>
+        </div>
         @unless ($canEdit)
             <p class="mt-3 rounded-lg bg-marigold-wash text-turmeric px-4 py-3 text-[14px]">{{ __('You can look but not change this. Only the Admin and the Website editor edit the website.') }}</p>
         @endunless

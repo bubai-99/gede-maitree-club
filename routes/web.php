@@ -263,6 +263,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
 
     Route::get('/settings', [Admin\SettingsController::class, 'edit'])->name('settings.edit');
     Route::put('/settings', [Admin\SettingsController::class, 'update'])->name('settings.update');
+    Route::get('/settings/areas', [Admin\AreaController::class, 'edit'])->name('areas.edit');
+    Route::put('/settings/areas', [Admin\AreaController::class, 'update'])->name('areas.update');
 
     Route::resource('enquiries', Admin\EnquiryController::class)->only(['index', 'show', 'update']);
     Route::get('/activity', Admin\ActivityController::class)->name('activity');

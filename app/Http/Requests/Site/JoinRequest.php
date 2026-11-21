@@ -4,6 +4,7 @@ namespace App\Http\Requests\Site;
 
 use App\Models\Member;
 use App\Support\FormOptions;
+use App\Support\SiteSettings;
 use Illuminate\Validation\Rule;
 
 /**
@@ -22,7 +23,7 @@ class JoinRequest extends PublicFormRequest
             'dob' => ['required', 'date', 'before:today', 'after:1900-01-01'],
             'blood_group' => ['nullable', Rule::in(Member::BLOOD_GROUPS)],
             'address' => ['required', 'string', 'max:500'],
-            'area' => ['required', Rule::in(FormOptions::keys(FormOptions::AREAS))],
+            'area' => ['required', Rule::in(array_keys(app(SiteSettings::class)->areas()))],
             'aadhaar_last4' => ['nullable', 'digits:4'],
             'members' => ['nullable', 'array', 'max:8'],
             'members.*.name' => ['required_with:members.*.relation', 'nullable', 'string', 'max:120'],

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Site;
 
 use App\Support\FormOptions;
+use App\Support\SiteSettings;
 use Illuminate\Validation\Rule;
 
 class VolunteerRequest extends PublicFormRequest
@@ -14,7 +15,7 @@ class VolunteerRequest extends PublicFormRequest
     {
         return [
             ...$this->baseRules(),
-            'area' => ['required', Rule::in(FormOptions::keys(FormOptions::AREAS))],
+            'area' => ['required', Rule::in(array_keys(app(SiteSettings::class)->areas()))],
             'skills' => ['required', 'array', 'min:1'],
             'skills.*' => [Rule::in(FormOptions::keys(FormOptions::VOLUNTEER_SKILLS))],
             'times' => ['nullable', 'array'],

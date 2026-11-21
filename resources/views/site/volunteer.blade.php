@@ -85,8 +85,8 @@
                     <label for="f-vol-area" class="label">{{ __('Where you live') }}</label>
                     <select id="f-vol-area" name="area" class="field" required>
                         <option value="">{{ __('Choose') }}</option>
-                        @foreach (\App\Support\FormOptions::AREAS as $value => $option)
-                            <option value="{{ $value }}" @selected(old('area') === $value)>{{ __($option['label']) }}</option>
+                        @foreach ($site->areas() as $value => $areaName)
+                            <option value="{{ $value }}" @selected(old('area') === $value)>{{ $areaName }}</option>
                         @endforeach
                     </select>
                     <x-field-error name="area" />

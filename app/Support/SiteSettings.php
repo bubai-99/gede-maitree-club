@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\App;
  */
 class SiteSettings
 {
+    /** The "Somewhere else" choice, always last in the lane list. */
+    public const ELSEWHERE = 'Elsewhere';
+
     /** @var array<string, mixed>|null */
     private ?array $stored = null;
 
@@ -104,6 +107,45 @@ class SiteSettings
         $chanda = $this->get('chanda', []);
 
         return is_array($chanda) ? $chanda : [];
+    }
+
+    /**
+     * Lanes and areas for "Where you live" (join, volunteer and chanda forms), in the committee's
+     * order, then "Somewhere else". Value => name in the page's language. Until the committee
+     * saves its own list, the sample lanes in FormOptions::AREAS.
+     *
+     * @return array<string, string>
+     */
+    public function areas(): array
+    {
+        $out = [];
+        foreach ($this->areaList() as $area) {
+            $out[$area['name']] = App::getLocale() === 'bn' && ($area['name_bn'] ?? '') !== '' ? (string) $area['name_bn'] : __($area['name']);
+        }
+        $out[self::ELSEWHERE] = __('Somewhere else');
+
+        return $out;
+    }
+
+    /**
+     * The lanes as the committee edits them (without "Somewhere else").
+     *
+     * @return list<array{name: string, name_bn: ?string}>
+     */
+    public function areaList(): array
+    {
+        $saved = $this->get('areas');
+
+        if (is_array($saved) && $saved !== []) {
+            return array_values(array_filter(array_map(
+                fn ($a): ?array => is_array($a) && is_string($a['name'] ?? null) && $a['name'] !== '' ? ['name' => $a['name'], 'name_bn' => is_string($a['name_bn'] ?? null) ? $a['name_bn'] : null] : null,
+                $saved,
+            )));
+        }
+
+        $lanes = array_values(array_filter(array_keys(FormOptions::AREAS), fn (string $key): bool => $key !== self::ELSEWHERE));
+
+        return array_map(fn (string $key): array => ['name' => $key, 'name_bn' => null], $lanes);
     }
 
     /**
