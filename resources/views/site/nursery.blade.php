@@ -253,16 +253,16 @@
         </div>
 
         {{-- Plant details: a large panel (photos on the left, details on the right) on wide screens,
-             a full-height sheet on phones. resources/js/nursery.js --}}
+             full screen on phones. resources/js/nursery.js --}}
         <div x-show="open" x-cloak class="fixed inset-0 z-[85] flex items-end lg:items-center justify-center lg:p-6" role="dialog" aria-modal="true" :aria-label="current?.name" @keydown.tab="trap($event, $refs.panel)">
             <div class="absolute inset-0 bg-black/60" x-show="open" x-transition.opacity @click="hide()"></div>
             <template x-if="current">
-                <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[94dvh] lg:h-[min(88dvh,800px)] bg-paper rounded-t-3xl lg:rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
+                <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[100dvh] lg:h-[min(88dvh,800px)] bg-paper lg:rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
                      x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 lg:translate-y-0 lg:scale-95">
                     <button type="button" x-ref="panelClose" @click="hide()" class="absolute right-3 top-3 z-20 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow hover:bg-white" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
 
                     {{-- Photos: swipe, arrows or the thumbnails over the photo --}}
-                    <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[46%]">
+                    <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[min(34dvh,340px)]">
                         <div class="relative flex-1 min-h-0">
                             <ul x-ref="gallery" @scroll.debounce.60ms="photoIndex = Math.round($el.scrollLeft / $el.clientWidth)" class="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar" aria-label="{{ __('Photos') }}">
                                 <template x-for="(ph, i) in current.photos" :key="i">
@@ -275,9 +275,9 @@
                                     <button type="button" @click="goPhoto(photoIndex - 1)" :disabled="photoIndex === 0" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow disabled:opacity-0 transition-opacity" aria-label="{{ __('Previous photo') }}"><x-icon name="chevron-left" class="w-5 h-5" /></button>
                                     <button type="button" @click="goPhoto(photoIndex + 1)" :disabled="photoIndex >= current.photos.length - 1" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow disabled:opacity-0 transition-opacity" aria-label="{{ __('Next photo') }}"><x-icon name="chevron-right" class="w-5 h-5" /></button>
                                     {{-- Thumbnails over the photo, centred along its bottom --}}
-                                    <ul class="absolute left-1/2 -translate-x-1/2 bottom-3 z-10 max-w-[calc(100%-1.5rem)] flex gap-1.5 p-1.5 rounded-xl bg-black/35 backdrop-blur-sm overflow-x-auto no-scrollbar" aria-label="{{ __('More photos') }}">
+                                    <ul class="absolute left-1/2 -translate-x-1/2 bottom-2.5 lg:bottom-3 z-10 max-w-[calc(100%-1.5rem)] flex gap-1.5 p-1 sm:p-1.5 rounded-xl bg-black/35 backdrop-blur-sm overflow-x-auto no-scrollbar" aria-label="{{ __('More photos') }}">
                                         <template x-for="(ph, i) in current.photos" :key="'t' + i">
-                                            <li class="shrink-0"><button type="button" @click="goPhoto(i)" class="block w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden border-2 transition" :class="photoIndex === i ? 'border-white' : 'border-transparent opacity-70 hover:opacity-100'" :aria-label="{{ Js::from(__('Photo :n')) }}.replace(':n', num(i + 1))" :aria-current="photoIndex === i ? 'true' : null"><img :src="ph.thumb" alt="" class="w-full h-full object-cover"></button></li>
+                                            <li class="shrink-0"><button type="button" @click="goPhoto(i)" class="block w-10 h-10 sm:w-14 sm:h-14 rounded-lg overflow-hidden border-2 transition" :class="photoIndex === i ? 'border-white' : 'border-transparent opacity-70 hover:opacity-100'" :aria-label="{{ Js::from(__('Photo :n')) }}.replace(':n', num(i + 1))" :aria-current="photoIndex === i ? 'true' : null"><img :src="ph.thumb" alt="" class="w-full h-full object-cover"></button></li>
                                         </template>
                                     </ul>
                                 </div>
