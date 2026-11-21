@@ -71,6 +71,14 @@
                                     {{-- Back: gate QR --}}
                                     <div class="idc idc-back">
                                         <div class="idc-back-body">
+                                            <svg class="idc-art idc-art-back" viewBox="0 0 200 200" aria-hidden="true">
+                                                <g fill="none" stroke="currentColor" stroke-width=".8">
+                                                    <circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="88" stroke-dasharray="2 4"/><circle cx="100" cy="100" r="58"/>
+                                                    @for ($i = 0; $i < 16; $i++)
+                                                        <path d="M100 4 C 110 22, 110 34, 100 42 C 90 34, 90 22, 100 4 Z" transform="rotate({{ $i * 22.5 }} 100 100)"/>
+                                                    @endfor
+                                                </g>
+                                            </svg>
                                             <div class="idc-qr bg-white">
                                                 @if ($codes[$member->id])
                                                     {{-- SVG drawn on the server by bacon/bacon-qr-code from a code the app makes; no user text. --}}
@@ -78,9 +86,15 @@
                                                 @endif
                                             </div>
                                             <div class="idc-terms">
-                                                <p class="idc-terms-h">{{ __('Gate pass') }}</p>
-                                                <p>{{ __('Show this QR at the gate. The card is not transferable.') }}</p>
-                                                <p class="idc-found">{{ __('Found this card? Please return it to the club room.') }} {{ $club['phone'] }}</p>
+                                                <p class="idc-terms-h">{{ __('Show this card at the gate') }}</p>
+                                                <p>{{ __('For club events and member prices at the nursery and on catering. Not transferable.') }}</p>
+                                                <p class="idc-found">{{ __('Regd.') }} <span class="num">{{ $club['reg_no'] }}</span> · {{ __('If found, please return to: :address', ['address' => local_text($club['address'], $club['address_bn'] ?? null)]) }} · <span class="num">{{ $club['phone'] }}</span></p>
+                                                @if ($secretary)
+                                                    <div class="idc-sign">
+                                                        <span class="idc-signature">{{ $secretary->tr('name') }}</span>
+                                                        <span class="idc-sign-l">{{ __('Secretary') }}</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="idc-strip num">{{ $member->member_no }}</div>

@@ -239,7 +239,6 @@
     "For everyone in your household, in the app.": "বাড়ির প্রত্যেকের জন্য, অ্যাপেই।",
     "Forgot password?": "পাসওয়ার্ড ভুলে গেছেন?",
     "Form": "ফর্ম",
-    "Found this card? Please return it to the club room.": "কার্ডটি পেয়েছেন? দয়া করে ক্লাব ঘরে ফেরত দিন।",
     "Friends first, then a club": "আগে বন্ধু, তারপর ক্লাব",
     "From blood camps to a hand on a hard day, the club shows up for the para.": "রক্তদান শিবির থেকে বিপদের দিনে সাহায্য, পাড়ার পাশে থাকা।",
     "From one rented room to the heart of the para": "এক ঘরের ক্লাব থেকে পাড়ার প্রাণকেন্দ্র",
@@ -251,7 +250,6 @@
     "Full sun": "পুরো রোদ",
     "Gallery": "ছবি",
     "Gate & scanner": "গেট ও স্ক্যানার",
-    "Gate pass": "গেট পাস",
     "Gede Maitree Club": "গেদে মৈত্রী ক্লাব",
     "Gede Maitree Club · Committee Console": "গেদে মৈত্রী ক্লাব · কমিটি কনসোল",
     "Gede Maitree Club · Member App": "গেদে মৈত্রী ক্লাব · সদস্য অ্যাপ",
@@ -599,7 +597,6 @@
     "Show or hide links in the top menu, rename them and change their order.": "ওপরের মেনুতে লিঙ্ক দেখান বা লুকান, নাম ও ক্রম বদলান।",
     "Show the front of :name’s card": ":name-এর কার্ডের সামনেটা দেখান",
     "Show the gate QR for :name": ":name-এর গেটের QR দেখান",
-    "Show this QR at the gate. The card is not transferable.": "গেটে এই QR দেখান। কার্ড হস্তান্তরযোগ্য নয়।",
     "Show your card at the gate": "গেটে আপনার কার্ড দেখান",
     "Showing": "দেখানো হচ্ছে",
     "Shraddha": "শ্রাদ্ধ",
@@ -1914,5 +1911,9 @@
     "News post": "খবর",
     "Line :line is not a link (it should start with https://).": ":line নম্বর লাইনটি লিঙ্ক নয় (https:// দিয়ে শুরু হওয়া উচিত)।",
     ":count min read|:count min read": ":count মিনিটে পড়া|:count মিনিটে পড়া",
-    ":count post|:count posts": ":countটি খবর|:countটি খবর"
+    ":count post|:count posts": ":countটি খবর|:countটি খবর",
+    "Show this card at the gate": "গেটে এই কার্ড দেখান",
+    "For club events and member prices at the nursery and on catering. Not transferable.": "ক্লাবের অনুষ্ঠান আর নার্সারি ও ক্যাটারিংয়ে সদস্য-দামের জন্য। হস্তান্তরযোগ্য নয়।",
+    "If found, please return to: :address": "কুড়িয়ে পেলে দয়া করে ফেরত দিন: :address",
+    "Secretary": "সম্পাদক"
 }

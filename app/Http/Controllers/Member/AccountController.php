@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Enums\DueStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
+use App\Models\CommitteeMember;
 use App\Models\Due;
 use App\Models\Payment;
 use App\Payments\DueService;
@@ -116,6 +117,8 @@ class AccountController extends Controller
             'family' => $family,
             'members' => $members,
             'codes' => $members->mapWithKeys(fn ($member) => [$member->id => $member->member_no ? QrCode::svg(QrCode::memberCode($member), 220) : null]),
+            // Signs the back of the card, as on the prototype
+            'secretary' => CommitteeMember::query()->where('role', 'Secretary')->first(),
         ]);
     }
 
