@@ -652,3 +652,8 @@ label:has(> input[type="checkbox"][required])::after {
 
 /* Search boxes that have their own clear button: hide the browser's */
 .own-clear::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+
+/* Reviews slider dots (resources/js/reviews.js); the active colour comes from the band (tulsi / turmeric) */
+.reviews-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(43,47,54,.2); cursor: pointer; transition: width .25s, background-color .25s; }
+.reviews-dot.is-active { width: 22px; }
+.reviews-dots .reviews-dot.is-active { background: currentColor; }

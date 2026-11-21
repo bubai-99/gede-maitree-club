@@ -8,8 +8,8 @@
     $nursery = $kind === ReviewKind::Nursery;
     // Full class names, so Tailwind finds them
     $c = $nursery
-        ? ['text' => 'text-tulsi', 'bar' => 'bg-tulsi', 'panel' => 'bg-tulsi-wash/60', 'soft' => 'bg-tulsi-wash', 'ring' => 'border-tulsi']
-        : ['text' => 'text-turmeric', 'bar' => 'bg-turmeric', 'panel' => 'bg-turmeric-wash/50', 'soft' => 'bg-turmeric-wash', 'ring' => 'border-turmeric'];
+        ? ['text' => 'text-tulsi', 'bar' => 'bg-tulsi', 'panel' => 'bg-tulsi-wash/60', 'soft' => 'bg-tulsi-wash', 'active' => '[&.swiper-slide-thumb-active]:border-tulsi', 'dot' => '[&_.swiper-pagination-bullet-active]:bg-tulsi']
+        : ['text' => 'text-turmeric', 'bar' => 'bg-turmeric', 'panel' => 'bg-turmeric-wash/50', 'soft' => 'bg-turmeric-wash', 'active' => '[&.swiper-slide-thumb-active]:border-turmeric', 'dot' => '[&_.swiper-pagination-bullet-active]:bg-turmeric'];
     $tags = $nursery
         ? [__('Healthy plants'), __('Care advice'), __('Fair prices'), __('Ready next morning')]
         : [__('On time'), __('Polite team'), __('Clean tables'), __('Clear bill'), __('Looked after elders')];
@@ -26,8 +26,7 @@
 @endphp
 @if ($data['count'] > 0)
     {{-- A full-width band (edge to edge from inside a page container too), its content in line with the page --}}
-    <section {{ $attributes->merge(['class' => 'mx-[calc(50%-50vw)] '.$c['panel']]) }} aria-labelledby="reviews-{{ $kind->value }}"
-             x-data="{ items: {{ Js::from($items) }}, cur: 0, step(d) { this.cur = (this.cur + d + this.items.length) % this.items.length } }">
+    <section {{ $attributes->merge(['class' => 'mx-[calc(50%-50vw)] '.$c['panel']]) }} aria-labelledby="reviews-{{ $kind->value }}" data-reviews>
         <div class="mx-auto max-w-[1160px] px-5 py-12 sm:py-16">
             <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
                 {{-- Summary --}}
@@ -59,45 +58,57 @@
                     <a href="https://wa.me/{{ app(\App\Support\SiteSettings::class)->club()['whatsapp'] }}?text={{ rawurlencode($ask) }}" target="_blank" rel="noopener" class="btn btn-line bg-white mt-7"><x-icon name="message-square-plus" />{{ __('Leave a review') }}</a>
                 </div>
 
-                {{-- The review in focus, and the others to pick from --}}
+                {{-- The review in focus (a Swiper slider) and the others to pick from (a linked Swiper row);
+                     resources/js/reviews.js --}}
                 <div class="lg:col-span-8 min-w-0">
-                    <figure class="relative bg-card rounded-[22px] shadow-[0_1px_2px_rgba(16,24,40,.05),0_18px_40px_-22px_rgba(16,24,40,.35)] overflow-hidden grid sm:grid-cols-[1fr_200px]">
-                        <div class="p-6 sm:p-9 flex flex-col" aria-live="polite">
-                            <div class="flex items-center gap-3">
-                                <span class="inline-flex gap-0.5" role="img" :aria-label="{{ Js::from(__(':n out of 5 stars')) }}.replace(':n', items[cur].n)">
-                                    @foreach ([1, 2, 3, 4, 5] as $i)<span class="inline-flex" :class="items[cur].n >= {{ $i }} ? 'text-marigold' : 'text-ink/20'"><x-icon name="star" class="w-4 h-4 fill-current" /></span>@endforeach
-                                </span>
-                                <span class="text-[13px] text-ink-3 num" x-text="items[cur].when"></span>
+                    <figure class="relative bg-card rounded-[22px] shadow-[0_1px_2px_rgba(16,24,40,.05),0_18px_40px_-22px_rgba(16,24,40,.35)] overflow-hidden grid sm:grid-cols-[minmax(0,1fr)_200px]">
+                        <div class="min-w-0 flex flex-col">
+                            <div class="swiper w-full" data-reviews-main aria-label="{{ __('Reviews') }}">
+                                <div class="swiper-wrapper">
+                                    @foreach ($items as $i => $r)
+                                        <div class="swiper-slide !h-auto p-6 sm:p-9 pb-3 sm:pb-4 flex flex-col">
+                                            <div class="flex items-center gap-3">
+                                                <span class="inline-flex gap-0.5" role="img" aria-label="{{ __(':n out of 5 stars', ['n' => digits($r['n'])]) }}">
+                                                    @foreach ([1, 2, 3, 4, 5] as $star)<x-icon name="star" class="w-4 h-4 fill-current {{ $r['n'] >= $star ? 'text-marigold' : 'text-ink/20' }}" />@endforeach
+                                                </span>
+                                                <span class="text-[13px] text-ink-3 num">{{ $r['when'] }}</span>
+                                            </div>
+                                            <svg viewBox="0 0 48 36" class="mt-5 w-10 h-8 {{ $c['text'] }}" aria-hidden="true"><path fill="currentColor" d="M0 36V22C0 9.6 6.4 2.3 19.2 0l2 5.3C14.6 7 11.2 11 10.9 17H20v19H0zm28 0V22C28 9.6 34.4 2.3 47.2 0l.8 5.3C41.4 7 38 11 37.7 17H48v19H28z"/></svg>
+                                            <blockquote class="mt-4 font-display text-[1.22rem] sm:text-[1.5rem] leading-snug text-ink flex-1">{{ $r['text'] }}</blockquote>
+                                            <p class="mt-7 flex items-center gap-3">
+                                                <span class="w-11 h-11 rounded-full {{ $c['soft'] }} {{ $c['text'] }} grid place-items-center shrink-0"><x-icon :name="$nursery ? 'sprout' : 'utensils'" class="w-5 h-5" /></span>
+                                                <span class="min-w-0"><span class="block font-semibold leading-snug">{{ $r['who'] }}</span>@if ($r['what'])<span class="block text-[13.5px] text-ink-3">{{ $r['what'] }}</span>@endif</span>
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
-                            <svg viewBox="0 0 48 36" class="mt-5 w-10 h-8 {{ $c['text'] }}" aria-hidden="true"><path fill="currentColor" d="M0 36V22C0 9.6 6.4 2.3 19.2 0l2 5.3C14.6 7 11.2 11 10.9 17H20v19H0zm28 0V22C28 9.6 34.4 2.3 47.2 0l.8 5.3C41.4 7 38 11 37.7 17H48v19H28z"/></svg>
-                            <blockquote class="mt-4 font-display text-[1.22rem] sm:text-[1.5rem] leading-snug text-ink flex-1" x-text="items[cur].text">{{ $items[0]['text'] }}</blockquote>
-                            <figcaption class="mt-7 flex flex-wrap items-center gap-3">
-                                <span class="w-11 h-11 rounded-full {{ $c['soft'] }} {{ $c['text'] }} grid place-items-center shrink-0"><x-icon :name="$nursery ? 'sprout' : 'utensils'" class="w-5 h-5" /></span>
-                                <span class="min-w-0"><span class="block font-semibold leading-snug" x-text="items[cur].who">{{ $items[0]['who'] }}</span><span class="block text-[13.5px] text-ink-3" x-text="items[cur].what">{{ $items[0]['what'] }}</span></span>
-                                @if ($data['count'] > 1)
-                                    <span class="w-full sm:w-auto sm:ml-auto flex justify-end gap-1.5 shrink-0">
-                                        <button type="button" @click="step(-1)" class="w-10 h-10 rounded-full border border-rule grid place-items-center hover:bg-paper-2" aria-label="{{ __('Previous review') }}"><x-icon name="arrow-left" class="w-4 h-4" /></button>
-                                        <button type="button" @click="step(1)" class="w-10 h-10 rounded-full border border-rule grid place-items-center hover:bg-paper-2" aria-label="{{ __('Next review') }}"><x-icon name="arrow-right" class="w-4 h-4" /></button>
+                            @if ($data['count'] > 1)
+                                <div class="flex items-center gap-3 px-6 sm:px-9 pb-6 sm:pb-8 pt-2">
+                                    <div class="reviews-dots flex gap-1.5 {{ $c['text'] }}" data-reviews-dots></div>
+                                    <span class="ml-auto flex gap-1.5">
+                                        <button type="button" data-reviews-prev class="w-10 h-10 rounded-full border border-rule grid place-items-center hover:bg-paper-2 disabled:opacity-40" aria-label="{{ __('Previous review') }}"><x-icon name="arrow-left" class="w-4 h-4" /></button>
+                                        <button type="button" data-reviews-next class="w-10 h-10 rounded-full border border-rule grid place-items-center hover:bg-paper-2 disabled:opacity-40" aria-label="{{ __('Next review') }}"><x-icon name="arrow-right" class="w-4 h-4" /></button>
                                     </span>
-                                @endif
-                            </figcaption>
+                                </div>
+                            @endif
                         </div>
                         <div class="hidden sm:block relative bg-paper-2"><x-photo :key="$photo" :width="500" sizes="200px" class="absolute inset-0 w-full h-full object-cover" /></div>
                     </figure>
 
                     @if ($data['count'] > 1)
-                        <div class="mt-4 flex gap-3 overflow-x-auto no-scrollbar snap-x pb-1 -mx-1 px-1" role="group" aria-label="{{ __('More reviews') }}">
-                            <template x-for="(r, i) in items" :key="i">
-                                <button type="button" @click="cur = i" :aria-pressed="(cur === i).toString()"
-                                        class="snap-start shrink-0 w-[230px] sm:w-[220px] text-left rounded-2xl bg-white/70 hover:bg-white border-2 border-transparent p-4 transition-colors"
-                                        :class="cur === i ? 'bg-white {{ $c['ring'] }} shadow-sm' : ''">
-                                    <span class="flex gap-0.5">
-                                        @foreach ([1, 2, 3, 4, 5] as $i)<span class="inline-flex" :class="r.n >= {{ $i }} ? 'text-marigold' : 'text-ink/20'"><x-icon name="star" class="w-3.5 h-3.5 fill-current" /></span>@endforeach
-                                    </span>
-                                    <span class="mt-2 text-[14px] leading-snug text-ink-2 line-clamp-3" x-text="r.text"></span>
-                                    <span class="mt-2 block text-[13px] font-semibold truncate" x-text="r.who"></span>
-                                </button>
-                            </template>
+                        <div class="swiper mt-4 !overflow-visible sm:!overflow-hidden" data-reviews-thumbs aria-label="{{ __('More reviews') }}">
+                            <div class="swiper-wrapper">
+                                @foreach ($items as $i => $r)
+                                    <div class="swiper-slide !w-[230px] sm:!w-[220px] !h-auto cursor-pointer text-left rounded-2xl bg-white/70 hover:bg-white border-2 border-transparent p-4 transition-colors [&.swiper-slide-thumb-active]:bg-white [&.swiper-slide-thumb-active]:shadow-sm {{ $c['active'] }}">
+                                        <span class="flex gap-0.5" aria-hidden="true">
+                                            @foreach ([1, 2, 3, 4, 5] as $star)<x-icon name="star" class="w-3.5 h-3.5 fill-current {{ $r['n'] >= $star ? 'text-marigold' : 'text-ink/20' }}" />@endforeach
+                                        </span>
+                                        <span class="mt-2 text-[14px] leading-snug text-ink-2 line-clamp-3">{{ $r['text'] }}</span>
+                                        <span class="mt-2 block text-[13px] font-semibold truncate">{{ $r['who'] }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>

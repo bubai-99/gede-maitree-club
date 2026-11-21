@@ -42,6 +42,10 @@ document.addEventListener('submit', (event) => {
 
 if (document.body?.dataset.signedOut !== undefined) forgetThisDevice();
 
+// Reviews band: Swiper slider (loaded only where there are reviews).
+const reviewBands = document.querySelectorAll('[data-reviews]');
+if (reviewBands.length) import('./reviews').then(({ reviewsSlider }) => reviewBands.forEach((el) => reviewsSlider(el)));
+
 // Home page gallery strip (Swiper is only loaded on pages that have one).
 const strip = document.querySelector('[data-gallery-strip]');
 if (strip) import('./gallery-strip').then(({ galleryStrip }) => galleryStrip(strip));
