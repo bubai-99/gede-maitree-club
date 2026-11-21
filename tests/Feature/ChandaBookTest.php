@@ -83,6 +83,14 @@ class ChandaBookTest extends TestCase
         $this->actingAs($this->volunteer)->get('/admin/chanda/receipts/'.$entry->id)->assertOk()->assertSee($entry->receipt_no)->assertSee('Chanda receipt');
     }
 
+    public function test_only_chanda_managers_see_the_drive_total_on_today(): void
+    {
+        app(ChandaBook::class)->record($this->event, ['donor_name' => 'Sample', 'amount' => 12345, 'mode' => ChandaMode::Cash, 'area' => $this->lane2], $this->user(Role::PujaInCharge));
+
+        $this->actingAs($this->volunteer)->get('/admin')->assertOk()->assertDontSee('Saraswati Puja chanda')->assertDontSee('12,345');
+        $this->actingAs($this->user(Role::PujaInCharge))->get('/admin')->assertOk()->assertSee('Saraswati Puja chanda');
+    }
+
     public function test_a_volunteer_cannot_record_in_another_area_or_as_someone_else(): void
     {
         $this->actingAs($this->volunteer)->post('/admin/chanda/saraswati/receipts', $this->gift(['area_id' => $this->lane2->id]))->assertForbidden();

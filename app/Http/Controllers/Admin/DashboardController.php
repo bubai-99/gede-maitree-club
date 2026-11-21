@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
         // The chanda drive the website shows, else the latest one collecting
         $chanda = null;
-        if ($user->can('chanda.open')) {
+        if ($user->can('chanda.manage')) {
             $slug = $site->chanda()['event_slug'] ?? null;
             $event = (is_string($slug) ? Event::query()->collectingChanda()->where('slug', $slug)->first() : null)
                 ?? Event::query()->collectingChanda()->first();
