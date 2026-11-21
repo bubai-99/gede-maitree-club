@@ -72,10 +72,12 @@
                 <h2 class="font-display leading-tight text-[2rem]">{{ __('Who to ask') }}</h2>
                 <ul class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 border-t border-rule">
                     @foreach ($committee as $person)
-                        @php $asks = collect($topics)->where('role', $person->role)->map(fn ($t) => __($t['label']))->unique()->implode(', '); @endphp
-                        <li class="flex gap-4 py-5 border-b border-rule">
+                        <li class="flex items-center gap-4 py-5 border-b border-rule">
                             <span class="w-11 h-11 rounded-full bg-sindoor-wash text-sindoor-deep grid place-items-center font-display text-lg shrink-0" aria-hidden="true">{{ $person->initials() }}</span>
-                            <span class="min-w-0"><span class="block font-semibold">{{ $person->tr('name') }} <span class="font-normal text-ink-3">· {{ $person->tr('role') }}</span></span>@if ($asks)<span class="block text-[15px] text-ink-2 mt-0.5">{{ $asks }}</span>@endif</span>
+                            <span class="min-w-0">
+                                <span class="block font-semibold leading-snug">{{ $person->tr('name') }}</span>
+                                <span class="block text-[14.5px] text-ink-3 leading-snug">{{ $person->tr('role') }}</span>
+                            </span>
                         </li>
                     @endforeach
                 </ul>

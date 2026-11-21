@@ -9,25 +9,27 @@
         $faq[] = [__('Can I give puja chanda without being a member?'), __('Yes. Give what you can; there is no fixed amount. You get a receipt for every rupee, and the full accounts go up on this website after the puja.'), route('chanda')];
     }
 @endphp
-{{-- One question open at a time is not forced; each answer slides open (grid rows 0fr → 1fr). --}}
+{{-- One answer open at a time: the first to begin with; opening another closes it. Each slides open (grid rows 0fr → 1fr). --}}
 @php($faqId = 'faq-'.substr(md5(request()->path()), 0, 6))
+<div x-data="{ active: 0 }">
 @foreach ($faq as $i => [$question, $answer, $link])
-    <div class="border-b border-rule" x-data="{ open: {{ $i === 0 ? 'true' : 'false' }} }">
+    <div class="border-b border-rule">
         <h3>
-            <button type="button" id="{{ $faqId }}-q{{ $i }}" aria-controls="{{ $faqId }}-a{{ $i }}" :aria-expanded="open.toString()" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}" @click="open = ! open"
+            <button type="button" id="{{ $faqId }}-q{{ $i }}" aria-controls="{{ $faqId }}-a{{ $i }}" :aria-expanded="(active === {{ $i }}).toString()" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}" @click="active = active === {{ $i }} ? null : {{ $i }}"
                     class="w-full flex items-center justify-between gap-4 py-5 text-left font-semibold text-[17px] hover:text-sindoor-deep transition-colors">
                 <span>{{ $question }}</span>
-                <span class="faq-icon shrink-0 inline-flex" data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="open.toString()"><x-icon name="plus" class="w-5 h-5" /></span>
+                <span class="faq-icon shrink-0 inline-flex" data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="(active === {{ $i }}).toString()"><x-icon name="plus" class="w-5 h-5" /></span>
             </button>
         </h3>
         <div id="{{ $faqId }}-a{{ $i }}" role="region" aria-labelledby="{{ $faqId }}-q{{ $i }}" class="faq-panel"
-             data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="open.toString()" x-effect="$el.inert = ! open" @if ($i !== 0) inert @endif>
+             data-open="{{ $i === 0 ? 'true' : 'false' }}" :data-open="(active === {{ $i }}).toString()" x-effect="$el.inert = active !== {{ $i }}" @if ($i !== 0) inert @endif>
             <div class="overflow-hidden">
                 <p class="pb-5 -mt-1 text-ink-2 max-w-[62ch]"><span>{{ $answer }}</span>@if ($link) <a href="{{ $link }}" class="font-semibold text-sindoor hover:underline">{{ __('See the chanda page') }}</a>@endif</p>
             </div>
         </div>
     </div>
 @endforeach
+</div>
 @if (Route::has('contact') && ! request()->routeIs('contact'))
     <a href="{{ route('contact') }}" class="mt-4 inline-flex items-center gap-1.5 text-[15px] font-semibold text-sindoor hover:underline"><span>{{ __('More questions and contact') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
 @endif
