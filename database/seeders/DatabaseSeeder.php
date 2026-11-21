@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             SampleUsersSeeder::class,
             SampleAccountsSeeder::class,
             SampleEventsSeeder::class,
+            SamplePanjikaSeeder::class,
         ]);
     }
 }

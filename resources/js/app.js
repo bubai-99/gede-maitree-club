@@ -32,3 +32,17 @@ if (document.body?.dataset.signedOut !== undefined) forgetThisDevice();
 // Home page gallery strip (Swiper is only loaded on pages that have one).
 const strip = document.querySelector('[data-gallery-strip]');
 if (strip) import('./gallery-strip').then(({ galleryStrip }) => galleryStrip(strip));
+
+// Panjika (the astronomy library is only loaded where a panjika is shown). Data: App\Support\PanjikaData.
+const panjikaData = () => JSON.parse(document.getElementById('panjika-data')?.textContent || '{}');
+const panjikaPage = document.querySelector('[data-panjika-page]');
+const panjikaBoxes = document.querySelectorAll('[data-panjika-today]');
+const panjikaConsole = document.querySelector('[data-panjika-console]');
+if (panjikaPage || panjikaBoxes.length || panjikaConsole) {
+    import('./panjika/view').then((pj) => {
+        const data = panjikaData();
+        if (panjikaPage) pj.panjikaPage(panjikaPage, data);
+        panjikaBoxes.forEach((el) => pj.todayBox(el, data));
+        if (panjikaConsole) pj.consolePanjika(panjikaConsole, data);
+    });
+}

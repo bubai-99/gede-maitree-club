@@ -81,6 +81,12 @@
         </div>
     @endif
 
+    {{-- Today's panjika: worked out in the browser (resources/js/panjika) --}}
+    <div class="mx-auto max-w-[1160px] px-5 {{ $nextEvent ? 'pt-3' : 'pt-10' }}">
+        <div data-panjika-today class="min-h-[132px]"></div>
+    </div>
+    @include('partials.panjika-data')
+
     {{-- What the club does --}}
     <div class="mx-auto max-w-[1160px] px-5 pt-20">
         <div class="flex flex-wrap items-end justify-between gap-4 mb-8">

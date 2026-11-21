@@ -233,6 +233,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         Route::post('/stock/{plant}/loss', 'loss')->name('stock.loss');
     });
 
+    // Panjika: puja days, parbon and wedding days from the club's panjika (Puja in-charge, Website editor, Admin)
+    Route::controller(Admin\PanjikaController::class)->prefix('panjika')->name('panjika.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/source', 'source')->name('source');
+        Route::delete('/{day}', 'destroy')->whereNumber('day')->name('destroy');
+    });
+
     Route::get('/pages', [Admin\PageController::class, 'index'])->name('pages.index');
     Route::get('/pages/{key}', [Admin\PageController::class, 'edit'])->whereIn('key', array_keys(config('pages')))->name('pages.edit');
     Route::put('/pages/{key}', [Admin\PageController::class, 'update'])->whereIn('key', array_keys(config('pages')))->name('pages.update');

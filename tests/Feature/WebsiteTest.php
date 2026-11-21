@@ -41,7 +41,7 @@ class WebsiteTest extends TestCase
             'contact' => ['/contact', 'Write to us'],
             'join' => ['/join', 'Send application'],
             'volunteer' => ['/volunteer', 'Sign up to volunteer'],
-            'panjika' => ['/panjika', 'The panjika is coming soon'],
+            'panjika' => ['/panjika', 'Pujas and parbon'],
             'privacy' => ['/privacy', 'What we keep'],
             'terms' => ['/terms', 'Member cards are not transferable.'],
         ];
@@ -112,8 +112,8 @@ class WebsiteTest extends TestCase
         $this->get('/nursery')->assertSee('Robert Thiemann', false)->assertDontSee('Unsplash</', false);
     }
 
-    public function test_the_sample_content_note_is_shown(): void
+    public function test_the_footer_has_no_sample_notes(): void
     {
-        $this->get('/')->assertSee('Sample content: names, numbers and photos are placeholders.');
+        $this->get('/')->assertDontSee('Sample content: names, numbers and photos are placeholders.')->assertDontSee('Sample photos');
     }
 }

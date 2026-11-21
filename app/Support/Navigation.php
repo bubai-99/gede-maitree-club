@@ -83,6 +83,7 @@ final class Navigation
         ['group' => 'Club', 'items' => [
             ['route' => 'admin.events.index', 'icon' => 'calendar-days', 'label' => 'Events', 'ability' => 'website.view'],
             ['route' => 'admin.scan', 'icon' => 'scan-line', 'label' => 'Gate scanner', 'ability' => 'passes.scan'],
+            ['route' => 'admin.panjika.index', 'icon' => 'moon-star', 'label' => 'Panjika', 'ability' => 'website.view'],
             ['route' => 'admin.notices.index', 'icon' => 'megaphone', 'label' => 'Notices & meetings', 'ability' => 'website.view'],
             ['route' => 'admin.website', 'icon' => 'globe', 'label' => 'Website', 'ability' => 'website.view', 'also' => 'admin.pages.*'],
             ['route' => 'admin.committee.index', 'icon' => 'users', 'label' => 'Committee', 'ability' => 'website.view'],

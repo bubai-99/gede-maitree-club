@@ -9,6 +9,7 @@ use App\Models\CommitteeMember;
 use App\Models\Event;
 use App\Models\LedgerEntry;
 use App\Models\Notice;
+use App\Models\PanjikaDay;
 use App\Models\Plant;
 use App\Models\User;
 use App\Payments\ManualUpiGateway;
@@ -81,11 +82,13 @@ class AppServiceProvider extends ServiceProvider
         Route::model('package', CateringPackage::class);
         Route::model('committee', CommitteeMember::class);
         Route::model('entry', LedgerEntry::class);
+        Route::model('day', PanjikaDay::class);
 
         // Console menu: the khata opens for anyone who may see at least one book.
         Gate::define('khata.open', fn (User $user): bool => $user->can('viewAny', LedgerEntry::class));
         Gate::define('reports.open', fn (User $user): bool => $user->can('viewReports', LedgerEntry::class));
         Gate::define('chanda.open', fn (User $user): bool => $user->can('viewAny', ChandaEntry::class));
+        Gate::define('panjika.manage', fn (User $user): bool => $user->can('events.manage') || $user->can('website.edit'));
         Gate::define('chanda.cash', fn (User $user): bool => $user->can('receiveCash', ChandaEntry::class));
 
         // Gate scanner: a busy gate scans a family every few seconds; sync uploads in batches.

@@ -62,6 +62,10 @@
                 </div>
             @endif
 
+            {{-- Today's panjika: the same box as the website home; opens the full panjika on the website --}}
+            <div data-panjika-today class="min-h-[132px]"></div>
+            @include('partials.panjika-data', ['surface' => 'member'])
+
             <nav aria-label="{{ __('Shortcuts') }}">
                 <ul class="grid grid-cols-4 gap-2 text-center text-[12.5px] sm:text-[13.5px] font-medium">
                     @foreach ($shortcuts as [$route, $icon, $label, $colour])
