@@ -1807,5 +1807,12 @@
     "Booking cancelled. Any refund is entered in the Catering book.": "বুকিং বাতিল। ফেরত থাকলে ক্যাটারিং খাতায় উঠেছে।",
     "Expense saved against this order.": "এই অর্ডারে খরচ সেভ হয়েছে।",
     "Added to the serving team.": "পরিবেশন দলে যোগ হয়েছে।",
-    "Removed from the serving team.": "পরিবেশন দল থেকে সরানো হয়েছে।"
+    "Removed from the serving team.": "পরিবেশন দল থেকে সরানো হয়েছে।",
+    "Where should we send it?": "কোথায় খবর পাবেন",
+    "Email address": "ইমেল ঠিকানা",
+    "Done. Club news will come to your inbox. Unsubscribe any time.": "হয়ে গেছে। ক্লাবের খবর ইমেলে পাবেন। যেকোনো সময় বন্ধ করতে পারেন।",
+    "Done. You’ll get club notices on WhatsApp. Reply STOP to leave.": "হয়ে গেছে। ক্লাবের নোটিস হোয়াটসঅ্যাপে পাবেন। বন্ধ করতে STOP লিখুন।",
+    "Every email has a one-click unsubscribe link.": "প্রতিটি ইমেলে এক ক্লিকে বন্ধ করার লিঙ্ক থাকে।",
+    "Club letter sign-up": "ক্লাবের চিঠিতে নাম লেখানো",
+    "Enter an email address like name@example.com.": "name@example.com-এর মতো একটি ইমেল ঠিকানা লিখুন।"
 }

@@ -131,4 +131,19 @@ class WebsiteFormsTest extends TestCase
         $this->post('/contact', $data)->assertTooManyRequests();
         $this->assertSame(5, Enquiry::count());
     }
+
+    public function test_the_club_letter_takes_a_whatsapp_number_or_an_email_once(): void
+    {
+        $this->from('/events')->post('/news', ['via' => 'wa', 'contact' => '98300 11111'])
+            ->assertRedirect(url('/events').'#club-letter')->assertSessionHas('news_done', 'wa');
+        $this->from('/events')->post('/news', ['via' => 'wa', 'contact' => '+91 98300 11111']);
+        $this->from('/')->post('/news', ['via' => 'email', 'contact' => 'Sample@Example.org'])->assertSessionHas('news_done', 'email');
+
+        $this->assertSame(2, Enquiry::query()->where('kind', EnquiryKind::News->value)->count());
+        $this->assertTrue(Enquiry::query()->where('email', 'sample@example.org')->exists());
+
+        $this->from('/')->post('/news', ['via' => 'email', 'contact' => 'not-an-email'])->assertSessionHasErrors('contact');
+        $this->from('/')->post('/news', ['via' => 'wa', 'contact' => '12345'])->assertSessionHasErrors('contact');
+        $this->get('/')->assertSee('Where should we send it?');
+    }
 }

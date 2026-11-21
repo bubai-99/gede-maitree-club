@@ -7,7 +7,7 @@
 @endphp
 <x-layouts.site seo="home">
     {{-- Hero --}}
-    <div class="banner min-h-[80svh] lg:min-h-[86svh] flex items-end md:items-center">
+    <div class="banner min-h-[56svh] lg:min-h-[60svh] flex items-end md:items-center">
         <div class="banner-media" aria-hidden="true">
             @if ($content->samplePhotoKey('home'))
                 <x-photo :key="$content->samplePhotoKey('home')" :width="1800" eager />
@@ -16,10 +16,10 @@
             @endif
         </div>
         <div class="banner-shade"></div>
-        <div class="relative w-full mx-auto max-w-[1160px] px-5 pt-28 pb-20 md:pb-24 grid lg:grid-cols-12 gap-10 lg:gap-8 items-end">
+        <div class="relative w-full mx-auto max-w-[1160px] px-5 pt-20 pb-14 md:pb-16 grid lg:grid-cols-12 gap-10 lg:gap-8 items-end">
             <div class="lg:col-span-8 min-w-0">
                 <p class="eyebrow text-marigold">{{ $content->text('home', 'hero_kicker') }}</p>
-                <h1 class="mt-4 font-display leading-[1.04] text-[clamp(2.6rem,6.4vw,4.8rem)] max-w-[15ch]">{{ $content->text('home', 'hero_title') }}</h1>
+                <h1 class="mt-4 font-display leading-[1.04] text-[clamp(2rem,4.2vw,3.1rem)] max-w-[20ch]">{{ $content->text('home', 'hero_title') }}</h1>
                 <p class="mt-5 text-[17px] sm:text-[19px] leading-relaxed text-white/85 max-w-[50ch]">{{ $content->text('home', 'hero_sub') }}</p>
                 <div class="mt-8 flex flex-wrap gap-2.5">
                     <a href="{{ route('join') }}" class="btn btn-primary h-12 px-6 text-base">{{ __('Become a member') }}</a>
@@ -100,7 +100,7 @@
                     <div class="relative aspect-[4/3] md:aspect-[4/5] rounded-[18px] overflow-hidden bg-paper-3">
                         <div class="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"><x-photo :key="$photo" sizes="(min-width: 768px) 33vw, 100vw" /></div>
                         <span class="absolute left-4 top-4 font-display text-[2.6rem] leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.5)]">{{ digits($no) }}</span>
-                        <span class="absolute right-3 top-3 text-[11.5px] text-white bg-black/50 px-1.5 rounded"><x-photo-credit :key="$photo" /></span>
+                        <span class="absolute right-3 top-3 text-[11.5px] text-white bg-black/50 px-1.5 rounded"><x-photo-credit :key="$photo" plain /></span>
                     </div>
                     <p class="mt-4 text-[13px] font-bold tracking-[0.14em] uppercase {{ $colour }}">{{ $kicker }}</p>
                     <h3 class="mt-1 font-display text-[1.6rem] leading-snug">{{ $title }}</h3>
@@ -169,13 +169,19 @@
                 <div><p class="gz-kicker">{{ __('From the gallery') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('The para in pictures') }}</h2></div>
                 <a href="{{ route('gallery') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('Open the gallery') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
             </div>
-            <div class="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar px-5 [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
-                @foreach ($strip as $item)
-                    <a href="{{ route('gallery') }}" class="relative shrink-0 w-[210px] sm:w-[260px] aspect-[4/5] rounded-[18px] overflow-hidden group bg-paper-3" aria-label="{{ local_text($item['day']['title'], $item['day']['title_bn'] ?? null) }}">
-                        <x-photo :key="$item['photo']" :width="700" sizes="300px" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                        <span class="absolute left-2 bottom-2 rounded bg-black/45 px-1.5 py-0.5 text-[10.5px] text-white/90"><x-photo-credit :key="$item['photo']" /></span>
-                    </a>
-                @endforeach
+            <div class="swiper gallery-strip [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]" data-gallery-strip="{{ $strip->count() }}">
+                <div class="swiper-wrapper">
+                    {{-- Twice over, so the moving strip never runs out; the copy is hidden from screen readers and the tab order. --}}
+                    @foreach ([false, true] as $copy)
+                        @foreach ($strip as $item)
+                            <a href="{{ route('gallery') }}" class="swiper-slide relative !w-[210px] sm:!w-[260px] aspect-[4/5] rounded-[18px] overflow-hidden group bg-paper-3"
+                               @if ($copy) aria-hidden="true" tabindex="-1" @else aria-label="{{ local_text($item['day']['title'], $item['day']['title_bn'] ?? null) }}" @endif>
+                                <x-photo :key="$item['photo']" :width="700" sizes="300px" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                                <span class="absolute left-2 bottom-2 rounded bg-black/45 px-1.5 py-0.5 text-[10.5px] text-white/90"><x-photo-credit :key="$item['photo']" plain /></span>
+                            </a>
+                        @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     @endif

@@ -8,6 +8,7 @@ use App\Http\Requests\Site\CateringEnquiryRequest;
 use App\Http\Requests\Site\ChandaPledgeRequest;
 use App\Http\Requests\Site\ContactRequest;
 use App\Http\Requests\Site\JoinRequest;
+use App\Http\Requests\Site\NewsRequest;
 use App\Http\Requests\Site\PhotosRequest;
 use App\Http\Requests\Site\PublicFormRequest;
 use App\Http\Requests\Site\VolunteerRequest;
@@ -48,6 +49,22 @@ class EnquiryController extends Controller
     public function chanda(ChandaPledgeRequest $request): RedirectResponse
     {
         return $this->save($request, EnquiryKind::Chanda, 'Thank you for your pledge. The treasurer or your lane’s volunteer will be in touch.');
+    }
+
+    /**
+     * The club letter: one sign-up per number or address (signing up again changes nothing).
+     */
+    public function news(NewsRequest $request): RedirectResponse
+    {
+        $contact = $request->contact();
+        $column = $request->byEmail() ? 'email' : 'phone';
+
+        Enquiry::query()->firstOrCreate(
+            ['kind' => EnquiryKind::News->value, $column => $contact],
+            ['name' => $contact, 'payload' => ['via' => $request->byEmail() ? 'email' : 'whatsapp'], 'locale' => app()->getLocale()],
+        );
+
+        return redirect()->to(url()->previous().'#club-letter')->with('news_done', $request->byEmail() ? 'email' : 'wa');
     }
 
     private function save(PublicFormRequest $request, EnquiryKind $kind, string $thanks): RedirectResponse

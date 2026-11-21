@@ -56,6 +56,7 @@ Route::controller(Site\EnquiryController::class)->middleware('throttle:forms')->
     Route::post('/catering', 'catering')->name('catering');
     Route::post('/volunteer', 'volunteer')->name('volunteer');
     Route::post('/gallery/photos', 'photos')->name('photos');
+    Route::post('/news', 'news')->name('news');
     Route::post('/chanda/pledge', 'chanda')->name('chanda');
 });
 

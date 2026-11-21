@@ -102,7 +102,7 @@
     </main>
 
     <footer class="site-footer bg-ink text-white/75 text-[15px]">
-        {{-- Club news on WhatsApp: the club adds the number by hand, so this opens a chat with the club --}}
+        {{-- The club letter: sign up with a WhatsApp number or an email address (saved as an enquiry for the committee) --}}
         <div class="news-band relative overflow-hidden">
             <div class="relative z-[1] mx-auto max-w-[1160px] px-5 py-12 sm:py-14 lg:py-16 grid lg:grid-cols-12 gap-8 lg:gap-14 lg:items-center">
                 <div class="lg:col-span-6 relative">
@@ -115,14 +115,38 @@
                         <li class="news-chip"><x-icon name="users" class="w-4 h-4 text-marigold" /><span>{{ __('Meeting notices') }}</span></li>
                     </ul>
                 </div>
-                <div class="lg:col-span-5 lg:col-start-8 relative">
-                    <p class="text-[13.5px] font-semibold text-white/85">{{ __('Get the news on WhatsApp') }}</p>
-                    <div class="mt-3 sm:flex sm:items-center sm:rounded-full sm:bg-white sm:p-1.5">
-                        <p class="flex-1 min-w-0 flex items-center rounded-full bg-white text-ink h-12 px-5 text-[14px] truncate">{{ __('Send “News” to the club and we add you') }}</p>
-                        <a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ rawurlencode(__('Please add me to the club news')) }}" target="_blank" rel="noopener" class="btn btn-primary h-12 px-6 rounded-full shrink-0 w-full sm:w-auto mt-2 sm:mt-0"><x-icon name="message-circle" class="w-4 h-4" /><span>{{ __('Subscribe') }}</span></a>
+                @php($newsVia = old('via', session('news_done') === 'email' ? 'email' : 'wa'))
+                <form method="POST" action="{{ route('forms.news') }}" id="club-letter" class="lg:col-span-5 lg:col-start-8 relative scroll-mt-24" novalidate
+                      x-data="{ via: @js($newsVia) }">
+                    @csrf
+                    <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <input type="hidden" name="via" :value="via">
+                    <p class="text-[13.5px] font-semibold text-white/85" id="news-via-label">{{ __('Where should we send it?') }}</p>
+                    <div class="mt-2.5 grid grid-cols-2 gap-1 p-1 rounded-full bg-white/[.08] border border-white/10 text-[14px]" role="radiogroup" aria-labelledby="news-via-label"
+                         @keydown.arrow-left.prevent="via = via === 'wa' ? 'email' : 'wa'; $nextTick(() => $el.querySelector('[aria-checked=true]').focus())"
+                         @keydown.arrow-right.prevent="via = via === 'wa' ? 'email' : 'wa'; $nextTick(() => $el.querySelector('[aria-checked=true]').focus())">
+                        <button type="button" role="radio" :aria-checked="(via === 'wa').toString()" :tabindex="via === 'wa' ? 0 : -1" @click="via = 'wa'" class="news-tab"><x-icon name="message-circle" class="w-4 h-4" /><span>{{ __('WhatsApp') }}</span></button>
+                        <button type="button" role="radio" :aria-checked="(via === 'email').toString()" :tabindex="via === 'email' ? 0 : -1" @click="via = 'email'" class="news-tab"><x-icon name="mail" class="w-4 h-4" /><span>{{ __('Email') }}</span></button>
                     </div>
-                    <p class="mt-3 flex items-center gap-2 text-[12.5px] text-white/55 sm:pl-5"><x-icon name="shield-check" class="w-4 h-4 shrink-0" /><span>{{ __('Reply STOP any time to leave.') }}</span></p>
-                </div>
+                    <label class="sr-only" for="news-contact"><span x-show="via === 'wa'">{{ __('Mobile number') }}</span><span x-show="via === 'email'" x-cloak>{{ __('Email address') }}</span></label>
+                    <div class="mt-3 sm:flex sm:items-center sm:rounded-full sm:bg-white sm:p-1.5 sm:focus-within:ring-4 sm:focus-within:ring-marigold/40">
+                        <div class="flex-1 min-w-0 flex items-center rounded-full bg-white text-ink focus-within:ring-4 focus-within:ring-marigold/40 sm:focus-within:ring-0">
+                            <span class="pl-5 pr-2 text-ink-3 font-semibold num shrink-0" x-show="via === 'wa'" aria-hidden="true">+91</span>
+                            <input id="news-contact" name="contact" required value="{{ old('contact') }}"
+                                   :type="via === 'wa' ? 'tel' : 'email'" :inputmode="via === 'wa' ? 'tel' : 'email'" :autocomplete="via === 'wa' ? 'tel' : 'email'"
+                                   :placeholder="via === 'wa' ? '98300 00000' : 'name@example.com'" :class="via === 'wa' ? 'num' : 'pl-5'"
+                                   @error('contact') aria-invalid="true" aria-describedby="news-contact-error" @enderror
+                                   class="w-full min-w-0 h-12 pr-4 bg-transparent text-ink rounded-full placeholder:text-ink-3/70 focus:outline-none">
+                        </div>
+                        <button class="btn btn-primary h-12 px-6 rounded-full shrink-0 w-full sm:w-auto mt-2 sm:mt-0"><span>{{ __('Subscribe') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></button>
+                    </div>
+                    @error('contact')<p id="news-contact-error" class="mt-2 sm:pl-5 text-[13.5px] text-marigold">{{ $message }}</p>@enderror
+                    @if (session('news_done'))
+                        <p class="mt-3 flex items-center gap-2 text-[14px] text-white sm:pl-5" role="status"><x-icon name="circle-check" class="w-4 h-4 shrink-0 text-marigold" /><span>{{ session('news_done') === 'email' ? __('Done. Club news will come to your inbox. Unsubscribe any time.') : __('Done. You’ll get club notices on WhatsApp. Reply STOP to leave.') }}</span></p>
+                    @else
+                        <p class="mt-3 flex items-center gap-2 text-[12.5px] text-white/55 sm:pl-5"><x-icon name="shield-check" class="w-4 h-4 shrink-0" /><span x-show="via === 'wa'">{{ __('Reply STOP any time to leave.') }}</span><span x-show="via === 'email'" x-cloak>{{ __('Every email has a one-click unsubscribe link.') }}</span></p>
+                    @endif
+                </form>
             </div>
         </div>
         <div class="mx-auto max-w-[1160px] px-5">

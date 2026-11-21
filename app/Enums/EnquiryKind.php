@@ -14,6 +14,7 @@ enum EnquiryKind: string
     case Volunteer = 'volunteer';
     case Photos = 'photos';
     case Chanda = 'chanda';
+    case News = 'news';
 
     public function englishLabel(): string
     {
@@ -24,6 +25,7 @@ enum EnquiryKind: string
             self::Volunteer => 'Volunteer',
             self::Photos => 'Photos',
             self::Chanda => 'Chanda pledge',
+            self::News => 'Club letter sign-up',
         };
     }
 }

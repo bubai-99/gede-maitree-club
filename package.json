@@ -24,6 +24,7 @@
         "barcode-detector": "3.2.3",
         "lucide": "^1.73.0",
         "qrcode": "^1.5.4",
+        "swiper": "^11.2.10",
         "zxing-wasm": "3.1.6"
     }
 }
