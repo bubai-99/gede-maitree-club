@@ -257,12 +257,12 @@
         <div x-show="open" x-cloak class="fixed inset-0 z-[85] flex items-end lg:items-center justify-center lg:p-6" role="dialog" aria-modal="true" :aria-label="current?.name" @keydown.tab="trap($event, $refs.panel)">
             <div class="absolute inset-0 bg-black/60" x-show="open" x-transition.opacity @click="hide()"></div>
             <template x-if="current">
-                <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[100dvh] lg:h-[min(88dvh,800px)] bg-paper lg:rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
+                <div x-ref="panel" class="relative w-full lg:max-w-[1120px] h-[100dvh] lg:h-[min(88dvh,800px)] bg-paper lg:rounded-3xl shadow-2xl max-lg:overflow-y-auto max-lg:overscroll-contain lg:overflow-hidden flex flex-col lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
                      x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 translate-y-6 lg:translate-y-0 lg:scale-95">
-                    <button type="button" x-ref="panelClose" @click="hide()" class="absolute right-3 top-3 z-20 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow hover:bg-white" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+                    <button type="button" x-ref="panelClose" @click="hide()" class="fixed lg:absolute right-3 top-3 z-30 w-10 h-10 rounded-full bg-white/95 text-ink grid place-items-center shadow hover:bg-white" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
 
                     {{-- Photos: swipe, arrows or the thumbnails over the photo --}}
-                    <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[min(34dvh,340px)]">
+                    <div class="relative bg-tulsi-wash flex flex-col min-h-0 lg:h-full shrink-0 max-lg:h-[min(92vw,460px)]">
                         <div class="relative flex-1 min-h-0">
                             <ul x-ref="gallery" @scroll.debounce.60ms="photoIndex = Math.round($el.scrollLeft / $el.clientWidth)" class="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory no-scrollbar" aria-label="{{ __('Photos') }}">
                                 <template x-for="(ph, i) in current.photos" :key="i">
@@ -285,9 +285,10 @@
                         </div>
                     </div>
 
-                    {{-- Details: price first, then care and videos (scrolling); the quantity and basket stay at the bottom --}}
-                    <div class="flex-1 min-h-0 flex flex-col">
-                    <div class="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+                    {{-- Details: price first, then care and videos; the quantity and basket stay at the bottom.
+                         Phones scroll the whole panel (photo too); wide screens scroll only this column. --}}
+                    <div class="lg:flex-1 lg:min-h-0 flex flex-col max-lg:grow">
+                    <div class="grow lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
                         <div class="p-6 sm:p-8">
                             <p class="eyebrow text-tulsi" x-text="current.categoryName"></p>
                             <h2 class="mt-2 pr-10 font-display text-[2rem] sm:text-[2.3rem] leading-tight" x-text="current.name"></h2>
@@ -328,7 +329,7 @@
                         </div>
                     </div>
                     {{-- Quantity and basket: always in view at the bottom --}}
-                    <div class="shrink-0 border-t border-rule bg-card/95 backdrop-blur-sm px-5 sm:px-8 py-3 pb-[max(.75rem,env(safe-area-inset-bottom))]">
+                    <div class="sticky bottom-0 z-20 shrink-0 border-t border-rule bg-card/95 backdrop-blur-sm px-5 sm:px-8 py-3 pb-[max(.75rem,env(safe-area-inset-bottom))]">
                         <template x-if="current.stock > 0">
                             <div class="flex items-center gap-3">
                                 <div class="flex items-center rounded-xl border border-rule h-12" role="group" aria-label="{{ __('Quantity') }}">
