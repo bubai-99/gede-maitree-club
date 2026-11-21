@@ -207,7 +207,7 @@
                     @if (Route::has('terms'))
                         <a href="{{ route('terms') }}" class="hover:text-white">{{ __('Terms') }}</a>
                     @endif
-                    <span>{{ __('Photos: Unsplash (samples)') }}</span>
+                    <span>{{ __('Sample photos') }}</span>
                     @if ($site->isSample())
                         <span class="text-marigold">{{ __('Sample content: names, numbers and photos are placeholders.') }}</span>
                     @endif

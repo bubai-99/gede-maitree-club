@@ -494,7 +494,6 @@
     "Phone call": "ফোন",
     "Photo": "ছবি",
     "Photos": "ছবি",
-    "Photos: Unsplash (samples)": "ছবি: Unsplash (নমুনা)",
     "Pick a package on the catering page and ask for a quote, or come to the club. We serve, we don’t cook. Members pay 10% less.": "ক্যাটারিং পাতায় প্যাকেজ বেছে দাম জানতে চান, বা ক্লাবে আসুন। আমরা শুধু পরিবেশন করি, রান্না নয়। সদস্যরা ১০% কম দেন।",
     "Pick plants": "গাছ বাছুন",
     "Pick up at the club gate, 7–10 am and 4–7 pm. Pay at the gate in cash or UPI.": "ক্লাবের গেট থেকে নিন, সকাল ৭–১০টা ও বিকেল ৪–৭টা। গেটে নগদ বা ইউপিআই-এ দাম দিন।",
@@ -1814,5 +1813,6 @@
     "Done. You’ll get club notices on WhatsApp. Reply STOP to leave.": "হয়ে গেছে। ক্লাবের নোটিস হোয়াটসঅ্যাপে পাবেন। বন্ধ করতে STOP লিখুন।",
     "Every email has a one-click unsubscribe link.": "প্রতিটি ইমেলে এক ক্লিকে বন্ধ করার লিঙ্ক থাকে।",
     "Club letter sign-up": "ক্লাবের চিঠিতে নাম লেখানো",
-    "Enter an email address like name@example.com.": "name@example.com-এর মতো একটি ইমেল ঠিকানা লিখুন।"
+    "Enter an email address like name@example.com.": "name@example.com-এর মতো একটি ইমেল ঠিকানা লিখুন।",
+    "Sample photos": "নমুনা ছবি"
 }

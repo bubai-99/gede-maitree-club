@@ -106,10 +106,10 @@ class WebsiteTest extends TestCase
         $this->get('/robots.txt')->assertOk()->assertSee('Disallow: /admin')->assertSee('Sitemap: '.route('sitemap'));
     }
 
-    public function test_unsplash_photos_are_credited(): void
+    public function test_photographers_are_credited_without_the_unsplash_name(): void
     {
-        $this->get('/')->assertSee('/ Unsplash', false);
-        $this->get('/nursery')->assertSee('Robert Thiemann / Unsplash', false);
+        $this->get('/')->assertSee('unsplash.com/photos', false)->assertDontSee('/ Unsplash', false);
+        $this->get('/nursery')->assertSee('Robert Thiemann', false)->assertDontSee('Unsplash</', false);
     }
 
     public function test_the_sample_content_note_is_shown(): void
