@@ -2,6 +2,7 @@ import Alpine from 'alpinejs';
 import { drawIcons } from './icons';
 import { razorpayCheckout } from './pay';
 import { forgetThisDevice } from './forget';
+import { enhanceForms } from './forms';
 
 window.Alpine = Alpine;
 
@@ -11,6 +12,7 @@ document.addEventListener('alpine:initialized', () => drawIcons());
 
 Alpine.start();
 drawIcons();
+enhanceForms();
 
 // Installable apps (member app, committee console): register the service worker named by the layout.
 const serviceWorker = document.body?.dataset.sw;

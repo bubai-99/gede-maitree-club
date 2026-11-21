@@ -117,7 +117,7 @@ class WebsiteFormsTest extends TestCase
 
     public function test_validation_messages_are_in_bengali_on_the_bengali_site(): void
     {
-        $this->withSession(['locale' => 'bn'])->post('/contact', [])->assertSessionHasErrors(['name' => 'নাম দিতে হবে।']);
+        $this->withSession(['locale' => 'bn'])->post('/contact', [])->assertSessionHasErrors(['name' => 'আপনার নাম দিন।']);
     }
 
     public function test_forms_are_rate_limited(): void
@@ -145,5 +145,15 @@ class WebsiteFormsTest extends TestCase
         $this->from('/')->post('/news', ['via' => 'email', 'contact' => 'not-an-email'])->assertSessionHasErrors('contact');
         $this->from('/')->post('/news', ['via' => 'wa', 'contact' => '12345'])->assertSessionHasErrors('contact');
         $this->get('/')->assertSee('Where should we send it?');
+    }
+
+    public function test_validation_messages_are_plain_english_with_proper_field_names(): void
+    {
+        $this->post('/contact', ['email' => 'not-an-email'])->assertSessionHasErrors([
+            'name' => 'Enter your name.',
+            'topic' => 'Choose topic.',
+            'message' => 'Enter your message.',
+        ]);
+        $this->get('/contact')->assertSee('Please check these', false)->assertSee('data-error-summary', false);
     }
 }
