@@ -240,7 +240,7 @@
             <p class="mt-4 text-[16px] text-ink-2">{{ __('Anything else? Call the secretary, or drop in at the club any evening.') }}</p>
             <a href="tel:{{ preg_replace('/\s+/', '', $site->club()['phone']) }}" class="mt-5 btn btn-line"><x-icon name="phone" /><span class="num">{{ $site->club()['phone'] }}</span></a>
         </div>
-        <div class="lg:col-span-8 border-t border-ink/80">
+        <div class="lg:col-span-8 border-t border-rule">
             @include('site.partials.faq')
         </div>
     </div>
