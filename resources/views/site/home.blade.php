@@ -138,7 +138,7 @@
                 <div><p class="gz-kicker">{{ __('Calendar') }}</p><h2 class="mt-2 gz-headline text-[clamp(2rem,4.5vw,3rem)]">{{ __('Coming up') }}</h2></div>
                 <a href="{{ route('events.index') }}" class="text-[15px] font-semibold text-sindoor hover:underline pb-1 inline-flex items-center gap-1"><span>{{ __('All events') }}</span><x-icon name="arrow-right" class="w-4 h-4" /></a>
             </div>
-            <ol class="border-t border-ink/80">
+            <ol class="border-t border-rule">
                 @forelse ($upcoming as $event)
                     @include('site.partials.event-row', ['event' => $event])
                 @empty

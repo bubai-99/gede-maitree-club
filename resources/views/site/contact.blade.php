@@ -70,7 +70,7 @@
         @if ($committee->isNotEmpty())
             <div class="mt-20">
                 <h2 class="font-display leading-tight text-[2rem]">{{ __('Who to ask') }}</h2>
-                <ul class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 border-t border-ink/80">
+                <ul class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 border-t border-rule">
                     @foreach ($committee as $person)
                         @php $asks = collect($topics)->where('role', $person->role)->map(fn ($t) => __($t['label']))->unique()->implode(', '); @endphp
                         <li class="flex gap-4 py-5 border-b border-rule">

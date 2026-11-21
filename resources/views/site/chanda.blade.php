@@ -46,7 +46,7 @@
                             @foreach ($budget as $i => $row)
                                 <li class="leader"><span>{{ local_text($row['head'], $row['head_bn']) }}</span><span class="font-semibold num">₹{{ digits($budgetShares[$i]) }}</span></li>
                             @endforeach
-                            <li class="flex items-baseline justify-between pt-3 mt-1 border-t border-ink/80 font-semibold"><span>{{ __('Of every ₹100') }}</span><span class="num">₹{{ digits(100) }}</span></li>
+                            <li class="flex items-baseline justify-between pt-3 mt-1 border-t border-rule font-semibold"><span>{{ __('Of every ₹100') }}</span><span class="num">₹{{ digits(100) }}</span></li>
                         </ul>
                     </div>
                 @endif
@@ -60,7 +60,7 @@
                     <div class="mt-6 overflow-x-auto -mx-5 px-5">
                         <table class="w-full min-w-[560px] text-[15px]">
                             <caption class="sr-only">{{ __('Chanda collected by lane') }}</caption>
-                            <thead><tr class="text-left text-[12.5px] uppercase tracking-wide text-ink-2 border-b border-ink/80">
+                            <thead><tr class="text-left text-[12.5px] uppercase tracking-wide text-ink-2 border-b border-rule">
                                 <th scope="col" class="py-2.5 pr-4 font-semibold">{{ __('Lane') }}</th>
                                 <th scope="col" class="py-2.5 pr-4 font-semibold">{{ __('Volunteer') }}</th>
                                 <th scope="col" class="py-2.5 pr-4 font-semibold">{{ __('Houses visited') }}</th>
@@ -155,7 +155,7 @@
                     <p class="mt-2 text-[17px] text-ink-2 max-w-[44ch]">{{ __('Local shops and businesses. Each gets a place at the puja: a banner, a board or a stage mention.') }}</p>
                     <a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ rawurlencode(__('I would like to sponsor the puja')) }}" target="_blank" rel="noopener" class="btn btn-line mt-6"><x-icon name="message-circle" /><span>{{ __('I’d like to sponsor') }}</span></a>
                 </div>
-                <ul class="lg:col-span-7 border-t border-ink/80">
+                <ul class="lg:col-span-7 border-t border-rule">
                     @foreach ($sponsors as $sponsor)
                         <li class="flex flex-wrap items-center gap-x-4 gap-y-1 py-4 border-b border-rule">
                             <span class="min-w-0 flex-1"><span class="block font-semibold text-[17px]">{{ $sponsor->tr('name') }}</span><span class="block text-[14px] text-ink-2">{{ $sponsor->tr('deliverable') }}</span></span>
@@ -215,7 +215,7 @@
         @if (! empty($chanda['documents']))
             <div class="mt-20">
                 <h2 class="font-display leading-tight text-[2rem]">{{ __('Documents') }}</h2>
-                <ul class="mt-6 border-t border-ink/80">
+                <ul class="mt-6 border-t border-rule">
                     @foreach ($chanda['documents'] as $doc)
                         <li class="flex flex-wrap items-center gap-x-4 gap-y-2 py-4 border-b border-rule">
                             <span class="w-10 h-10 rounded-lg bg-paper-2 grid place-items-center shrink-0"><x-icon name="file-text" class="w-5 h-5 text-ink-2" /></span>

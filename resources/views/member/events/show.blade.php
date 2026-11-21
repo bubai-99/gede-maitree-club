@@ -80,7 +80,7 @@
 
             @if ($event->schedule)
                 <h2 class="mt-8 font-display text-[1.5rem]">{{ __('Programme') }}</h2>
-                <ol class="mt-3 border-t border-ink/80 max-w-[640px]">
+                <ol class="mt-3 border-t border-rule max-w-[640px]">
                     @foreach ($event->schedule as $item)
                         <li class="leader py-3 border-b border-rule"><span>{{ local_text($item['what'] ?? '', $item['what_bn'] ?? null) }}</span><span class="font-semibold num">{{ local_text($item['time'] ?? '', $item['time_bn'] ?? null) }}</span></li>
                     @endforeach

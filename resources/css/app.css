@@ -213,7 +213,7 @@
 .idc-art-seal svg { width: 100%; height: 100%; }
 .idc-wave { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 3.2cqw; color: var(--color-marigold); opacity: .22; z-index: -1; pointer-events: none; }
 @media print { .idc-art, .idc-art-seal, .idc-wave { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
-.idc-photo { width: 24cqw; aspect-ratio: 3 / 4; align-self: flex-start; overflow: hidden; border: .45cqw solid var(--color-ink); background: var(--color-paper-2); display: grid; place-items: center; flex-shrink: 0; }
+.idc-photo { width: 24cqw; aspect-ratio: 3 / 4; align-self: flex-start; overflow: hidden; border: .3cqw solid rgba(43, 47, 54, .2); border-radius: 1.2cqw; background: var(--color-paper-2); display: grid; place-items: center; flex-shrink: 0; }
 .idc-initials { font-family: "Tiro Bangla", serif; font-size: 8cqw; color: var(--color-ink-2); }
 .idc-nophoto { font-size: 2.3cqw; text-align: center; color: var(--color-sindoor-deep); font-weight: 600; line-height: 1.2; }
 .idc-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }

@@ -13,7 +13,7 @@
             </nav>
         @endif
         <p class="mt-5 text-sm text-ink-3">{{ trans_choice(':count notice|:count notices', $notices->total(), ['count' => digits($notices->total())]) }}</p>
-        <ol class="mt-3 border-t border-ink/80">
+        <ol class="mt-3 border-t border-rule">
             @forelse ($notices as $notice)
                 <li class="border-b border-rule">
                     <a href="{{ route('notices.show', $notice) }}" class="group grid grid-cols-[56px_1fr_auto] sm:grid-cols-[80px_1fr_auto] gap-x-4 sm:gap-x-6 py-5 items-start">

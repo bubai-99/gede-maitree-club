@@ -17,7 +17,7 @@
                 @endforeach
             </nav>
         </div>
-        <ol class="mt-6 border-t border-ink/80">
+        <ol class="mt-6 border-t border-rule">
             @forelse ($upcoming as $event)
                 @include('site.partials.event-row', ['event' => $event, 'full' => true])
             @empty
