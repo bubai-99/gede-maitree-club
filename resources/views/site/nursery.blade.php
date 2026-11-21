@@ -305,7 +305,7 @@
                                 <div class="flex items-end justify-between gap-3">
                                     <div>
                                         <p class="font-display text-[2rem] leading-none num" x-text="rupees(current.price)"></p>
-                                        <p class="mt-1.5 text-[13.5px] text-tulsi font-semibold" x-show="current.member < current.price" x-text="{{ Js::from(__('Members :price')) }}.replace(':price', rupees(current.member))"></p>
+                                        <p class="mt-1.5 flex items-center gap-1.5 text-[13.5px] text-tulsi" x-show="current.member < current.price"><x-icon name="badge-percent" class="w-4 h-4 shrink-0" /><span><span class="font-semibold" x-text="{{ Js::from(__('Club members pay :price')) }}.replace(':price', rupees(current.member))"></span> <span class="text-ink-3" x-text="'· ' + {{ Js::from(__('save :amount')) }}.replace(':amount', rupees(current.price - current.member))"></span></span></p>
                                     </div>
                                     <p class="text-[13.5px] font-semibold" :class="current.stock === 0 ? 'text-ink-3' : (current.stock <= 10 ? 'text-sindoor-deep' : 'text-tulsi')"
                                        x-text="current.stock === 0 ? {{ Js::from(__('Out of stock')) }} : (current.stock <= 10 ? {{ Js::from(__('Only :count left')) }}.replace(':count', num(current.stock)) : {{ Js::from(__('In stock')) }})"></p>

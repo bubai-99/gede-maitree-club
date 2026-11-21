@@ -1990,5 +1990,7 @@
     "Club member?": "ক্লাবের সদস্য?",
     "Add your member no.": "সদস্য নং দিন",
     "You save": "আপনার সাশ্রয়",
-    "we check the member no. at the gate": "সদস্য নং গেটে মিলিয়ে নেওয়া হবে"
+    "we check the member no. at the gate": "সদস্য নং গেটে মিলিয়ে নেওয়া হবে",
+    "Club members pay :price": "ক্লাবের সদস্যরা দেবেন :price",
+    "save :amount": ":amount কম"
 }
