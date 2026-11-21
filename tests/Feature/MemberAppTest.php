@@ -38,7 +38,7 @@ class MemberAppTest extends TestCase
             'home' => ['/app', 'Your dues'],
             'dues' => ['/app/dues', 'Statement'],
             'receipts' => ['/app/receipts', 'MC-26-0388'],
-            'card' => ['/app/card', 'Gate pass'],
+            'card' => ['/app/card', 'Show this card at the gate'],
             'events' => ['/app/events', 'Annual Sports Day'],
             'event' => ['/app/events/sports', 'Programme'],
             'notices' => ['/app/notices', 'AGM agenda for members'],
