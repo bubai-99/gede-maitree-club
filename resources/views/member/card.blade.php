@@ -43,6 +43,18 @@
                                             <span class="idc-kind">{{ $member->is_head ? __('HEAD') : __('FAMILY') }}</span>
                                         </div>
                                         <div class="idc-body">
+                                            {{-- Behind the details: a faint alpana with the club seal at its heart, and a festive wave at the foot --}}
+                                            <svg class="idc-art" viewBox="0 0 200 200" aria-hidden="true">
+                                                <g fill="none" stroke="currentColor" stroke-width=".8">
+                                                    <circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="88" stroke-dasharray="2 4"/><circle cx="100" cy="100" r="58"/>
+                                                    @for ($i = 0; $i < 16; $i++)
+                                                        <path d="M100 4 C 110 22, 110 34, 100 42 C 90 34, 90 22, 100 4 Z" transform="rotate({{ $i * 22.5 }} 100 100)"/>
+                                                        <circle cx="100" cy="50" r="2.2" transform="rotate({{ $i * 22.5 + 11.25 }} 100 100)"/>
+                                                    @endfor
+                                                </g>
+                                            </svg>
+                                            <span class="idc-art-seal" aria-hidden="true"><x-seal :size="64" :estd="false" color="currentColor" /></span>
+                                            <svg class="idc-wave" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C 40 4, 80 24, 120 14 S 200 4, 240 14 S 320 24, 360 14 S 400 8, 400 8 V24 H0Z" fill="currentColor"/></svg>
                                             <div class="idc-photo overflow-hidden"><x-id-photo :member="$member" /></div>
                                             <div class="idc-info">
                                                 <p class="idc-name">{{ $member->tr('name') }}</p>

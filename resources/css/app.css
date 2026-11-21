@@ -206,7 +206,13 @@
 .idc-club > span:first-child { font-size: 5.6cqw; }
 .idc-sub { font-size: 1.9cqw; letter-spacing: .14em; font-weight: 600; opacity: .95; margin-top: .4cqw; }
 .idc-kind { margin-left: auto; font-family: var(--font-display); font-size: 3.6cqw; letter-spacing: .02em; border: .35cqw solid #fff; border-radius: 1cqw; padding: .4cqw 1.6cqw; }
-.idc-body { flex: 1; display: flex; gap: 3.4cqw; padding: 3.4cqw 3.6cqw 3cqw; }
+.idc-body { flex: 1; display: flex; gap: 3.4cqw; padding: 3.4cqw 3.6cqw 3cqw; position: relative; overflow: hidden; isolation: isolate; }
+/* Card body art: alpana + seal watermark on the right, a soft marigold wave along the foot */
+.idc-art { position: absolute; right: -9cqw; top: 50%; width: 52cqw; height: 52cqw; transform: translateY(-50%); color: var(--color-sindoor); opacity: .09; z-index: -1; pointer-events: none; }
+.idc-art-seal { position: absolute; right: 13.5cqw; top: 50%; transform: translate(50%, -50%) rotate(-8deg); width: 13.4cqw; height: 13.4cqw; color: var(--color-sindoor); opacity: .12; z-index: -1; pointer-events: none; }
+.idc-art-seal svg { width: 100%; height: 100%; }
+.idc-wave { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 3.2cqw; color: var(--color-marigold); opacity: .22; z-index: -1; pointer-events: none; }
+@media print { .idc-art, .idc-art-seal, .idc-wave { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 .idc-photo { width: 24cqw; aspect-ratio: 3 / 4; align-self: flex-start; overflow: hidden; border: .45cqw solid var(--color-ink); background: var(--color-paper-2); display: grid; place-items: center; flex-shrink: 0; }
 .idc-initials { font-family: "Tiro Bangla", serif; font-size: 8cqw; color: var(--color-ink-2); }
 .idc-nophoto { font-size: 2.3cqw; text-align: center; color: var(--color-sindoor-deep); font-weight: 600; line-height: 1.2; }
@@ -592,3 +598,18 @@ button.pj-cell:hover { border-color: rgba(43,47,54,.35); }
 @media (prefers-reduced-motion: reduce) { .scanline { animation: none; top: 50%; } }
 
 .gallery-strip { padding-inline: 1.25rem; }
+
+/* News story text (App\Support\RichText): readable measure, headings, lists, quotes, links */
+.news-prose { font-size: 18px; line-height: 1.75; color: var(--color-ink); }
+.news-prose > * + * { margin-top: 1.15em; }
+.news-prose h2 { font-family: "Tiro Bangla", serif; font-size: 1.7rem; line-height: 1.2; margin-top: 1.8em; }
+.news-prose h3 { font-family: "Tiro Bangla", serif; font-size: 1.35rem; line-height: 1.25; margin-top: 1.5em; }
+.news-prose a { color: var(--color-sindoor-deep); text-decoration: underline; text-underline-offset: 3px; }
+.news-prose ul { list-style: disc; padding-left: 1.3em; }
+.news-prose ol { list-style: decimal; padding-left: 1.3em; }
+.news-prose li + li { margin-top: .35em; }
+.news-prose blockquote { border-left: 3px solid var(--color-sindoor); padding: .2em 0 .2em 1.1em; color: var(--color-ink-2); font-style: italic; }
+.news-prose img { border-radius: 14px; }
+.news-prose hr { border-color: var(--color-rule); margin: 2.2em 0; }
+.news-prose strong { font-weight: 700; }
+.news-prose .news-video { margin-top: 1.8em; margin-bottom: 1.8em; }
