@@ -1,7 +1,7 @@
 @props(['size' => 96, 'rotate' => -8, 'estd' => true, 'color' => 'var(--color-sindoor)'])
 @php
     $id = 'seal-'.\Illuminate\Support\Str::random(8);
-    $ring = $estd ? 'GEDE MAITREE CLUB  •  NETAJI PARA  •  ESTD 2014  •  ' : 'GEDE MAITREE CLUB  •  NETAJI PARA  •  ';
+    $ring = $estd ? 'GEDE MAITREE CLUB  •  GEDE UTTARPARA  •  ESTD 2014  •  ' : 'GEDE MAITREE CLUB  •  GEDE UTTARPARA  •  ';
     $bengali = app()->getLocale() === 'bn';
 @endphp
 <svg {{ $attributes }} width="{{ $size }}" height="{{ $size }}" viewBox="0 0 200 200" role="img" aria-label="{{ __('Gede Maitree Club seal') }}" style="transform:rotate({{ (int) $rotate }}deg);color:{{ $color }}">

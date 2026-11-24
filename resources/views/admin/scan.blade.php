@@ -116,7 +116,7 @@
     <title>{{ __('Gate scanner') }} · {{ __('Gede Maitree Club') }}</title>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="manifest" href="{{ asset('admin.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/admin-180.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/admin-180.png?v=2') }}">
     @vite(['resources/css/app.css', 'resources/js/scan.js'])
 </head>
 <body class="min-h-dvh bg-night text-paper" data-sw="{{ asset('sw.js') }}">

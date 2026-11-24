@@ -45,7 +45,7 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     {{-- The member app can be installed from any website page (the browser's install icon, or "Get the app") --}}
     <link rel="manifest" href="{{ asset('member.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png?v=2') }}">
     <meta name="apple-mobile-web-app-title" content="Maitree Club">
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:site_name" content="{{ $club['name'] }}">

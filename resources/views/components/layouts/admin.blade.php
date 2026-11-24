@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Maitree Console">
     <link rel="manifest" href="{{ asset('admin.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/admin-180.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/admin-180.png?v=2') }}">
 </head>
 <body class="app-shell min-h-dvh bg-paper" data-sw="{{ asset('sw.js') }}" x-data="{ side: false }" @keydown.escape.window="side = false">
     <a href="#main" class="skip-link">{{ __('Skip to content') }}</a>

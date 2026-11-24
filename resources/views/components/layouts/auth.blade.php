@@ -8,7 +8,7 @@
     @include('partials.app-head')
     <title>{{ $title }} · {{ __('Gede Maitree Club') }}</title>
     <link rel="manifest" href="{{ asset($isAdmin ? 'admin.webmanifest' : 'member.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset($isAdmin ? 'icons/admin-180.png' : 'icons/member-180.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset($isAdmin ? 'icons/admin-180.png?v=2' : 'icons/member-180.png?v=2') }}">
 </head>
 <body class="min-h-dvh bg-paper" data-signed-out>
     <div class="min-h-dvh lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">

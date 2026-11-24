@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Maitree Club">
     <link rel="manifest" href="{{ asset('member.webmanifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png?v=2') }}">
 </head>
 <body class="app-shell min-h-dvh bg-paper-2" data-sw="{{ asset('sw.js') }}">
     <a href="#main" class="skip-link">{{ __('Skip to content') }}</a>

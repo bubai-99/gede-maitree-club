@@ -13,7 +13,7 @@ class InstallAppTest extends TestCase
     {
         $this->get('/')->assertOk()
             ->assertSee('<link rel="manifest" href="'.asset('member.webmanifest').'">', false)
-            ->assertSee('<link rel="apple-touch-icon" href="'.asset('icons/member-180.png').'">', false)
+            ->assertSee('<link rel="apple-touch-icon" href="'.asset('icons/member-180.png?v=2').'">', false)
             ->assertSee('Get the app');
     }
 
@@ -25,6 +25,15 @@ class InstallAppTest extends TestCase
         $this->assertSame(['/app', '/app'], [$member['start_url'], $member['scope']]);
         $this->assertSame(['/admin', '/admin'], [$admin['start_url'], $admin['scope']]);
         $this->assertSame('standalone', $member['display']);
-        $this->assertContains('512x512', array_column($member['icons'], 'sizes'));
+        // A standard and a maskable (Android crops it to its own shape) icon at 192 and 512, all present
+        foreach ([$member, $admin] as $manifest) {
+            $this->assertEqualsCanonicalizing(['any 192x192', 'any 512x512', 'maskable 192x192', 'maskable 512x512'],
+                array_map(fn ($i) => $i['purpose'].' '.$i['sizes'], $manifest['icons']));
+            foreach ($manifest['icons'] as $icon) {
+                $file = public_path(ltrim((string) strtok($icon['src'], '?'), '/'));
+                $this->assertFileExists($file);
+                $this->assertSame($icon['sizes'], implode('x', array_slice((array) getimagesize($file), 0, 2)));
+            }
+        }
     }
 }

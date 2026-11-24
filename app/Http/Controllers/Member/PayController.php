@@ -81,7 +81,7 @@ class PayController extends Controller
                     'currency' => 'INR',
                     'name' => __('Gede Maitree Club'),
                     'description' => __('Subscription').' · '.$payment->monthsLabel(),
-                    'image' => asset('icons/member-180.png'),
+                    'image' => asset('icons/member-180.png?v=2'),
                     'order_id' => $payment->gateway_order_id,
                     'prefill' => array_filter([
                         'name' => $user->name,
