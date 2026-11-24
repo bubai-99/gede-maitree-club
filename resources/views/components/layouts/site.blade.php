@@ -245,14 +245,19 @@
             </div>
         </div>
         <div class="mx-auto max-w-[1160px] px-5">
-            <div class="py-12 grid grid-cols-2 md:grid-cols-12 gap-x-6 gap-y-10">
-                <div class="col-span-2 md:col-span-4">
+            {{-- Phones: the club, then Club and Services as accordions, then Visit us; tablets: the club across the top,
+                 three columns below; desktop: four columns --}}
+            <div class="py-12 grid grid-cols-1 md:grid-cols-12 gap-x-6 md:gap-y-12">
+                <div class="max-md:mb-8 md:col-span-12 lg:col-span-4 md:grid md:grid-cols-2 md:gap-x-10 lg:block">
+                    <div>
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3 text-white">
                         <x-seal :size="52" :estd="false" color="#fff" aria-hidden="true" />
                         <span><span class="block font-display text-[22px] leading-none">{{ $clubName }}</span><span class="block mt-1 text-[12px] uppercase tracking-[0.12em] text-white/55">{{ __('Gede Uttarpara · since 2014') }}</span></span>
                     </a>
                     <p class="mt-5 max-w-[36ch] text-white/65">{{ __('Run by neighbours, for neighbours. Pujas, sports, a serving team and the para’s own nursery.') }}</p>
-                    <p class="mt-6 text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Follow the club') }}</p>
+                    </div>
+                    <div class="mt-6 md:mt-0 lg:mt-6">
+                    <p class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Follow the club') }}</p>
                     <ul class="mt-3 flex flex-wrap gap-2.5">
                         @foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube'] as $network => $label)
                             @if (! empty($club['social'][$network]))
@@ -269,24 +274,43 @@
                         </button>
                         <p class="mt-2 text-[13px] text-white/55 max-w-[34ch]">{{ __('Dues, your member card and event passes on your phone. Free; no app store needed.') }}</p>
                     </div>
+                    </div>
                 </div>
-                <nav class="md:col-span-2" aria-label="{{ __('Footer: club') }}">
-                    <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Club') }}</h2>
-                    <ul class="mt-4 space-y-2.5">
-                        @foreach (\App\Support\SiteMenu::available(\App\Support\SiteMenu::FOOTER_CLUB) as $item)
-                            <li><a href="{{ route($item['route']) }}" class="hover:text-white">{{ __($item['label']) }}</a></li>
-                        @endforeach
-                    </ul>
+                <nav class="md:col-span-3 lg:col-span-2 max-md:border-b max-md:border-white/10 max-md:border-t" aria-label="{{ __('Footer: club') }}" x-data="{ open: false, wide: matchMedia('(min-width: 768px)').matches }" x-init="matchMedia('(min-width: 768px)').addEventListener('change', (e) => wide = e.matches)">
+                    <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">
+                        <button type="button" class="group md:hidden w-full flex items-center justify-between py-4 uppercase tracking-[0.1em]" @click="open = ! open" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="footer-club">
+                            {{ __('Club') }}<x-icon name="chevron-down" class="w-4 h-4 text-white/60 transition-transform duration-300 group-aria-expanded:rotate-180" />
+                        </button>
+                        <span class="hidden md:inline">{{ __('Club') }}</span>
+                    </h2>
+                    <div id="footer-club" class="footer-fold grid transition-[grid-template-rows] duration-300 ease-out" :class="open && 'is-open'" :inert="! open && ! wide">
+                        <div class="min-h-0 overflow-hidden md:overflow-visible">
+                        <ul class="space-y-2.5 max-md:space-y-0 max-md:[&>li>a]:block max-md:[&>li>a]:py-2 md:mt-4 max-md:pb-3">
+                            @foreach (\App\Support\SiteMenu::available(\App\Support\SiteMenu::FOOTER_CLUB) as $item)
+                                <li><a href="{{ route($item['route']) }}" class="hover:text-white">{{ __($item['label']) }}</a></li>
+                            @endforeach
+                        </ul>
+                        </div>
+                    </div>
                 </nav>
-                <nav class="md:col-span-2" aria-label="{{ __('Footer: services and members') }}">
-                    <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Services') }}</h2>
-                    <ul class="mt-4 space-y-2.5">
-                        @foreach (\App\Support\SiteMenu::available(\App\Support\SiteMenu::FOOTER_SERVICES) as $item)
-                            <li><a href="{{ route($item['route']) }}" class="hover:text-white">{{ __($item['label']) }}</a></li>
-                        @endforeach
-                    </ul>
+                <nav class="md:col-span-3 lg:col-span-2 max-md:border-b max-md:border-white/10" aria-label="{{ __('Footer: services and members') }}" x-data="{ open: false, wide: matchMedia('(min-width: 768px)').matches }" x-init="matchMedia('(min-width: 768px)').addEventListener('change', (e) => wide = e.matches)">
+                    <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">
+                        <button type="button" class="group md:hidden w-full flex items-center justify-between py-4 uppercase tracking-[0.1em]" @click="open = ! open" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="footer-services">
+                            {{ __('Services') }}<x-icon name="chevron-down" class="w-4 h-4 text-white/60 transition-transform duration-300 group-aria-expanded:rotate-180" />
+                        </button>
+                        <span class="hidden md:inline">{{ __('Services') }}</span>
+                    </h2>
+                    <div id="footer-services" class="footer-fold grid transition-[grid-template-rows] duration-300 ease-out" :class="open && 'is-open'" :inert="! open && ! wide">
+                        <div class="min-h-0 overflow-hidden md:overflow-visible">
+                        <ul class="space-y-2.5 max-md:space-y-0 max-md:[&>li>a]:block max-md:[&>li>a]:py-2 md:mt-4 max-md:pb-3">
+                            @foreach (\App\Support\SiteMenu::available(\App\Support\SiteMenu::FOOTER_SERVICES) as $item)
+                                <li><a href="{{ route($item['route']) }}" class="hover:text-white">{{ __($item['label']) }}</a></li>
+                            @endforeach
+                        </ul>
+                        </div>
+                    </div>
                 </nav>
-                <div class="col-span-2 md:col-span-4">
+                <div class="max-md:mt-8 md:col-span-6 lg:col-span-4">
                     <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Visit us') }}</h2>
                     <ul class="mt-4 space-y-3">
                         <li class="flex gap-3"><x-icon name="map-pin" class="size-[18px] mt-0.5 text-white/50" /><span>{{ $bn ? $club['address_bn'] : $club['address'] }}</span></li>

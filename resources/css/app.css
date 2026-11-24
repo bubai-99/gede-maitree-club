@@ -696,3 +696,11 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 /* Bengali letters join into conjuncts; letter-spacing (the small spaced-out labels) pulls them
    apart. Outside the layers so it wins over the tracking-* utilities; English keeps its spacing. */
 :lang(bn) :is(.eyebrow, [class*="tracking-"]) { letter-spacing: 0; }
+
+/* Footer menus: accordions on phones (closed until tapped; open if scripts don't run), always open from 768px */
+.footer-fold { grid-template-rows: 1fr; }
+@media (max-width: 767px) {
+  html.js .footer-fold { grid-template-rows: 0fr; }
+  html.js .footer-fold.is-open { grid-template-rows: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .footer-fold { transition: none; } }
