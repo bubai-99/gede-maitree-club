@@ -79,9 +79,63 @@
                 <div class="ml-auto shrink-0 flex items-center gap-1">
                     <x-lang-switch class="hidden sm:flex mr-1" />
                     <a href="{{ route('home') }}" class="w-10 h-10 grid place-items-center rounded-md hover:bg-paper-2" target="_blank" rel="noopener" aria-label="{{ __('View website') }}" title="{{ __('View website') }}"><x-icon name="external-link" class="w-5 h-5" /></a>
-                    @can('activity.view')
-                        <a href="{{ route('admin.activity') }}" class="relative w-10 h-10 grid place-items-center rounded-md hover:bg-paper-2" aria-label="{{ __('Activity') }}" title="{{ __('Activity') }}"><x-icon name="bell" class="w-5 h-5" /></a>
-                    @endcan
+                    {{-- The bell: what is waiting for you, and the latest notices (App\Support\AdminAlerts) --}}
+                    @php
+                        $alerts = auth()->user() ? app(\App\Support\AdminAlerts::class)->for(auth()->user()) : ['items' => [], 'notices' => collect()];
+                        $alertCount = count($alerts['items']);
+                    @endphp
+                    <div class="relative" x-data="noticeBell({{ (int) optional($alerts['notices']->first()?->published_at)->timestamp }})" @keydown.escape.window="shut()" @click.outside="shut()">
+                        <button type="button" @click="toggle()" class="relative w-10 h-10 grid place-items-center rounded-md hover:bg-paper-2 aria-expanded:bg-paper-2" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="alert-panel"
+                                aria-label="{{ $alertCount ? trans_choice('Notifications: :count waiting for you|Notifications: :count waiting for you', $alertCount, ['count' => digits($alertCount)]) : __('Notifications') }}" title="{{ __('Notifications') }}">
+                            <x-icon name="bell" class="w-5 h-5" />
+                            @if ($alertCount)
+                                <span class="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-sindoor text-white text-[11px] font-bold grid place-items-center ring-2 ring-paper num" aria-hidden="true">{{ digits($alertCount) }}</span>
+                            @else
+                                <span x-show="unseen" x-cloak class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-sindoor ring-2 ring-paper"></span>
+                            @endif
+                        </button>
+                        <div id="alert-panel" x-show="open" x-cloak x-transition.origin.top.right
+                             class="fixed inset-x-3 top-[60px] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+8px)] sm:w-[380px] max-h-[calc(100dvh-90px)] overflow-y-auto rounded-2xl bg-card border border-rule shadow-[0_18px_40px_-16px_rgba(16,24,40,.35)] z-50">
+                            <p class="flex items-center gap-2 px-4 pt-3.5 pb-2 text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-3">{{ __('Needs you') }}@if ($alertCount)<span class="chip h-5 px-1.5 text-[11px] bg-sindoor text-white num">{{ digits($alertCount) }}</span>@endif</p>
+                            @forelse ($alerts['items'] as $item)
+                                <a href="{{ $item['url'] }}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-paper-2">
+                                    <span class="w-8 h-8 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0"><x-icon :name="$item['icon']" class="w-4 h-4" /></span>
+                                    <span class="flex-1 min-w-0 text-[14.5px] leading-snug">{{ $item['text'] }}</span>
+                                    <x-icon name="chevron-right" class="w-4 h-4 text-ink-3 shrink-0" />
+                                </a>
+                            @empty
+                                <p class="flex items-center gap-2 px-4 pb-3 text-[14px] text-tulsi"><x-icon name="check" class="w-4 h-4" />{{ __('Nothing waiting for you.') }}</p>
+                            @endforelse
+                            <p class="mt-1 flex items-center gap-2 px-4 pt-3 pb-2 border-t border-rule text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-3">{{ __('Latest notices') }}</p>
+                            @forelse ($alerts['notices'] as $notice)
+                                @php
+                                    $canEditNotice = auth()->user()?->can('update', $notice) ?? false;
+                                @endphp
+                                <a href="{{ $canEditNotice ? route('admin.notices.edit', $notice) : route('notices.show', $notice) }}" @unless ($canEditNotice) target="_blank" rel="noopener" @endunless class="flex gap-3 px-4 py-2.5 hover:bg-paper-2">
+                                    <span class="mt-1.5 w-2 h-2 rounded-full shrink-0 {{ $notice->published_at?->gt(now()->subDays(7)) ? 'bg-sindoor' : 'bg-rule' }}" aria-hidden="true"></span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="flex items-center gap-1.5 text-[12px] text-ink-3">
+                                            @if ($notice->pinned)<x-icon name="pin" class="w-3 h-3 text-turmeric" />@endif
+                                            @if ($notice->tag)<span class="font-semibold uppercase tracking-[0.08em] text-sindoor truncate">{{ $notice->tr('tag') }}</span><span aria-hidden="true">·</span>@endif
+                                            <span class="num whitespace-nowrap">{{ local_date($notice->published_at, 'j M') }}</span>
+                                            @if ($notice->audience !== \App\Enums\NoticeAudience::Public)<span class="chip h-5 px-1.5 text-[11px] bg-paper-2 text-ink-2">{{ $notice->audience->label() }}</span>@endif
+                                        </span>
+                                        <span class="mt-0.5 block text-[14.5px] leading-snug line-clamp-2">{{ $notice->tr('title') }}</span>
+                                    </span>
+                                </a>
+                            @empty
+                                <p class="px-4 pb-3 text-[14px] text-ink-3">{{ __('No notices right now.') }}</p>
+                            @endforelse
+                            <div class="mt-1 flex border-t border-rule text-[14px] font-semibold">
+                                @can('website.view')
+                                    <a href="{{ route('admin.notices.index') }}" class="flex-1 px-4 py-3 text-center text-sindoor hover:bg-paper-2">{{ __('All notices') }}</a>
+                                @endcan
+                                @can('activity.view')
+                                    <a href="{{ route('admin.activity') }}" class="flex-1 px-4 py-3 text-center text-ink-2 hover:bg-paper-2 border-l border-rule">{{ __('Activity') }}</a>
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 @can('fees.manage')
                     <a href="{{ route('admin.collect') }}" class="btn btn-primary btn-sm shrink-0"><x-icon name="plus" /><span class="hidden sm:inline">{{ __('Collect payment') }}</span></a>

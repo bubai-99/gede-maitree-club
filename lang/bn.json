@@ -2063,5 +2063,10 @@
     "Committee console": "কমিটি কনসোল",
     "Login": "লগইন",
     "Latest notices": "সাম্প্রতিক নোটিস",
-    "New notices": "নতুন নোটিস"
+    "New notices": "নতুন নোটিস",
+    ":count UPI payment to confirm|:count UPI payments to confirm": ":countটি ইউপিআই পেমেন্ট নিশ্চিত করতে হবে|:countটি ইউপিআই পেমেন্ট নিশ্চিত করতে হবে",
+    "Notifications: :count waiting for you|Notifications: :count waiting for you": "বিজ্ঞপ্তি: আপনার জন্য :countটি অপেক্ষায়|বিজ্ঞপ্তি: আপনার জন্য :countটি অপেক্ষায়",
+    "Notifications": "বিজ্ঞপ্তি",
+    "Needs you": "আপনার কাজ",
+    "Nothing waiting for you.": "আপনার জন্য কিছু অপেক্ষায় নেই।"
 }
