@@ -2028,5 +2028,22 @@
     "Edit the lists": "তালিকা বদলান",
     ":name is used by :count plant. Choose another for it first, then remove this.|:name is used by :count plants. Choose another for them first, then remove this.": ":name :countটি গাছে আছে। আগে সেই গাছে অন্যটা বাছুন, তারপর এটা সরান।|:name :countটি গাছে আছে। আগে সেই গাছগুলোতে অন্যটা বাছুন, তারপর এটা সরান।",
     "Plant lists saved. The nursery page and the plant form use them now.": "গাছের তালিকা রাখা হল। নার্সারি পাতা আর গাছের ফর্ম এখন এগুলোই ব্যবহার করছে।",
-    "Plant lists updated": "গাছের তালিকা বদলানো হয়েছে"
+    "Plant lists updated": "গাছের তালিকা বদলানো হয়েছে",
+    "Four steps": "চারটি ধাপ",
+    "Step :n": "ধাপ :n",
+    "Tell us the date and the number of guests; we reply within a day.": "তারিখ আর অতিথির সংখ্যা জানান; এক দিনের মধ্যে উত্তর দেব।",
+    "Namaskar, I would like to book Maitree Serving.": "নমস্কার, আমি মৈত্রী পরিবেশন বুক করতে চাই।",
+    "From first rice to reunions": "অন্নপ্রাশন থেকে পুনর্মিলন",
+    "Annaprashan\nWedding\nReception\nUpanayan\nBirthday\nShraddha & niyombhongo\nOffice lunch\nReunion": "অন্নপ্রাশন\nবিয়ে\nবউভাত\nউপনয়ন\nজন্মদিন\nশ্রাদ্ধ ও নিয়মভঙ্গ\nঅফিসের খাওয়া\nপুনর্মিলন",
+    "How booking works, step 1: Title": "যেভাবে বুক করবেন, ধাপ ১: শিরোনাম",
+    "How booking works, step 1: Text": "যেভাবে বুক করবেন, ধাপ ১: লেখা",
+    "How booking works, step 2: Title": "যেভাবে বুক করবেন, ধাপ ২: শিরোনাম",
+    "How booking works, step 2: Text": "যেভাবে বুক করবেন, ধাপ ২: লেখা",
+    "How booking works, step 3: Title": "যেভাবে বুক করবেন, ধাপ ৩: শিরোনাম",
+    "How booking works, step 3: Text": "যেভাবে বুক করবেন, ধাপ ৩: লেখা",
+    "How booking works, step 4: Title": "যেভাবে বুক করবেন, ধাপ ৪: শিরোনাম",
+    "How booking works, step 4: Text": "যেভাবে বুক করবেন, ধাপ ৪: লেখা",
+    "How booking works: Line under the steps": "যেভাবে বুক করবেন: ধাপগুলোর নিচের লাইন",
+    "Occasions we serve at (one per line)": "যেসব অনুষ্ঠানে পরিবেশন করি (প্রতি লাইনে একটি)",
+    "Occasions: Note under the list": "অনুষ্ঠান: তালিকার নিচের নোট"
 }

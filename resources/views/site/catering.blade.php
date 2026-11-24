@@ -6,6 +6,33 @@
     // Sample photos for the package cards until the club adds its own
     $packagePhotos = ['catPlating', 'catBanana', 'catBuffet'];
     $club = $site->club();
+    // How booking works and the occasions: text from Website → Pages → Serving
+    $steps = collect(['message-circle', 'file-text', 'wallet', 'receipt'])->map(fn ($icon, $i) => [
+        $icon, $content->text('catering', 'step'.($i + 1).'_title'), $content->text('catering', 'step'.($i + 1).'_text'),
+    ])->filter(fn ($step) => trim($step[1]) !== '')->values();
+    // Occasions: one per line; the icon comes from the English line in the same place (a new one gets a general icon)
+    $lines = fn (string $text) => array_values(array_filter(array_map('trim', preg_split('/\R/u', $text) ?: [])));
+    $occasionNames = $lines($content->text('catering', 'occasions'));
+    $englishOccasions = app()->getLocale() === 'bn' ? $lines((string) (($content->page('catering')?->blocks ?? [])['occasions'] ?? '') ?: (string) config('pages.catering.fields.occasions.default')) : $occasionNames;
+    $occasionLook = function (string $name): array {
+        $n = mb_strtolower($name);
+        foreach ([
+            ['annaprash', 'baby', 'bg-marigold-wash text-turmeric'], ['rice', 'baby', 'bg-marigold-wash text-turmeric'],
+            ['wedding', 'heart', 'bg-sindoor-wash text-sindoor'], ['marriage', 'heart', 'bg-sindoor-wash text-sindoor'],
+            ['reception', 'party-popper', 'bg-turmeric-wash text-turmeric'], ['bou bhat', 'party-popper', 'bg-turmeric-wash text-turmeric'],
+            ['upanayan', 'flame', 'bg-sindoor-wash text-sindoor-deep'], ['puja', 'flame', 'bg-sindoor-wash text-sindoor-deep'],
+            ['birthday', 'cake', 'bg-marigold-wash text-turmeric'], ['anniversary', 'cake', 'bg-marigold-wash text-turmeric'],
+            ['shraddha', 'flower-2', 'bg-tulsi-wash text-tulsi'], ['niyom', 'flower-2', 'bg-tulsi-wash text-tulsi'],
+            ['office', 'briefcase', 'bg-paper-2 text-ink-2'], ['lunch', 'briefcase', 'bg-paper-2 text-ink-2'],
+            ['reunion', 'users', 'bg-tulsi-wash text-tulsi'], ['get-together', 'users', 'bg-tulsi-wash text-tulsi'],
+        ] as [$word, $icon, $tone]) {
+            if (str_contains($n, $word)) {
+                return [$icon, $tone];
+            }
+        }
+
+        return ['sparkles', 'bg-turmeric-wash text-turmeric'];
+    };
 @endphp
 <x-layouts.site seo="catering" :title="$content->text('catering', 'title')">
     <div class="book-catering"
@@ -69,27 +96,55 @@
             </div>
             <p class="mt-4 text-[15px] text-ink-3">{{ str_replace(':percent', digits($discount), $content->text('catering', 'note')) }}</p>
 
-            <div class="mt-16 grid lg:grid-cols-12 gap-10 items-start">
-                <div class="lg:col-span-5">
-                    <h2 class="font-display leading-tight text-[clamp(1.9rem,4vw,2.6rem)]">{{ __('How booking works') }}</h2>
-                    <p class="mt-3 text-[17px] text-ink-2">{{ __('One person looks after you, from the first call to the last batch.') }}</p>
-                </div>
-                <ol class="lg:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-6">
-                    @foreach ([[__('Send an enquiry'), __('Below or on WhatsApp: date, guests, package.')], [__('Get a quotation'), __('Within a day, as a stamped PDF.')], [__('Book with 20% advance'), __('Cash or UPI, with a receipt on the spot.')], [__('Settle after the event'), __('Final bill on the actual guest count.')]] as $i => [$title, $text])
-                        <li class="flex gap-4"><span class="font-display text-3xl text-turmeric w-8 shrink-0 num">{{ digits($i + 1) }}</span><div><p class="font-semibold">{{ $title }}</p><p class="text-[15px] text-ink-2">{{ $text }}</p></div></li>
+            {{-- How booking works: four numbered step cards, each with its icon --}}
+            <section class="mt-16" aria-labelledby="how-book">
+                <p class="eyebrow text-turmeric">{{ __('Four steps') }}</p>
+                <h2 id="how-book" class="mt-2 font-display leading-tight text-[clamp(1.9rem,4vw,2.6rem)]">{{ __('How booking works') }}</h2>
+                <p class="mt-2 text-[17px] text-ink-2 max-w-[52ch]">{{ __('One person looks after you, from the first call to the last batch.') }}</p>
+                <ol class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+                    @foreach ($steps as $i => [$icon, $title, $text])
+                        {{-- Phones: the icon beside the text; wider: the icon on top with the big number --}}
+                        <li class="relative flex gap-4 sm:block rounded-2xl bg-card border border-rule p-4 sm:p-6 shadow-[0_1px_2px_rgba(16,24,40,.04)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-18px_rgba(120,80,0,.45)] hover:border-turmeric/40">
+                            <div class="shrink-0 sm:flex sm:items-center sm:justify-between">
+                                <span class="w-12 h-12 rounded-2xl bg-turmeric-wash text-turmeric grid place-items-center"><x-icon :name="$icon" class="w-6 h-6" /></span>
+                                <span class="absolute right-4 top-3 sm:static font-display text-[2rem] sm:text-[2.6rem] leading-none text-turmeric/20 num" aria-hidden="true">{{ digits($i + 1) }}</span>
+                            </div>
+                            <div class="min-w-0 pr-6 sm:pr-0">
+                                <p class="sm:mt-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-turmeric">{{ __('Step :n', ['n' => digits($i + 1)]) }}</p>
+                                <h3 class="mt-1 font-semibold text-[17px] leading-snug">{{ $title }}</h3>
+                                <p class="mt-1.5 text-[15px] text-ink-2 leading-relaxed">{{ $text }}</p>
+                            </div>
+                        </li>
                     @endforeach
                 </ol>
-            </div>
+                <div class="mt-5 flex flex-wrap items-center gap-3 rounded-2xl bg-turmeric-wash/45 px-5 py-4">
+                    <p class="flex-1 min-w-[15rem] flex gap-3 text-[15px] text-ink-2"><x-icon name="clock" class="w-5 h-5 text-turmeric shrink-0 mt-0.5" /><span>{{ $content->text('catering', 'steps_note') }}</span></p>
+                    <a href="#quote" class="btn btn-sm bg-turmeric text-white hover:bg-[#7d5100]"><x-icon name="arrow-down" />{{ __('Ask for a quote') }}</a>
+                    <a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ rawurlencode(__('Namaskar, I would like to book Maitree Serving.')) }}" target="_blank" rel="noopener" class="btn btn-sm btn-line bg-white"><x-icon name="message-circle" />WhatsApp</a>
+                </div>
+            </section>
 
-            <div class="mt-16 rounded-2xl bg-paper-2 p-6 sm:p-8">
-                <h2 class="font-display text-[1.6rem]">{{ __('Occasions we serve at') }}</h2>
-                <ul class="mt-4 flex flex-wrap gap-2 text-[15px]">
-                    @foreach ([__('Annaprashan'), __('Wedding'), __('Reception'), __('Upanayan'), __('Birthday'), __('Shraddha & niyombhongo'), __('Office lunch'), __('Reunion')] as $occasion)
-                        <li class="chip h-9 px-4 bg-card border border-rule">{{ $occasion }}</li>
+            {{-- Occasions: a tile with an icon for each --}}
+            <section class="mt-16" aria-labelledby="occasions">
+                <p class="eyebrow text-turmeric">{{ __('From first rice to reunions') }}</p>
+                <h2 id="occasions" class="mt-2 font-display leading-tight text-[clamp(1.7rem,3.6vw,2.2rem)]">{{ __('Occasions we serve at') }}</h2>
+                @if ($occasionNames)
+                <ul class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                    @foreach ($occasionNames as $i => $name)
+                        @php
+                            [$icon, $tone] = $occasionLook($englishOccasions[$i] ?? $name);
+                        @endphp
+                        <li class="group min-w-0 flex items-center gap-3 rounded-2xl bg-card border border-rule p-3.5 sm:p-4 transition hover:border-turmeric/40 hover:shadow-[0_10px_24px_-18px_rgba(120,80,0,.5)]">
+                            <span class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl {{ $tone }} grid place-items-center shrink-0 transition group-hover:scale-105"><x-icon :name="$icon" class="w-5 h-5 sm:w-6 sm:h-6" /></span>
+                            <span class="min-w-0 font-semibold text-[15px] leading-snug [overflow-wrap:anywhere]">{{ $name }}</span>
+                        </li>
                     @endforeach
                 </ul>
-                <p class="mt-4 text-[15px] text-ink-2">{{ __('Vegetarian and shraddha meals are served with separate utensils and a separate team.') }}</p>
-            </div>
+                @endif
+                @if (trim($content->text('catering', 'food_note')) !== '')
+                <p class="mt-4 flex gap-3 items-start rounded-2xl bg-tulsi-wash/60 px-5 py-4 text-[15px] text-ink-2"><x-icon name="leaf" class="w-5 h-5 text-tulsi shrink-0 mt-0.5" /><span>{{ $content->text('catering', 'food_note') }}</span></p>
+                @endif
+            </section>
 
             {{-- What families say (published reviews, console → Reviews) --}}
             <x-reviews kind="catering" class="mt-16" />

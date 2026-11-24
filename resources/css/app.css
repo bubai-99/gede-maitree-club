@@ -691,3 +691,7 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 .plant-care { font-size: 16px; line-height: 1.65; }
 .plant-care h2 { font-size: 1.15rem; margin-top: 1.4em; font-family: inherit; font-weight: 700; color: var(--color-tulsi); }
 .plant-care > :first-child { margin-top: 0; }
+
+/* Bengali letters join into conjuncts; letter-spacing (the small spaced-out labels) pulls them
+   apart. Outside the layers so it wins over the tracking-* utilities; English keeps its spacing. */
+:lang(bn) :is(.eyebrow, [class*="tracking-"]) { letter-spacing: 0; }
