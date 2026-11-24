@@ -43,6 +43,10 @@
     <link rel="alternate" hreflang="bn" href="{{ $canonicalUrl }}?lang=bn">
     <link rel="alternate" hreflang="x-default" href="{{ $canonicalUrl }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    {{-- The member app can be installed from any website page (the browser's install icon, or "Get the app") --}}
+    <link rel="manifest" href="{{ asset('member.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/member-180.png') }}">
+    <meta name="apple-mobile-web-app-title" content="Maitree Club">
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:site_name" content="{{ $club['name'] }}">
     <meta property="og:title" content="{{ $pageTitle }}">
@@ -117,6 +121,7 @@
                         @if (Route::has('member.login'))
                             <a href="{{ route('member.login') }}" class="btn btn-line w-full"><x-icon name="log-in" />{{ __('Member login') }}</a>
                         @endif
+                        <button type="button" x-show="! $store.install.installed" @click="close(); $store.install.start()" class="btn btn-ghost w-full text-ink-2"><x-icon name="download" />{{ __('Get the app') }}</button>
                         <div class="flex items-center gap-4 pt-1.5 text-[14px] text-ink-2">
                             <a href="tel:{{ preg_replace('/\s+/', '', $club['phone']) }}" class="inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="phone" class="w-4 h-4" /><span class="num">{{ $club['phone'] }}</span></a>
                             <a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="ml-auto inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="message-circle" class="w-4 h-4" />WhatsApp</a>
@@ -199,6 +204,13 @@
                         <li><a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="social-btn social-whatsapp" aria-label="WhatsApp" title="WhatsApp"><x-social-icon network="whatsapp" /></a></li>
                     </ul>
                     <x-lang-switch dark long class="mt-6 w-max" />
+                    {{-- The member app on the phone (resources/js/install.js) --}}
+                    <div x-data x-show="! $store.install.installed" class="mt-6">
+                        <button type="button" @click="$store.install.start()" class="inline-flex items-center gap-2.5 h-11 pl-3 pr-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold ring-1 ring-white/15 transition">
+                            <span class="w-7 h-7 rounded-lg bg-sindoor grid place-items-center"><x-icon name="smartphone" class="w-4 h-4" /></span>{{ __('Get the app') }}
+                        </button>
+                        <p class="mt-2 text-[13px] text-white/55 max-w-[34ch]">{{ __('Dues, your member card and event passes on your phone. Free; no app store needed.') }}</p>
+                    </div>
                 </div>
                 <nav class="md:col-span-2" aria-label="{{ __('Footer: club') }}">
                     <h2 class="text-[13px] font-semibold uppercase tracking-[0.1em] text-white">{{ __('Club') }}</h2>
@@ -246,5 +258,33 @@
 
     <button type="button" class="to-top" x-data="{ shown: false }" @scroll.window.passive="shown = window.scrollY > 900" :class="{ 'is-shown': shown }"
         @click="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="{{ __('Back to top') }}" tabindex="-1"><x-icon name="arrow-up" /></button>
+    {{-- How to install the member app when the browser has no install prompt to show (iPhone, Firefox…) --}}
+    <div x-data x-show="$store.install.help" x-cloak class="fixed inset-0 z-[95] flex items-end sm:items-center justify-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="install-h"
+         @keydown.escape.window="$store.install.close()">
+        <div class="absolute inset-0 bg-black/50" x-show="$store.install.help" x-transition.opacity @click="$store.install.close()"></div>
+        <div class="relative w-full sm:max-w-[420px] bg-paper rounded-t-3xl sm:rounded-3xl shadow-2xl p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+             x-show="$store.install.help" x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="translate-y-6 opacity-0 sm:translate-y-0 sm:scale-95">
+            <button type="button" @click="$store.install.close()" class="absolute right-3 top-3 w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('icons/member-192.png') }}" alt="" class="w-14 h-14 rounded-2xl shadow-sm">
+                <div>
+                    <h2 id="install-h" class="font-display text-[1.35rem] leading-tight">{{ __('Get the app') }}</h2>
+                    <p class="text-[14px] text-ink-2">{{ __('Maitree Club on your home screen, like any other app.') }}</p>
+                </div>
+            </div>
+            <ol class="mt-5 space-y-3 text-[15px]" x-show="$store.install.ios">
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(1) }}</span><span>{{ __('Open this page in Safari.') }}</span></li>
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(2) }}</span><span>{{ __('Tap the Share button') }} <x-icon name="share" class="inline w-4 h-4 -mt-1 text-[#0a84ff]" /> {{ __('at the bottom of the screen.') }}</span></li>
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(3) }}</span><span>{{ __('Choose Add to Home Screen') }} <x-icon name="square-plus" class="inline w-4 h-4 -mt-1" />{{ __(', then Add.') }}</span></li>
+            </ol>
+            <ol class="mt-5 space-y-3 text-[15px]" x-show="! $store.install.ios">
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(1) }}</span><span>{{ __('Open the browser menu') }} <x-icon name="ellipsis-vertical" class="inline w-4 h-4 -mt-1" /></span></li>
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(2) }}</span><span>{{ __('Choose Install app or Add to Home screen.') }}</span></li>
+                <li class="flex gap-3 items-start"><span class="w-7 h-7 rounded-full bg-sindoor-wash text-sindoor grid place-items-center shrink-0 font-semibold num">{{ digits(3) }}</span><span>{{ __('On a computer, look for the install icon at the right of the address bar.') }}</span></li>
+            </ol>
+            <p class="mt-5 text-[13px] text-ink-3">{{ __('Members sign in with their mobile number or email. Pages you have opened still show without the internet.') }}</p>
+            <button type="button" @click="$store.install.close()" class="mt-5 btn btn-line w-full">{{ __('Got it') }}</button>
+        </div>
+    </div>
 </body>
 </html>

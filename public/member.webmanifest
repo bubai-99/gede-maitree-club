@@ -4,7 +4,7 @@
   "description": "Member app: dues, member cards, events and notices.",
   "id": "/app",
   "start_url": "/app",
-  "scope": "/",
+  "scope": "/app",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#d21f1b",
