@@ -2,7 +2,7 @@ import Alpine from 'alpinejs';
 import { drawIcons } from './icons';
 import { razorpayCheckout } from './pay';
 import { nursery } from './nursery';
-import { siteHeader } from './site-header';
+import { siteHeader, noticeBell } from './site-header';
 import { setupInstall } from './install';
 import { forgetThisDevice } from './forget';
 import { enhanceForms } from './forms';
@@ -13,6 +13,7 @@ window.Alpine = Alpine;
 Alpine.data('razorpayCheckout', razorpayCheckout);
 Alpine.data('nursery', nursery);
 Alpine.data('siteHeader', siteHeader);
+Alpine.data('noticeBell', noticeBell);
 setupInstall(Alpine);
 
 document.addEventListener('alpine:initialized', () => drawIcons());

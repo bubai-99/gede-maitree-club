@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Family;
+use App\Models\Notice;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -52,12 +53,24 @@ class InstallAppTest extends TestCase
 
     public function test_the_header_offers_member_login_or_the_members_account(): void
     {
-        $this->get('/')->assertOk()->assertSee('title="Member login"', false)->assertSee('Become a member');
+        $this->get('/')->assertOk()->assertSee('title="Login"', false)->assertSee('Become a member');
 
         $member = User::factory()->create(['family_id' => Family::factory()->create()->id]);
         $this->actingAs($member)->get('/')->assertOk()
             ->assertSee('title="My account"', false)
             ->assertSee('href="'.route('member.home').'"', false)
-            ->assertDontSee('title="Member login"', false);
+            ->assertDontSee('title="Login"', false);
+    }
+
+    public function test_the_header_bell_lists_the_latest_notices(): void
+    {
+        Notice::factory()->create(['title' => 'Water supply off on Sunday', 'published_at' => now()->subDay()]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+        $panel = (string) strstr((string) strstr($html, 'id="notice-panel"'), 'All notices', true);
+        $this->assertStringContainsString('Water supply off on Sunday', $panel);
+        $this->assertStringContainsString('New', $panel);
+        // The desktop menu leaves Notices out (it is the bell); the phone menu keeps it
+        $this->assertStringNotContainsString('>Notices</span></a>', (string) strstr((string) strstr($html, 'aria-label="Main"'), '</nav>', true));
     }
 }

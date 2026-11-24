@@ -17,12 +17,17 @@
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');
     $mainMenu = $site->mainMenu();
+    // Desktop header: Notices as a bell with the latest notices (the phone menu keeps the Notices link)
+    $noticesItem = collect($mainMenu)->firstWhere('route', 'notices.index');
+    $latestNotices = $noticesItem
+        ? \App\Models\Notice::query()->forPublic()->reorder()->orderByDesc('published_at')->limit(5)->get(['slug', 'title', 'title_bn', 'tag', 'tag_bn', 'pinned', 'published_at'])
+        : collect();
     // Signed in: a link to the member app (or the console for committee who aren't members); otherwise Member login
     $account = auth()->user();
     $accountLink = match (true) {
         $account?->isMember() === true && Route::has('member.home') => ['url' => route('member.home'), 'label' => __('My account'), 'icon' => 'user'],
         $account?->isCommitteeMember() === true && Route::has('admin.dashboard') => ['url' => route('admin.dashboard'), 'label' => __('Committee console'), 'icon' => 'layout-dashboard'],
-        Route::has('member.login') => ['url' => route('member.login'), 'label' => __('Member login'), 'icon' => 'log-in'],
+        Route::has('member.login') => ['url' => route('member.login'), 'label' => __('Login'), 'icon' => 'log-in'],
         default => null,
     };
     // Phone menu: an icon for each page
@@ -84,10 +89,45 @@
             </a>
             <nav class="hidden lg:flex items-center gap-0.5 ml-auto text-[15px] font-medium" aria-label="{{ __('Main') }}">
                 @foreach ($mainMenu as $item)
+                    @continue($noticesItem && $item['route'] === 'notices.index')
                     <a href="{{ $item['url'] }}" class="nav-link {{ $item['class'] ?? '' }}" @if ($item['active']) aria-current="page" @endif><span>{{ $item['label'] }}</span></a>
                 @endforeach
             </nav>
             <div class="flex items-center gap-1 ml-auto lg:ml-1 shrink-0">
+                @if ($noticesItem)
+                    {{-- Notices: a bell; a dot until the newest notice has been seen on this browser (resources/js/site-header.js) --}}
+                    <div class="hidden lg:block relative" x-data="noticeBell({{ (int) optional($latestNotices->first()?->published_at)->timestamp }})" @keydown.escape.window="shut()" @click.outside="shut()">
+                        <button type="button" @click="toggle()" class="relative w-9 h-9 rounded-full grid place-items-center hover:bg-paper-2 aria-expanded:bg-paper-2" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="notice-panel" aria-label="{{ $noticesItem['label'] }}" title="{{ $noticesItem['label'] }}" @if ($noticesItem['active']) aria-current="page" @endif>
+                            <x-icon name="bell" class="w-[19px] h-[19px] {{ $noticesItem['active'] ? 'text-sindoor' : '' }}" />
+                            <span x-show="unseen" x-cloak class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-sindoor ring-2 ring-paper"></span>
+                            <span x-show="unseen" x-cloak class="sr-only">{{ __('New notices') }}</span>
+                        </button>
+                        <div id="notice-panel" x-show="open" x-cloak x-transition.origin.top.right
+                             class="absolute right-0 top-[calc(100%+12px)] w-[360px] rounded-2xl bg-card border border-rule shadow-[0_18px_40px_-16px_rgba(16,24,40,.35)] overflow-hidden z-50">
+                            <div class="flex items-center gap-2 px-4 py-3 border-b border-rule">
+                                <x-icon name="bell" class="w-4 h-4 text-sindoor" />
+                                <p class="font-semibold">{{ __('Latest notices') }}</p>
+                            </div>
+                            @forelse ($latestNotices as $notice)
+                                <a href="{{ route('notices.show', $notice) }}" class="flex gap-3 px-4 py-3 hover:bg-paper-2 border-b border-rule last:border-b-0">
+                                    <span class="mt-1.5 w-2 h-2 rounded-full shrink-0 {{ $notice->published_at?->gt(now()->subDays(7)) ? 'bg-sindoor' : 'bg-rule' }}" aria-hidden="true"></span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="flex items-center gap-1.5 text-[12px] text-ink-3">
+                                            @if ($notice->pinned)<x-icon name="pin" class="w-3 h-3 text-turmeric" />@endif
+                                            @if ($notice->tag)<span class="font-semibold uppercase tracking-[0.08em] text-sindoor truncate">{{ $notice->tr('tag') }}</span><span aria-hidden="true">·</span>@endif
+                                            <span class="num whitespace-nowrap">{{ local_date($notice->published_at, 'j M') }}</span>
+                                            @if ($notice->published_at?->gt(now()->subDays(7)))<span class="ml-auto chip h-5 px-1.5 text-[11px] bg-sindoor-wash text-sindoor">{{ __('New') }}</span>@endif
+                                        </span>
+                                        <span class="mt-0.5 block text-[14.5px] leading-snug text-ink line-clamp-2">{{ $notice->tr('title') }}</span>
+                                    </span>
+                                </a>
+                            @empty
+                                <p class="px-4 py-6 text-center text-[14px] text-ink-3">{{ __('No notices right now.') }}</p>
+                            @endforelse
+                            <a href="{{ $noticesItem['url'] }}" class="flex items-center justify-center gap-1.5 px-4 py-3 text-[14px] font-semibold text-sindoor bg-paper-2/60 hover:bg-paper-2">{{ __('All notices') }}<x-icon name="arrow-right" class="w-4 h-4" /></a>
+                        </div>
+                    </div>
+                @endif
                 <x-lang-switch class="max-[379px]:[&>a]:px-1.5" />
                 @if ($accountLink)
                     {{-- Desktop: an icon between 1024 and 1280px (the menu is full), icon and words from 1280px; phones: in the menu --}}

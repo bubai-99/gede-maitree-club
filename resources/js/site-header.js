@@ -33,3 +33,26 @@ export function siteHeader() {
         },
     };
 }
+
+// Desktop header: the Notices bell. A dot until the newest notice has been opened here (remembered on this
+// browser); opening the list clears it.
+const SEEN = 'gmc-notices-seen';
+
+export function noticeBell(newest) {
+    return {
+        open: false,
+        unseen: false,
+        init() {
+            const seen = Number(localStorage.getItem(SEEN) || 0);
+            this.unseen = newest > 0 && newest > seen;
+        },
+        toggle() {
+            this.open = !this.open;
+            if (this.open && newest > 0) {
+                localStorage.setItem(SEEN, String(newest));
+                this.unseen = false;
+            }
+        },
+        shut() { this.open = false },
+    };
+}
