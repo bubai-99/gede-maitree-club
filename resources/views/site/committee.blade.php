@@ -20,7 +20,7 @@
                 @endforeach
             </ul>
         </div>
-        <div class="mt-8 rounded-2xl bg-ink text-white p-5 sm:p-6 flex flex-wrap items-center gap-4">
+        <div class="mt-10 sm:mt-12 rounded-2xl bg-ink text-white p-5 sm:p-6 flex flex-wrap items-center gap-4">
             <x-icon name="hand-heart" class="w-6 h-6 text-marigold shrink-0" />
             <p class="flex-1 min-w-[16rem] text-[16px]"><span class="font-semibold">{{ __('Everyone here is a volunteer.') }}</span> <span class="text-white/80">{{ __('See where the next events need a hand.') }}</span></p>
             <a href="{{ route('volunteer') }}" class="btn bg-white text-ink hover:bg-paper-2"><span>{{ __('Get involved') }}</span><x-icon name="arrow-right" /></a>
@@ -55,7 +55,7 @@
         <p class="mt-4 text-[12.5px] text-ink-3">{{ __('Sample photos, to be replaced with the club’s own.') }} <x-photo-credit key="pujaCrowd" />, <x-photo-credit key="race" />, <x-photo-credit key="blood" />.</p>
     </div>
 
-    <div class="mx-auto max-w-[1160px] px-5 pt-16 pb-20">
+    <div class="mx-auto max-w-[1160px] px-5 pt-16 pb-6 sm:pb-8">
         <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
             <h2 class="font-display text-[clamp(1.9rem,4vw,2.6rem)] leading-tight">{{ __('Committee 2025–27') }}</h2>
             <p class="text-[15px] text-ink-2">{{ __('Find us in the club room, any evening 6–9 pm') }}</p>
@@ -102,7 +102,7 @@
     </div>
 
     {{-- The club together: text first, then the photo edge to edge --}}
-    <figure class="mt-24 group-band" x-data x-init="new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { $el.classList.add('is-in'); o.disconnect() } }, { rootMargin: '0px 0px -20% 0px' }).observe($el)">
+    <figure class="mt-4 group-band" x-data x-init="new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { $el.classList.add('is-in'); o.disconnect() } }, { rootMargin: '0px 0px -20% 0px' }).observe($el)">
         <div class="mx-auto max-w-[1160px] px-5 pb-10 sm:pb-12 grid lg:grid-cols-12 gap-6 lg:gap-10 items-end group-band-text">
             <div class="lg:col-span-7">
                 <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-sindoor">{{ $content->text('committee', 'group_kicker') }}</p>
@@ -118,6 +118,5 @@
             </div>
         </div>
         <div class="group-band-media"><x-photo key="group" :width="1800" sizes="100vw" /></div>
-        <p class="mx-auto max-w-[1160px] px-5 py-3 text-[12px] text-ink-3">{{ __('Photo') }}: <x-photo-credit key="group" /> · {{ __('Sample photo, to be replaced with the club’s own.') }}</p>
     </figure>
 </x-layouts.site>
