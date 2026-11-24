@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Family;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -9,6 +12,8 @@ use Tests\TestCase;
  */
 class InstallAppTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_website_pages_offer_the_member_app(): void
     {
         $this->get('/')->assertOk()
@@ -43,5 +48,16 @@ class InstallAppTest extends TestCase
                 $this->assertSame($icon['sizes'], implode('x', array_slice((array) getimagesize($file), 0, 2)));
             }
         }
+    }
+
+    public function test_the_header_offers_member_login_or_the_members_account(): void
+    {
+        $this->get('/')->assertOk()->assertSee('title="Member login"', false)->assertSee('Become a member');
+
+        $member = User::factory()->create(['family_id' => Family::factory()->create()->id]);
+        $this->actingAs($member)->get('/')->assertOk()
+            ->assertSee('title="My account"', false)
+            ->assertSee('href="'.route('member.home').'"', false)
+            ->assertDontSee('title="Member login"', false);
     }
 }

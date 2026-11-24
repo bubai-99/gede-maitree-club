@@ -17,6 +17,14 @@
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');
     $mainMenu = $site->mainMenu();
+    // Signed in: a link to the member app (or the console for committee who aren't members); otherwise Member login
+    $account = auth()->user();
+    $accountLink = match (true) {
+        $account?->isMember() === true && Route::has('member.home') => ['url' => route('member.home'), 'label' => __('My account'), 'icon' => 'user'],
+        $account?->isCommitteeMember() === true && Route::has('admin.dashboard') => ['url' => route('admin.dashboard'), 'label' => __('Committee console'), 'icon' => 'layout-dashboard'],
+        Route::has('member.login') => ['url' => route('member.login'), 'label' => __('Member login'), 'icon' => 'log-in'],
+        default => null,
+    };
     // Phone menu: an icon for each page
     $menuIcons = ['events.index' => 'calendar-days', 'notices.index' => 'megaphone', 'news.index' => 'newspaper', 'catering' => 'utensils', 'nursery' => 'sprout', 'gallery' => 'camera', 'committee' => 'users', 'contact' => 'phone', 'panjika' => 'calendar', 'chanda' => 'hand-coins'];
     $moreMenu = array_values(array_filter([
@@ -81,7 +89,11 @@
             </nav>
             <div class="flex items-center gap-1 ml-auto lg:ml-1 shrink-0">
                 <x-lang-switch class="max-[379px]:[&>a]:px-1.5" />
-                @if (Route::has('join'))
+                @if ($accountLink)
+                    {{-- Desktop: an icon between 1024 and 1280px (the menu is full), icon and words from 1280px; phones: in the menu --}}
+                    <a href="{{ $accountLink['url'] }}" class="hidden lg:inline-flex btn btn-ghost btn-sm px-2 xl:px-3 whitespace-nowrap" title="{{ $accountLink['label'] }}"><x-icon :name="$accountLink['icon']" /><span class="sr-only xl:not-sr-only">{{ $accountLink['label'] }}</span></a>
+                @endif
+                @if (Route::has('join') && ! $account?->isMember())
                     <a href="{{ route('join') }}" class="hidden sm:inline-flex btn btn-primary btn-sm ml-1 whitespace-nowrap"><span class="xl:hidden">{{ __('Join') }}</span><span class="hidden xl:inline">{{ __('Become a member') }}</span></a>
                 @endif
                 <button type="button" class="lg:hidden btn btn-ghost btn-sm px-2" x-ref="menuButton" @click="open ? close() : show()" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ __('Menu') }}"><x-icon name="menu" /></button>
@@ -115,11 +127,11 @@
                         @endif
                     </div>
                     <div class="shrink-0 border-t border-rule px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-2.5">
-                        @if (Route::has('join'))
+                        @if (Route::has('join') && ! $account?->isMember())
                             <a href="{{ route('join') }}" class="btn btn-primary w-full"><x-icon name="user-plus" />{{ __('Become a member') }}</a>
                         @endif
-                        @if (Route::has('member.login'))
-                            <a href="{{ route('member.login') }}" class="btn btn-line w-full"><x-icon name="log-in" />{{ __('Member login') }}</a>
+                        @if ($accountLink)
+                            <a href="{{ $accountLink['url'] }}" class="btn {{ $account ? 'btn-primary' : 'btn-line' }} w-full"><x-icon :name="$accountLink['icon']" />{{ $accountLink['label'] }}</a>
                         @endif
                         <button type="button" x-show="! $store.install.installed" @click="close(); $store.install.start()" class="btn btn-ghost w-full text-ink-2"><x-icon name="download" />{{ __('Get the app') }}</button>
                         <div class="flex items-center gap-4 pt-1.5 text-[14px] text-ink-2">
