@@ -216,8 +216,11 @@ class SiteSettings
                 'streetAddress' => $club['street'],
                 'addressLocality' => $club['locality'],
                 'postalCode' => $club['postal_code'],
+                'addressRegion' => $club['region'] ?? null,
                 'addressCountry' => 'IN',
             ],
+            'geo' => isset($club['geo']['lat'], $club['geo']['lon']) ? ['@type' => 'GeoCoordinates', 'latitude' => $club['geo']['lat'], 'longitude' => $club['geo']['lon']] : null,
+            'hasMap' => $club['maps_url'] ?? null,
             'openingHours' => $club['opening_hours'],
         ];
     }

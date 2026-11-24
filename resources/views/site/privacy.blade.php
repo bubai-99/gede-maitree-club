@@ -8,6 +8,7 @@
                 [__('What we keep'), __('What the membership form asks: your name, photo, date of birth, blood group, mobile, email (optional), address and only the last 4 digits of your Aadhaar; the names and relation of family joining on your form; and your subscription and receipt history. We never store a full Aadhaar number.')],
                 [__('Why'), __('To run membership, receipts, event passes and the AGM accounts. Blood group is only looked at when a blood donation camp needs it.')],
                 [__('Who can see it'), __('Only committee members who need it for their job: the treasurer sees accounts, volunteers see only gate passes. Nothing is sold or shared outside the club.')],
+                [__('Maps'), __('The map on the Contact page is shown by Google Maps; Google may set its own cookies when it loads. The rest of the site does not use cookies from other companies.')],
                 [__('Your choices'), __('See and change your details in the app’s Settings. If you leave the club, ask and we delete your details, keeping only the accounts the law requires.')],
             ] as [$heading, $text])
                 <section><h2 class="font-display text-[1.6rem] text-ink">{{ $heading }}</h2><p class="mt-2">{{ $text }}</p></section>

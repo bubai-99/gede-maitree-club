@@ -16,16 +16,20 @@
     <div class="mx-auto max-w-[1160px] px-5 pt-12 pb-20">
         <div class="grid lg:grid-cols-12 gap-10 items-start">
             <div class="lg:col-span-7">
+                {{-- The club on Google Maps (config/club.php geo and maps_url) --}}
                 <figure class="frame bg-paper-2">
-                    @include('site.partials.para-map')
-                    <figcaption class="border-t border-rule bg-paper px-4 py-3 flex flex-wrap items-center gap-3 text-[14px]">
-                        <span class="text-ink-2 flex-1 min-w-[200px]">{{ __('Sketch, not to scale. A real map goes here once the club confirms the location.') }}</span>
-                        <a href="https://www.google.com/maps/search/?api=1&amp;query={{ urlencode($club['address']) }}" target="_blank" rel="noopener" class="btn btn-ink btn-sm"><x-icon name="navigation" /><span>{{ __('Open in Maps') }}</span></a>
+                    <iframe src="https://www.google.com/maps?q={{ $club['geo']['lat'] }},{{ $club['geo']['lon'] }}&amp;z=16&amp;hl={{ app()->getLocale() }}&amp;output=embed"
+                        class="block w-full h-[300px] sm:h-[380px] border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+                        title="{{ __('Map: :name, :address', ['name' => local_text($club['name'], $club['name_bn']), 'address' => local_text($club['address'], $club['address_bn'])]) }}"></iframe>
+                    <figcaption class="border-t border-rule bg-paper px-4 py-3 flex flex-wrap items-center gap-2.5 text-[14px]">
+                        <span class="text-ink-2 flex-1 min-w-[200px]">{{ __('Inside the BSF Ground, on Banpur–Gede Road.') }}</span>
+                        <a href="{{ $club['maps_url'] }}" target="_blank" rel="noopener" class="btn btn-line btn-sm"><x-icon name="map-pin" /><span>{{ __('Open in Maps') }}</span></a>
+                        <a href="https://www.google.com/maps/dir/?api=1&amp;destination={{ $club['geo']['lat'] }},{{ $club['geo']['lon'] }}" target="_blank" rel="noopener" class="btn btn-ink btn-sm"><x-icon name="navigation" /><span>{{ __('Directions') }}</span></a>
                     </figcaption>
                 </figure>
                 <dl class="mt-8 grid sm:grid-cols-2 gap-6 text-[15px]">
                     <div class="flex gap-3"><x-icon name="map-pin" class="w-5 h-5 text-sindoor shrink-0 mt-0.5" /><div><dt class="font-semibold">{{ __('Address') }}</dt><dd class="text-ink-2 mt-0.5">{{ local_text($club['address'], $club['address_bn']) }}</dd></div></div>
-                    <div class="flex gap-3"><x-icon name="navigation" class="w-5 h-5 text-sindoor shrink-0 mt-0.5" /><div><dt class="font-semibold">{{ __('Landmark') }}</dt><dd class="text-ink-2 mt-0.5">{{ __('North corner of the para ground, two minutes from the School Road crossing.') }}</dd></div></div>
+                    <div class="flex gap-3"><x-icon name="navigation" class="w-5 h-5 text-sindoor shrink-0 mt-0.5" /><div><dt class="font-semibold">{{ __('Landmark') }}</dt><dd class="text-ink-2 mt-0.5">{{ __('Inside the BSF Ground, on Banpur–Gede Road, near Gede Uttarpara Primary School.') }}</dd></div></div>
                     <div class="flex gap-3"><x-icon name="clock" class="w-5 h-5 text-sindoor shrink-0 mt-0.5" /><div><dt class="font-semibold">{{ __('Club room open') }}</dt><dd class="text-ink-2 mt-0.5">{{ local_text($club['hours'], $club['hours_bn']) }}</dd></div></div>
                     <div class="flex gap-3"><x-icon name="sprout" class="w-5 h-5 text-tulsi shrink-0 mt-0.5" /><div><dt class="font-semibold">{{ __('Nursery open') }}</dt><dd class="text-ink-2 mt-0.5">{{ __('7 – 10 am and 5 – 8 pm') }}</dd></div></div>
                 </dl>

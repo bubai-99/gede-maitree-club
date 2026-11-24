@@ -84,8 +84,8 @@ return [
         'label_bn' => 'যোগাযোগ',
         'title' => 'Contact & directions',
         'title_bn' => 'যোগাযোগ ও পথ',
-        'description' => 'Find the Gede Maitree Club room on Netaji Subhas Road, Gede Uttarpara, Kolkata 700084. Open 6 to 9 pm every day.',
-        'description_bn' => 'নেতাজি সুভাষ রোড, গেদে উত্তরপাড়া, কলকাতা ৭০০০৮৪-এ গেদে মৈত্রী ক্লাব ঘর। রোজ সন্ধ্যা ৬টা থেকে ৯টা খোলা।',
+        'description' => 'Find the Gede Maitree Club room at the BSF Ground on Banpur–Gede Road, Gede Uttarpara, Gede, Nadia 741503. Open 6 to 9 pm every day.',
+        'description_bn' => 'বনপুর–গেদে রোডে বিএসএফ মাঠে, গেদে উত্তরপাড়া, গেদে, নদিয়া ৭৪১৫০৩-এ গেদে মৈত্রী ক্লাব ঘর। রোজ সন্ধ্যা ৬টা থেকে ৯টা খোলা।',
     ],
     'join' => [
         'label' => 'Become a member',

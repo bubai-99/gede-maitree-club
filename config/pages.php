@@ -90,7 +90,7 @@ return [
             'value3_text' => ['label' => 'Value 3: Text', 'default' => 'The committee is elected by members, and big decisions go to the AGM.'],
             'value4_title' => ['label' => 'Value 4: Title', 'default' => 'There when it’s needed'],
             'value4_text' => ['label' => 'Value 4: Text', 'default' => 'From blood camps to a hand on a hard day, the club shows up for the para.', 'long' => true],
-            'clubroom_text' => ['label' => 'Clubroom: Text', 'default' => '14/2 Netaji Subhas Road, Gede Uttarpara, Kolkata 700 084 · daily 6–9 pm'],
+            'clubroom_text' => ['label' => 'Clubroom: Text', 'default' => 'BSF Ground, Banpur–Gede Road, Gede Uttarpara, Gede, Nadia 741503 · daily 6–9 pm'],
             'group_kicker' => ['label' => 'Group: Small heading', 'default' => 'The people behind it'],
             'group_title' => ['label' => 'Group: Title', 'default' => 'Friends first, then a club'],
             'group_caption' => ['label' => 'Group: Caption', 'default' => 'Every puja, match and camp is run by people like these: neighbours who turn up, year after year.', 'long' => true],

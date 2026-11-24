@@ -3,7 +3,7 @@
 // Puja times and wedding dates are NOT computed here: the committee enters them from the club's panjika.
 import * as A from 'astronomy-engine';
 
-export const PLACE = { en: 'Gede, Nadia', bn: 'গেদে, নদিয়া', lat: 23.0567, lon: 88.7967 };
+export const PLACE = { en: 'Gede, Nadia', bn: 'গেদে, নদিয়া', lat: 23.4943573, lon: 88.788812 }; // the club (config/club.php geo)
 const OBS = new A.Observer(PLACE.lat, PLACE.lon, 15);
 const IST = 330 * 60000; // +5:30
 const DAY = 86400000;

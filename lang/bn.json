@@ -2093,5 +2093,11 @@
     ":count festival added. Check it against the club’s panjika, then mark it checked.|:count festivals added. Check them against the club’s panjika, then mark each checked.": ":countটি উৎসব যোগ হল। ক্লাবের পঞ্জিকার সঙ্গে মিলিয়ে “মিলিয়ে দেখা হয়েছে” চাপুন।|:countটি উৎসব যোগ হল। ক্লাবের পঞ্জিকার সঙ্গে মিলিয়ে প্রতিটিতে “মিলিয়ে দেখা হয়েছে” চাপুন।",
     "Marked as checked.": "মিলিয়ে দেখা হয়েছে বলে রাখা হল।",
     "Festivals filled from the calculation": "হিসাব থেকে উৎসব যোগ",
-    "Panjika day checked": "পঞ্জিকার দিন মিলিয়ে দেখা"
+    "Panjika day checked": "পঞ্জিকার দিন মিলিয়ে দেখা",
+    "BSF Ground, Banpur–Gede Road, Gede Uttarpara, Gede, Nadia 741503 · daily 6–9 pm": "বিএসএফ মাঠ, বনপুর–গেদে রোড, গেদে উত্তরপাড়া, গেদে, নদিয়া ৭৪১৫০৩ · রোজ সন্ধ্যা ৬টা–৯টা",
+    "Map: :name, :address": "মানচিত্র: :name, :address",
+    "Inside the BSF Ground, on Banpur–Gede Road.": "বিএসএফ মাঠের ভেতরে, বনপুর–গেদে রোডে।",
+    "Inside the BSF Ground, on Banpur–Gede Road, near Gede Uttarpara Primary School.": "বিএসএফ মাঠের ভেতরে, বনপুর–গেদে রোডে, গেদে উত্তরপাড়া প্রাথমিক বিদ্যালয়ের কাছে।",
+    "Maps": "মানচিত্র",
+    "The map on the Contact page is shown by Google Maps; Google may set its own cookies when it loads. The rest of the site does not use cookies from other companies.": "যোগাযোগ পাতার মানচিত্রটি Google Maps দেখায়; এটি খুললে Google নিজের কুকি রাখতে পারে। সাইটের বাকি অংশে অন্য কোনো কোম্পানির কুকি নেই।"
 }
