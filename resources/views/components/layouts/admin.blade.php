@@ -70,7 +70,7 @@
                     <form method="GET" action="{{ route('admin.receipts.index') }}" role="search" class="relative flex-1 max-w-md" x-data @keydown.slash.window="if (! ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) { $event.preventDefault(); $refs.q.focus() }">
                         <x-icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
                         <label for="gsearch" class="sr-only">{{ __('Find a family or receipt') }}</label>
-                        <input id="gsearch" x-ref="q" name="q" type="search" value="{{ request()->routeIs('admin.receipts.index') ? request('q') : '' }}" maxlength="60" class="field h-10 pl-9 bg-card" autocomplete="off" placeholder="{{ __('Find a family or receipt') }}" />
+                        <input id="gsearch" x-ref="q" name="q" type="search" value="{{ request()->routeIs('admin.receipts.index') ? request('q') : '' }}" maxlength="60" class="field h-10 pl-9 bg-card text-ellipsis" autocomplete="off" placeholder="{{ __('Find a family or receipt') }}" />
                         <kbd class="hidden sm:block absolute right-2.5 top-1/2 -translate-y-1/2 text-[12px] text-ink-3 border border-rule rounded px-1.5">/</kbd>
                     </form>
                 @else
@@ -90,7 +90,7 @@
 
             <x-flash />
 
-            <main id="main" tabindex="-1" class="flex-1 px-4 sm:px-6 pt-6 pb-24 lg:py-8 focus:outline-none">
+            <main id="main" tabindex="-1" class="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-24 lg:py-8 focus:outline-none">
                 {{ $slot }}
             </main>
         </div>

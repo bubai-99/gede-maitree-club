@@ -8,7 +8,7 @@
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Reports') }}</h1>
             <p class="mt-1 text-ink-2">{{ __('Statements for the committee, the auditor and the AGM.') }}</p>
         </div>
-        <form method="GET" class="flex items-center gap-2" data-no-print>
+        <form method="GET" class="flex flex-wrap items-center gap-2" data-no-print>
             <label for="rep-year" class="text-sm text-ink-2">{{ __('Financial year') }}</label>
             <select id="rep-year" name="year" class="field h-9 text-sm w-auto" onchange="this.form.submit()">
                 @foreach ($years as $option)

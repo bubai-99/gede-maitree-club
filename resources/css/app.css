@@ -54,6 +54,15 @@
 }
 
 @layer base {
+  /* A fieldset or file picker never makes a page wider than the screen (browsers give a
+     fieldset its content's width, and a file picker a fixed one) */
+  fieldset { min-width: 0; }
+  input[type="file"] { max-width: 100%; }
+  /* Screen-reader-only text keeps its place in the layout; in a table header cell that place can be
+     past the edge of the table's own scroll box, which made the whole page scroll sideways */
+  .sr-only { left: 0; }
+  /* A long word in a heading (an email address, a link) wraps instead of running off a phone screen */
+  h1, h2, h3 { overflow-wrap: break-word; }
   html {
     -webkit-text-size-adjust: 100%;
     scrollbar-color: var(--color-paper-3) transparent;

@@ -83,7 +83,7 @@
 
             <x-flash />
 
-            <main id="main" tabindex="-1" class="flex-1 w-full mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-10 pt-5 lg:pt-8 pb-28 lg:pb-14 focus:outline-none">
+            <main id="main" tabindex="-1" class="flex-1 min-w-0 w-full mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-10 pt-5 lg:pt-8 pb-28 lg:pb-14 focus:outline-none">
                 {{ $slot }}
             </main>
         </div>
