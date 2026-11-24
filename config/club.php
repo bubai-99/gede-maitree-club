@@ -24,7 +24,7 @@ return [
     'geo' => ['lat' => 23.4943573, 'lon' => 88.788812],
     'maps_url' => 'https://maps.google.com/?cid=460540838906069322',
     'phone' => '+91 90935 24255',
-    'whatsapp' => '919830012345',
+    'whatsapp' => '919093524255', // the club's phone has WhatsApp
     'email' => 'hello@example.org',
     'upi' => 'maitriclub@sbi',
     'hours' => 'Open daily, 6 – 9 pm',

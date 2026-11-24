@@ -21,6 +21,7 @@ class ClubLocationTest extends TestCase
             ->assertSee('https://maps.google.com/?cid=460540838906069322', false)
             ->assertSee('BSF Ground, Banpur–Gede Road, Gede Uttarpara, Gede, Nadia, West Bengal 741503')
             ->assertSee('href="tel:+919093524255"', false)
+            ->assertSee('https://wa.me/919093524255', false)
             ->assertDontSee('Netaji Subhas Road');
     }
 
