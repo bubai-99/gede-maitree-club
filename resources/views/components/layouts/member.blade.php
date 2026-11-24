@@ -55,21 +55,22 @@
 
         <div class="min-w-0 flex flex-col">
             <header data-no-print class="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm border-b border-rule">
-                <div class="mx-auto max-w-[1120px] h-14 lg:h-[72px] px-4 sm:px-6 lg:px-10 flex items-center gap-2">
-                    <a href="{{ $homeUrl }}" class="flex items-center gap-2.5 min-w-0 lg:hidden" aria-label="{{ __('Home') }}">
-                        <x-seal :size="32" :estd="false" aria-hidden="true" />
-                        <span class="font-display text-[1.1rem] text-sindoor truncate">{{ __('Gede Maitree Club') }}</span>
+                <div class="mx-auto max-w-[1120px] h-14 lg:h-[72px] px-3 min-[400px]:px-4 sm:px-6 lg:px-10 flex items-center gap-2">
+                    <a href="{{ $homeUrl }}" class="flex items-center gap-2 min-[400px]:gap-2.5 min-w-0 lg:hidden" aria-label="{{ __('Home') }}">
+                        <x-seal :size="32" :estd="false" class="shrink-0 max-[359px]:size-7" aria-hidden="true" />
+                        <span class="font-display text-[0.9rem] min-[360px]:text-[1rem] min-[400px]:text-[1.1rem] text-sindoor truncate">{{ __('Gede Maitree Club') }}</span>
                     </a>
                     @if ($user)
                         <p class="hidden lg:block text-[15px] text-ink-2 min-w-0 truncate">{{ __('Namaskar') }}, <span class="font-semibold text-ink">{{ \Illuminate\Support\Str::before($user->name, ' ') }}</span> · {{ local_date(now(), 'D j M Y') }}</p>
                     @endif
                     <div class="ml-auto flex items-center gap-1">
-                        <x-lang-switch variant="app" class="mr-1 lg:mr-2" />
+                        <x-lang-switch variant="app" class="mr-1 lg:mr-2 max-[359px]:[&>a]:px-2" />
                         @if ($user)
-                            <a href="{{ route('member.profile') }}" class="w-11 h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Family & profile') }}"><span class="w-8 h-8 text-sm rounded-full bg-ink text-white grid place-items-center font-display" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span></a>
+                            <a href="{{ route('member.profile') }}" class="w-10 h-10 min-[360px]:w-11 min-[360px]:h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Family & profile') }}"><span class="w-8 h-8 text-sm rounded-full bg-ink text-white grid place-items-center font-display" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span></a>
                         @endif
                         @if ($user && Route::has('member.logout'))
-                            <form method="POST" action="{{ route('member.logout') }}">
+                            {{-- Narrow phones: sign out from Profile (the avatar), so the club name fits --}}
+                            <form method="POST" action="{{ route('member.logout') }}" class="hidden min-[400px]:block">
                                 @csrf
                                 <button type="submit" class="w-11 h-11 rounded-full grid place-items-center hover:bg-paper-2" aria-label="{{ __('Sign out') }}" title="{{ __('Sign out') }}"><x-icon name="log-out" class="w-5 h-5" /></button>
                             </form>
