@@ -294,8 +294,9 @@
 .nav-catering[aria-current="page"] { color: var(--color-turmeric); }
 .nav-nursery[aria-current="page"] { color: var(--color-tulsi); }
 /* Phone menu (sidebar) links: an icon, the page name; the current page in sindoor with a bar */
-.side-link { position: relative; display: flex; align-items: center; gap: .85rem; min-height: 3rem; padding: 0 .75rem; border-radius: 10px; font-size: 16.5px; color: var(--color-ink); transition: background-color .15s; }
+.side-link { position: relative; display: flex; align-items: center; gap: .85rem; min-height: 2.75rem; padding: 0 .75rem; border-radius: 10px; font-size: 16.5px; color: var(--color-ink); transition: background-color .15s; }
 .side-link svg { color: var(--color-ink-3); flex-shrink: 0; }
+@media (min-height: 760px) { .side-link { min-height: 3rem; } } /* taller phones: a little more room per link */
 .side-link:hover { background: var(--color-paper-2); }
 .side-link[aria-current="page"] { background: color-mix(in srgb, var(--color-sindoor) 8%, transparent); color: var(--color-sindoor); font-weight: 600; }
 .side-link[aria-current="page"] svg { color: currentColor; }

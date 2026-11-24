@@ -17,7 +17,7 @@
     $canonicalUrl = $canonical ?? url()->current();
     $ogImage = $image ?? asset('og-image.png');
     $mainMenu = $site->mainMenu();
-    // Desktop header: Notices as a bell with the latest notices (the phone menu keeps the Notices link)
+    // Tablet and desktop header: Notices as a bell with the latest notices (the phone menu keeps the Notices link)
     $noticesItem = collect($mainMenu)->firstWhere('route', 'notices.index');
     $latestNotices = $noticesItem
         ? \App\Models\Notice::query()->forPublic()->reorder()->orderByDesc('published_at')->limit(5)->get(['slug', 'title', 'title_bn', 'tag', 'tag_bn', 'pinned', 'published_at'])
@@ -93,10 +93,10 @@
                     <a href="{{ $item['url'] }}" class="nav-link {{ $item['class'] ?? '' }}" @if ($item['active']) aria-current="page" @endif><span>{{ $item['label'] }}</span></a>
                 @endforeach
             </nav>
-            <div class="flex items-center gap-1 ml-auto lg:ml-1 shrink-0">
+            <div class="flex items-center gap-1 sm:gap-1.5 ml-auto lg:ml-2 shrink-0">
                 @if ($noticesItem)
                     {{-- Notices: a bell; a dot until the newest notice has been seen on this browser (resources/js/site-header.js) --}}
-                    <div class="hidden lg:block relative" x-data="noticeBell({{ (int) optional($latestNotices->first()?->published_at)->timestamp }})" @keydown.escape.window="shut()" @click.outside="shut()">
+                    <div class="hidden sm:block relative" x-data="noticeBell({{ (int) optional($latestNotices->first()?->published_at)->timestamp }})" @keydown.escape.window="shut()" @click.outside="shut()">
                         <button type="button" @click="toggle()" class="relative w-9 h-9 rounded-full grid place-items-center hover:bg-paper-2 aria-expanded:bg-paper-2" :aria-expanded="open.toString()" aria-expanded="false" aria-controls="notice-panel" aria-label="{{ $noticesItem['label'] }}" title="{{ $noticesItem['label'] }}" @if ($noticesItem['active']) aria-current="page" @endif>
                             <x-icon name="bell" class="w-[19px] h-[19px] {{ $noticesItem['active'] ? 'text-sindoor' : '' }}" />
                             <span x-show="unseen" x-cloak class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-sindoor ring-2 ring-paper"></span>
@@ -130,8 +130,8 @@
                 @endif
                 <x-lang-switch class="max-[379px]:[&>a]:px-1.5" />
                 @if ($accountLink)
-                    {{-- Desktop: an icon between 1024 and 1280px (the menu is full), icon and words from 1280px; phones: in the menu --}}
-                    <a href="{{ $accountLink['url'] }}" class="hidden lg:inline-flex btn btn-ghost btn-sm px-2 xl:px-3 whitespace-nowrap" title="{{ $accountLink['label'] }}"><x-icon :name="$accountLink['icon']" /><span class="sr-only xl:not-sr-only">{{ $accountLink['label'] }}</span></a>
+                    {{-- Tablet and desktop: an icon up to 1280px (the menu is full), icon and words from 1280px; phones: in the menu --}}
+                    <a href="{{ $accountLink['url'] }}" class="hidden sm:inline-flex btn btn-ghost btn-sm px-2 xl:px-3 whitespace-nowrap" title="{{ $accountLink['label'] }}"><x-icon :name="$accountLink['icon']" /><span class="sr-only xl:not-sr-only">{{ $accountLink['label'] }}</span></a>
                 @endif
                 @if (Route::has('join') && ! $account?->isMember())
                     <a href="{{ route('join') }}" class="hidden sm:inline-flex btn btn-primary btn-sm ml-1 whitespace-nowrap"><span class="xl:hidden">{{ __('Join') }}</span><span class="hidden xl:inline">{{ __('Become a member') }}</span></a>
@@ -146,19 +146,19 @@
                 <nav id="mobile-nav" x-ref="drawer" aria-label="{{ __('Main mobile') }}"
                      class="absolute inset-y-0 right-0 w-[min(86vw,360px)] bg-paper shadow-2xl flex flex-col"
                      x-show="open" x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="translate-x-full" x-transition:leave="transition duration-200 ease-in" x-transition:leave-end="translate-x-full">
-                    <div class="flex items-center gap-2.5 h-16 px-4 border-b border-rule shrink-0">
-                        <x-seal :size="34" :estd="false" class="shrink-0" aria-hidden="true" />
+                    <div class="flex items-center gap-2.5 h-14 px-4 border-b border-rule shrink-0">
+                        <x-seal :size="32" :estd="false" class="shrink-0" aria-hidden="true" />
                         <span class="font-display text-[1.15rem] text-sindoor truncate">{{ $clubName }}</span>
                         <button type="button" x-ref="drawerClose" @click="close()" class="ml-auto w-10 h-10 rounded-full hover:bg-paper-2 grid place-items-center shrink-0" aria-label="{{ __('Close') }}"><x-icon name="x" class="w-5 h-5" /></button>
                     </div>
-                    <div class="flex-1 overflow-y-auto overscroll-contain px-3 py-3">
+                    <div class="flex-1 overflow-y-auto overscroll-contain px-3 py-2">
                         <ul class="space-y-0.5">
                             @foreach ($mainMenu as $item)
                                 <li><a href="{{ $item['url'] }}" class="side-link" @if ($item['active']) aria-current="page" @endif><x-icon :name="$menuIcons[$item['route']] ?? 'chevron-right'" class="w-[18px] h-[18px]" /><span>{{ $item['label'] }}</span></a></li>
                             @endforeach
                         </ul>
                         @if ($moreMenu)
-                            <p class="mt-4 px-3 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-3">{{ __('More') }}</p>
+                            <p class="mt-3 px-3 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-ink-3">{{ __('More') }}</p>
                             <ul class="mt-1 space-y-0.5">
                                 @foreach ($moreMenu as $item)
                                     <li><a href="{{ $item['url'] }}" class="side-link" @if ($item['active']) aria-current="page" @endif><x-icon :name="$menuIcons[$item['route']]" class="w-[18px] h-[18px]" /><span>{{ $item['label'] }}</span></a></li>
@@ -166,17 +166,23 @@
                             </ul>
                         @endif
                     </div>
-                    <div class="shrink-0 border-t border-rule px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-2.5">
-                        @if (Route::has('join') && ! $account?->isMember())
-                            <a href="{{ route('join') }}" class="btn btn-primary w-full"><x-icon name="user-plus" />{{ __('Become a member') }}</a>
-                        @endif
-                        @if ($accountLink)
-                            <a href="{{ $accountLink['url'] }}" class="btn {{ $account ? 'btn-primary' : 'btn-line' }} w-full"><x-icon :name="$accountLink['icon']" />{{ $accountLink['label'] }}</a>
-                        @endif
-                        <button type="button" x-show="! $store.install.installed" @click="close(); $store.install.start()" class="btn btn-ghost w-full text-ink-2"><x-icon name="download" />{{ __('Get the app') }}</button>
-                        <div class="flex items-center gap-4 pt-1.5 text-[14px] text-ink-2">
-                            <a href="tel:{{ preg_replace('/\s+/', '', $club['phone']) }}" class="inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="phone" class="w-4 h-4" /><span class="num">{{ $club['phone'] }}</span></a>
-                            <a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="ml-auto inline-flex items-center gap-1.5 hover:text-ink"><x-icon name="message-circle" class="w-4 h-4" />WhatsApp</a>
+                    {{-- Bottom: the account buttons side by side, then the app and the contacts in one small row --}}
+                    <div class="shrink-0 border-t border-rule px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))]">
+                        @php
+                            $showJoin = Route::has('join') && ! $account?->isMember();
+                        @endphp
+                        <div class="grid {{ $showJoin && $accountLink ? 'grid-cols-2' : 'grid-cols-1' }} gap-2">
+                            @if ($showJoin)
+                                <a href="{{ route('join') }}" class="btn btn-primary h-11 px-3 text-[14.5px] whitespace-nowrap"><x-icon name="user-plus" />{{ __('Join') }}</a>
+                            @endif
+                            @if ($accountLink)
+                                <a href="{{ $accountLink['url'] }}" class="btn {{ $account ? 'btn-primary' : 'btn-line' }} h-11 px-3 text-[14.5px] whitespace-nowrap"><x-icon :name="$accountLink['icon']" />{{ $accountLink['label'] }}</a>
+                            @endif
+                        </div>
+                        <div class="mt-2 flex items-center gap-1 text-[14px] text-ink-2">
+                            <button type="button" x-show="! $store.install.installed" @click="close(); $store.install.start()" class="inline-flex items-center gap-1.5 h-10 px-2 -ml-2 rounded-lg font-semibold hover:bg-paper-2 hover:text-ink"><x-icon name="download" class="w-4 h-4" />{{ __('Get the app') }}</button>
+                            <a href="tel:{{ preg_replace('/\s+/', '', $club['phone']) }}" class="ml-auto w-10 h-10 rounded-full grid place-items-center hover:bg-paper-2 hover:text-ink" aria-label="{{ __('Call :number', ['number' => $club['phone']]) }}" title="{{ $club['phone'] }}"><x-icon name="phone" class="w-[18px] h-[18px]" /></a>
+                            <a href="https://wa.me/{{ $club['whatsapp'] }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full grid place-items-center hover:bg-paper-2 hover:text-ink" aria-label="WhatsApp" title="WhatsApp"><x-icon name="message-circle" class="w-[18px] h-[18px]" /></a>
                         </div>
                     </div>
                 </nav>

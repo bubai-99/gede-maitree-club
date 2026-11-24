@@ -2068,5 +2068,6 @@
     "Notifications: :count waiting for you|Notifications: :count waiting for you": "বিজ্ঞপ্তি: আপনার জন্য :countটি অপেক্ষায়|বিজ্ঞপ্তি: আপনার জন্য :countটি অপেক্ষায়",
     "Notifications": "বিজ্ঞপ্তি",
     "Needs you": "আপনার কাজ",
-    "Nothing waiting for you.": "আপনার জন্য কিছু অপেক্ষায় নেই।"
+    "Nothing waiting for you.": "আপনার জন্য কিছু অপেক্ষায় নেই।",
+    "Call :number": "কল করুন :number"
 }
