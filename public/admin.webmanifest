@@ -1,7 +1,7 @@
 {
   "name": "Gede Maitree Club Admin",
   "short_name": "GMC Admin",
-  "description": "Committee console.",
+  "description": "Committee console: collect dues and chanda, keep the books, scan passes at the gate, and edit the website.",
   "id": "/admin",
   "start_url": "/admin",
   "scope": "/admin",

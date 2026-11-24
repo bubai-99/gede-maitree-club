@@ -22,9 +22,17 @@ class InstallAppTest extends TestCase
         $member = json_decode((string) file_get_contents(public_path('member.webmanifest')), true);
         $admin = json_decode((string) file_get_contents(public_path('admin.webmanifest')), true);
 
-        $this->assertSame(['/app', '/app'], [$member['start_url'], $member['scope']]);
+        // The member app covers the website too ("Open in app" on any page once installed); the console keeps to /admin
+        $this->assertSame(['/app', '/'], [$member['start_url'], $member['scope']]);
         $this->assertSame(['/admin', '/admin'], [$admin['start_url'], $admin['scope']]);
         $this->assertSame('standalone', $member['display']);
+        // Screenshots for the install dialog: wide (computers) and narrow (phones), all present at their stated size
+        $this->assertEqualsCanonicalizing(['narrow', 'wide'], array_values(array_unique(array_column($member['screenshots'], 'form_factor'))));
+        foreach ($member['screenshots'] as $shot) {
+            $file = public_path(ltrim($shot['src'], '/'));
+            $this->assertFileExists($file);
+            $this->assertSame($shot['sizes'], implode('x', array_slice((array) getimagesize($file), 0, 2)));
+        }
         // A standard and a maskable (Android crops it to its own shape) icon at 192 and 512, all present
         foreach ([$member, $admin] as $manifest) {
             $this->assertEqualsCanonicalizing(['any 192x192', 'any 512x512', 'maskable 192x192', 'maskable 512x512'],

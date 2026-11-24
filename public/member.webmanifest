@@ -1,10 +1,10 @@
 {
   "name": "Gede Maitree Club",
   "short_name": "Maitree Club",
-  "description": "Member app: dues, member cards, events and notices.",
+  "description": "Gede Maitree Club in your pocket: pay dues, show your member card and event passes at the gate, read notices, and follow pujas, sports and club news, even on a weak network.",
   "id": "/app",
   "start_url": "/app",
-  "scope": "/app",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#d21f1b",
@@ -33,6 +33,47 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "lifestyle",
+    "social"
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/wide-website.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "The club website: pujas, events and club news"
+    },
+    {
+      "src": "/screenshots/wide-home.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Your dues, today's panjika and quick links"
+    },
+    {
+      "src": "/screenshots/phone-home.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Your dues, today's panjika and quick links"
+    },
+    {
+      "src": "/screenshots/phone-dues.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Every month paid or due, and pay by UPI"
+    },
+    {
+      "src": "/screenshots/phone-events.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Events and your passes for the gate"
     }
   ]
 }
