@@ -62,12 +62,12 @@
     <header class="site-header sticky top-0 z-40 bg-paper border-b border-rule" x-data="siteHeader"
         x-init="scrolled = window.scrollY > 4" @scroll.window.passive="scrolled = window.scrollY > 4" :class="{ 'is-scrolled': scrolled }"
         @keydown.escape.window="close()">
-        <div class="mx-auto max-w-[1160px] px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 min-w-0 shrink-0" aria-label="{{ __('Gede Maitree Club home') }}">
-                <x-seal :size="40" :estd="false" class="shrink-0" aria-hidden="true" />
+        <div class="mx-auto max-w-[1160px] px-3 min-[380px]:px-4 sm:px-5 h-16 flex items-center gap-1.5 min-[380px]:gap-2 sm:gap-3">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 min-[380px]:gap-2.5 min-w-0 shrink-0" aria-label="{{ __('Gede Maitree Club home') }}">
+                <x-seal :size="40" :estd="false" class="shrink-0 max-[379px]:size-[34px]" aria-hidden="true" />
                 <span class="leading-none min-w-0">
-                    <span class="block font-display text-[18px] sm:text-[22px] text-sindoor whitespace-nowrap">{{ $clubName }}</span>
-                    <span class="block text-[11px] sm:text-[11.5px] font-semibold tracking-[0.14em] text-ink-2 mt-0.5 uppercase truncate">{{ __('Gede Uttarpara · Est. 2014') }}</span>
+                    <span class="block font-display text-[16px] min-[380px]:text-[18px] sm:text-[22px] text-sindoor whitespace-nowrap">{{ $clubName }}</span>
+                    <span class="block text-[10px] min-[380px]:text-[11px] sm:text-[11.5px] font-semibold tracking-[0.1em] min-[380px]:tracking-[0.14em] text-ink-2 mt-0.5 uppercase truncate">{{ __('Gede Uttarpara · Est. 2014') }}</span>
                 </span>
             </a>
             <nav class="hidden lg:flex items-center gap-0.5 ml-auto text-[15px] font-medium" aria-label="{{ __('Main') }}">
@@ -76,7 +76,7 @@
                 @endforeach
             </nav>
             <div class="flex items-center gap-1 ml-auto lg:ml-1 shrink-0">
-                <x-lang-switch />
+                <x-lang-switch class="max-[379px]:[&>a]:px-1.5" />
                 @if (Route::has('join'))
                     <a href="{{ route('join') }}" class="hidden sm:inline-flex btn btn-primary btn-sm ml-1 whitespace-nowrap"><span class="xl:hidden">{{ __('Join') }}</span><span class="hidden xl:inline">{{ __('Become a member') }}</span></a>
                 @endif
