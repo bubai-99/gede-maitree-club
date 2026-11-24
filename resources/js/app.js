@@ -4,6 +4,7 @@ import { razorpayCheckout } from './pay';
 import { nursery } from './nursery';
 import { siteHeader, noticeBell } from './site-header';
 import { setupInstall } from './install';
+import { panjikaFill } from './panjika-fill';
 import { forgetThisDevice } from './forget';
 import { enhanceForms } from './forms';
 import { imageLoader } from './images';
@@ -14,6 +15,7 @@ Alpine.data('razorpayCheckout', razorpayCheckout);
 Alpine.data('nursery', nursery);
 Alpine.data('siteHeader', siteHeader);
 Alpine.data('noticeBell', noticeBell);
+Alpine.data('panjikaFill', panjikaFill);
 setupInstall(Alpine);
 
 document.addEventListener('alpine:initialized', () => drawIcons());

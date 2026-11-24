@@ -83,4 +83,44 @@ class PanjikaTest extends TestCase
         $this->actingAs($this->user(Role::Admin))->delete("/admin/panjika/{$day->id}")->assertSessionHas('status');
         $this->assertSame(0, PanjikaDay::query()->count());
     }
+
+    public function test_filling_the_festivals_saves_them_marked_calculated(): void
+    {
+        PanjikaDay::query()->create(['date' => now()->addDays(40)->toDateString(), 'kind' => PanjikaKind::Puja, 'name' => 'Saraswati Puja']);
+        $puja = $this->user(Role::PujaInCharge);
+
+        $this->actingAs($puja)->get('/admin/panjika')->assertOk()->assertSee('Fill a year’s festivals')->assertSee('Work out the dates');
+
+        $rows = [
+            ['date' => now()->addDays(40)->toDateString(), 'kind' => 'puja', 'name' => 'Saraswati Puja', 'name_bn' => 'সরস্বতী পূজা', 'tithi' => 4],
+            ['date' => now()->addDays(60)->toDateString(), 'kind' => 'puja', 'name' => 'Shivaratri', 'name_bn' => 'শিবরাত্রি', 'tithi' => 28],
+            ['date' => now()->addDays(80)->toDateString(), 'kind' => 'parbon', 'name' => 'Choitro Sankranti · Charak', 'name_bn' => '', 'tithi' => ''],
+        ];
+        $this->actingAs($puja)->post('/admin/panjika/fill', ['rows' => $rows])
+            ->assertRedirect(route('admin.panjika.index'))->assertSessionHas('status');
+
+        // The one already in the list is skipped; the new ones are marked calculated
+        $this->assertSame(1, PanjikaDay::query()->where('name', 'Saraswati Puja')->count());
+        $shivaratri = PanjikaDay::query()->where('name', 'Shivaratri')->firstOrFail();
+        $this->assertTrue($shivaratri->calculated);
+        $this->assertSame(28, $shivaratri->tithi);
+        $this->assertNull(PanjikaDay::query()->where('name', 'Choitro Sankranti · Charak')->value('tithi'));
+
+        $this->actingAs($puja)->get('/admin/panjika')->assertSee('Calculated')->assertSee('Mark checked');
+        $this->actingAs($puja)->put("/admin/panjika/{$shivaratri->id}/checked")->assertSessionHas('status');
+        $this->assertFalse($shivaratri->fresh()->calculated);
+    }
+
+    public function test_filling_refuses_past_dates_weddings_and_people_who_cannot_edit(): void
+    {
+        $row = ['date' => now()->addDays(10)->toDateString(), 'kind' => 'puja', 'name' => 'Kali Puja'];
+
+        $this->actingAs($this->user(Role::WebsiteEditor))->post('/admin/panjika/fill', ['rows' => [[...$row, 'date' => now()->subDay()->toDateString()]]])
+            ->assertSessionHasErrors('rows.0.date');
+        $this->actingAs($this->user(Role::WebsiteEditor))->post('/admin/panjika/fill', ['rows' => [[...$row, 'kind' => 'wedding']]])
+            ->assertSessionHasErrors('rows.0.kind');
+        $this->actingAs($this->user(Role::Treasurer))->post('/admin/panjika/fill', ['rows' => [$row]])->assertForbidden();
+
+        $this->assertSame(0, PanjikaDay::query()->count());
+    }
 }

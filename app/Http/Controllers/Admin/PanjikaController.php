@@ -34,6 +34,9 @@ class PanjikaController extends Controller
             'source' => $data->source(),
             'events' => Event::query()->where('starts_at', '>=', now()->subMonth())->orderBy('starts_at')->get(['id', 'title', 'title_bn', 'starts_at']),
             'canEdit' => $request->user()?->can('panjika.manage') ?? false,
+            // "Fill a year's festivals": this Bengali year and the next (1 Boishakh is 14 or 15 April)
+            'bengaliYear' => now()->year - (now()->format('m-d') >= '04-15' ? 593 : 594),
+            'entered' => PanjikaDay::query()->get(['date', 'name'])->map(fn (PanjikaDay $d): string => $d->date->toDateString().'|'.$d->name)->values(),
         ]);
     }
 
@@ -69,6 +72,62 @@ class PanjikaController extends Controller
             ->log("Panjika day added: {$day->name}, {$day->date->toDateString()}");
 
         return redirect()->route('admin.panjika.index')->with('status', 'Added. It shows on the website’s Panjika page.');
+    }
+
+    /**
+     * Save the festivals picked from "Fill a year's festivals" (worked out in the browser, resources/js/panjika/
+     * festivals.js), marked calculated until checked. A day already in the list (same date and name) is skipped.
+     */
+    public function fill(Request $request): RedirectResponse
+    {
+        Gate::authorize('panjika.manage');
+
+        $data = $request->validate([
+            'rows' => ['required', 'array', 'min:1', 'max:40'],
+            'rows.*.date' => ['required', 'date', 'after_or_equal:today', 'before:+3 years'],
+            'rows.*.kind' => ['required', Rule::in([PanjikaKind::Puja->value, PanjikaKind::Parbon->value])],
+            'rows.*.name' => ['required', 'string', 'max:120'],
+            'rows.*.name_bn' => ['nullable', 'string', 'max:120'],
+            'rows.*.tithi' => ['nullable', 'integer', 'between:0,29'],
+        ]);
+
+        $added = 0;
+        foreach ($data['rows'] as $row) {
+            $exists = PanjikaDay::query()->whereDate('date', $row['date'])->where('name', $row['name'])->exists();
+            if ($exists) {
+                continue;
+            }
+            PanjikaDay::query()->create([
+                'date' => $row['date'],
+                'kind' => $row['kind'],
+                'name' => $row['name'],
+                'name_bn' => $row['name_bn'] ?? null,
+                'tithi' => $row['tithi'] ?? null,
+                'calculated' => true,
+                'created_by' => $request->user()?->getKey(),
+            ]);
+            $added++;
+        }
+
+        activity('panjika')->causedBy($request->user())->withProperties(['added' => $added])->event('created')
+            ->log('Festivals filled from the calculation');
+
+        return redirect()->route('admin.panjika.index')->with('status', trans_choice(':count festival added. Check it against the club’s panjika, then mark it checked.|:count festivals added. Check them against the club’s panjika, then mark each checked.', $added, ['count' => digits($added)]));
+    }
+
+    /**
+     * A calculated day has been checked against the club's panjika.
+     */
+    public function checked(Request $request, PanjikaDay $day): RedirectResponse
+    {
+        Gate::authorize('panjika.manage');
+
+        $day->update(['calculated' => false]);
+
+        activity('panjika')->causedBy($request->user())->withProperties(['date' => $day->date->toDateString(), 'name' => $day->name])->event('updated')
+            ->log('Panjika day checked');
+
+        return back()->with('status', 'Marked as checked.');
     }
 
     public function destroy(Request $request, PanjikaDay $day): RedirectResponse

@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property ?int $event_id
  * @property ?int $created_by
  */
-#[Fillable(['date', 'kind', 'name', 'name_bn', 'tithi', 'lagna', 'lagna_bn', 'event_id', 'created_by'])]
+#[Fillable(['date', 'kind', 'name', 'name_bn', 'tithi', 'lagna', 'lagna_bn', 'event_id', 'calculated', 'created_by'])]
 class PanjikaDay extends Model
 {
     use Bilingual;
@@ -37,6 +37,7 @@ class PanjikaDay extends Model
     {
         return [
             'date' => 'date',
+            'calculated' => 'boolean',
             'kind' => PanjikaKind::class,
             'tithi' => 'integer',
         ];

@@ -253,6 +253,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'committee'])->group
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
         Route::put('/source', 'source')->name('source');
+        Route::post('/fill', 'fill')->name('fill');
+        Route::put('/{day}/checked', 'checked')->whereNumber('day')->name('checked');
         Route::delete('/{day}', 'destroy')->whereNumber('day')->name('destroy');
     });
 
