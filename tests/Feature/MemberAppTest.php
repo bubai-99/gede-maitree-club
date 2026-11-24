@@ -106,7 +106,7 @@ class MemberAppTest extends TestCase
             $this->assertSame('standalone', $manifest['display']);
 
             foreach ($manifest['icons'] as $icon) {
-                $this->assertFileExists(public_path(ltrim($icon['src'], '/')));
+                $this->assertFileExists(public_path(ltrim((string) strtok($icon['src'], '?'), '/'))); // without the ?v= cache mark
             }
         }
 
