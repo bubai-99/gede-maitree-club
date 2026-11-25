@@ -181,7 +181,7 @@
                         <section class="mt-8" aria-label="{{ __('Videos') }}">
                             <div class="flex items-center gap-2 mb-4"><x-icon name="clapperboard" class="w-5 h-5 text-sindoor" /><h2 class="text-[1.25rem] font-bold">{{ __('Videos') }}</h2>
                                 <a href="{{ $link(['type' => 'video']) }}" class="ml-auto text-[14px] font-semibold text-sindoor hover:underline">{{ __('See all') }}</a></div>
-                            <div class="carousel"><div class="swiper" data-carousel data-gap="16"><div class="swiper-wrapper pb-1">
+                            <div class="carousel"><div class="swiper" data-carousel data-cards data-gap="16"><div class="swiper-wrapper pb-1">
                                 @foreach ($videoCards as $card)
                                     <div class="swiper-slide shrink-0 !w-[78%] sm:!w-[46%] lg:!w-[31%] xl:!w-[23.5%]">@include('site.partials.gallery-video', $card)</div>
                                 @endforeach
