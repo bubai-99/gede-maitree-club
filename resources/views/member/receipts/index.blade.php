@@ -1,4 +1,6 @@
 <x-layouts.member :title="__('Receipts')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="member-receipts" data-instant class="instant-region">
     <h1 class="font-display text-[2rem] leading-tight">{{ __('Receipts') }}</h1>
     <p class="text-ink-2">{{ __('Every subscription receipt in one place.') }}</p>
 
@@ -40,4 +42,5 @@
         @endforeach
         <div class="mt-6">{{ $payments->links() }}</div>
     @endif
+    </div>
 </x-layouts.member>

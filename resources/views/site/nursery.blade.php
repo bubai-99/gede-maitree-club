@@ -74,7 +74,7 @@
                      :class="stuck && 'shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]'" :style="'top: ' + headerH + 'px'" style="top: 64px">
                     <div class="mx-auto max-w-[1160px] px-5">
                         <div class="flex items-center gap-2 sm:gap-3">
-                            <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
+                            <div data-scroll-fade class="flex gap-2 overflow-x-auto no-scrollbar py-0.5 -ml-5 pl-5 sm:ml-0 sm:pl-0 flex-1 min-w-0" role="group" aria-label="{{ __('Plant types') }}">
                                 <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
                                 @foreach (app(\App\Support\PlantLists::class)->options('category') as $option => $optionName)
                                     @php

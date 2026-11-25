@@ -42,7 +42,7 @@
                 <h2 id="photos-h" class="font-display text-[1.8rem]">{{ __('Photos') }}</h2>
                 <ul class="mt-5 grid grid-cols-2 md:grid-cols-3 gap-3">
                     @foreach ($images as $image)
-                        <li><a href="{{ $image->getUrl() }}" target="_blank" rel="noopener" class="block aspect-[4/3] rounded-xl overflow-hidden bg-paper-3 group"><img src="{{ $image->getUrl() }}" alt="{{ __('Photo :n of :count', ['n' => digits($loop->iteration), 'count' => digits($images->count())]) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"></a></li>
+                        <li><a href="{{ $image->getUrl() }}" target="_blank" rel="noopener" data-lightbox="post-photos" data-caption="{{ $post->tr('title') }} · {{ __('Photo :n of :count', ['n' => digits($loop->iteration), 'count' => digits($images->count())]) }}" class="block aspect-[4/3] rounded-xl overflow-hidden bg-paper-3 group"><img src="{{ $image->getUrl() }}" alt="{{ __('Photo :n of :count', ['n' => digits($loop->iteration), 'count' => digits($images->count())]) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"></a></li>
                     @endforeach
                 </ul>
             </section>

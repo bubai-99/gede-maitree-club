@@ -1,11 +1,13 @@
 <x-layouts.site seo="notices" :title="app(\App\Support\PageContent::class)->text('notices', 'title')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="notices-page" data-instant class="instant-region">
     <x-page-banner page="notices">
         <div class="mt-7"><a href="https://wa.me/{{ $site->club()['whatsapp'] }}?text={{ rawurlencode(__('Please add me to the club news')) }}" target="_blank" rel="noopener" class="btn btn-glass h-12 px-5"><x-icon name="message-circle" /><span>{{ __('Get notices on WhatsApp') }}</span></a></div>
     </x-page-banner>
 
     <div class="mx-auto max-w-[1160px] px-5 pt-10 pb-20">
         @if ($tags->isNotEmpty())
-            <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter notices') }}">
+            <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter notices') }}" data-instant-top>
                 <a href="{{ route('notices.index') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($tag === '') aria-current="page" @endif>{{ __('All') }} <span class="opacity-60 num">{{ digits($total) }}</span></a>
                 @foreach ($tags as $option)
                     <a href="{{ route('notices.index', ['tag' => $option['tag']]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($tag === $option['tag']) aria-current="page" @endif>{{ $option['label'] }} <span class="opacity-60 num">{{ digits($option['count']) }}</span></a>
@@ -38,5 +40,6 @@
         </ol>
         <div class="mt-8">{{ $notices->links() }}</div>
         <p class="mt-8 text-[15px] text-ink-2"><span>{{ __('Older notices, meeting minutes and polls are in the member app.') }}</span> <a href="{{ route('member.login') }}" class="font-semibold text-sindoor hover:underline">{{ __('Member login') }}</a></p>
+    </div>
     </div>
 </x-layouts.site>

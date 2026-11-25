@@ -368,5 +368,6 @@
             <button type="button" @click="$store.install.close()" class="mt-5 btn btn-line w-full">{{ __('Got it') }}</button>
         </div>
     </div>
+    <script type="application/json" id="lightbox-words">{!! json_encode(['title' => __('Photo'), 'close' => __('Close'), 'previous' => __('Previous photo'), 'next' => __('Next photo')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
 </body>
 </html>

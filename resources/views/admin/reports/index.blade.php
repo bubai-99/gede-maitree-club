@@ -3,6 +3,8 @@
     $sum = fn (string $key) => (int) $collections->sum($key);
 @endphp
 <x-layouts.admin :title="__('Reports')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="admin-reports" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Reports') }}</h1>
@@ -10,7 +12,7 @@
         </div>
         <form method="GET" class="flex flex-wrap items-center gap-2" data-no-print>
             <label for="rep-year" class="text-sm text-ink-2">{{ __('Financial year') }}</label>
-            <select id="rep-year" name="year" class="field h-9 text-sm w-auto" onchange="this.form.submit()">
+            <select id="rep-year" name="year" class="field h-9 text-sm w-auto" onchange="this.form.requestSubmit()">
                 @foreach ($years as $option)
                     <option value="{{ $option }}" @selected($year === $option)>{{ $fyLabel($option) }}</option>
                 @endforeach
@@ -84,4 +86,5 @@
             @endforeach
         </div>
     </section>
+    </div>
 </x-layouts.admin>

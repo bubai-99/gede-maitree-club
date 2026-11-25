@@ -3,6 +3,8 @@
     $gaps = $series['missing'];
 @endphp
 <x-layouts.admin :title="__('Receipts register')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="admin-receipts" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Receipts register') }}</h1>
@@ -70,4 +72,5 @@
         </table>
     </div>
     <div class="mt-6">{{ $receipts->links() }}</div>
+    </div>
 </x-layouts.admin>

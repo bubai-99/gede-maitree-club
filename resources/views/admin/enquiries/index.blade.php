@@ -1,4 +1,6 @@
 <x-layouts.admin :title="__('Enquiries')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="admin-enquiries" data-instant class="instant-region">
     <h1 class="font-display text-[2rem] leading-tight">{{ __('Enquiries') }}</h1>
     <p class="mt-1 text-ink-2">{{ __('Everything sent from the website forms.') }}</p>
 
@@ -42,4 +44,5 @@
         </table>
     </div>
     <div class="mt-6">{{ $enquiries->links() }}</div>
+    </div>
 </x-layouts.admin>

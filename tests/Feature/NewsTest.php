@@ -69,7 +69,9 @@ class NewsTest extends TestCase
             ->assertSee('https://www.facebook.com/plugins/video.php', false)
             ->assertSee('https://player.vimeo.com/video/76979871', false)
             ->assertSee('<strong>Bhog</strong>', false)
-            ->assertSee('Bijoya');
+            ->assertSee('Bijoya')
+            // The photos open full screen (resources/js/lightbox.js); without scripts, the photo itself
+            ->assertSee('data-lightbox="post-photos"', false);
         $this->assertStringNotContainsString('<p>https://youtu.be', $page->getContent());
 
         // The console opens, unpublishes and deletes an existing story

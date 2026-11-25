@@ -1,9 +1,11 @@
 <x-layouts.site seo="news" :title="app(\App\Support\PageContent::class)->text('news', 'title')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="news-page" data-instant class="instant-region">
     <x-page-banner page="news" />
 
     <div class="mx-auto max-w-[1160px] px-5 pt-10 pb-20">
         @if ($categories->isNotEmpty())
-            <nav class="flex flex-wrap gap-2" aria-label="{{ __('News categories') }}">
+            <nav class="flex flex-wrap gap-2" aria-label="{{ __('News categories') }}" data-instant-top>
                 <a href="{{ route('news.index') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if (! $category) aria-current="page" @endif>{{ __('All') }} <span class="opacity-60 num">{{ digits($total) }}</span></a>
                 @foreach ($categories as $option)
                     <a href="{{ route('news.index', ['category' => $option->slug]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($category?->id === $option->id) aria-current="page" @endif>{{ $option->tr('name') }} <span class="opacity-60 num">{{ digits($option->posts_count) }}</span></a>
@@ -53,5 +55,6 @@
 
             <div class="mt-12">{{ $posts->links() }}</div>
         @endif
+    </div>
     </div>
 </x-layouts.site>

@@ -1,9 +1,11 @@
 <x-layouts.member :title="__('Notices')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="member-notices" data-instant class="instant-region">
     <h1 class="font-display text-[1.7rem] lg:text-[2.3rem] leading-tight">{{ __('Notice board') }}</h1>
     <p class="text-[15px] text-ink-2 mt-1">{{ __('From the committee. Important notices also come on WhatsApp.') }}</p>
 
     @if ($tags->isNotEmpty())
-        <nav class="mt-5 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap" aria-label="{{ __('Filter notices') }}">
+        <nav data-scroll-fade class="mt-5 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap" aria-label="{{ __('Filter notices') }}">
             <a href="{{ route('member.notices.index') }}" @if ($tag === '') aria-current="page" @endif class="chip h-9 px-4 text-[14.5px] whitespace-nowrap border border-rule bg-card aria-[current=page]:bg-ink aria-[current=page]:text-paper aria-[current=page]:border-ink">{{ __('All') }}</a>
             @foreach ($tags as $option)
                 <a href="{{ route('member.notices.index', ['tag' => $option['tag']]) }}" @if ($tag === $option['tag']) aria-current="page" @endif class="chip h-9 px-4 text-[14.5px] whitespace-nowrap border border-rule bg-card aria-[current=page]:bg-ink aria-[current=page]:text-paper aria-[current=page]:border-ink">{{ $option['label'] }}</a>
@@ -35,4 +37,5 @@
         @endforelse
     </ul>
     <div class="mt-6">{{ $notices->links() }}</div>
+    </div>
 </x-layouts.member>

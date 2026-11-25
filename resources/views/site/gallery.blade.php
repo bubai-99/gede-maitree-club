@@ -20,6 +20,8 @@
     $whatsappText = rawurlencode(__('I have photos or videos for the club gallery'));
 @endphp
 <x-layouts.site seo="gallery" :title="$content->text('gallery', 'title')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="gallery-page" data-instant class="instant-region">
     @unless ($open)
         <x-page-banner page="gallery">
             <div class="mt-7"><a href="https://wa.me/{{ $club['whatsapp'] }}?text={{ $whatsappText }}" target="_blank" rel="noopener" class="btn btn-glass h-12 px-5"><x-icon name="image-plus" /><span>{{ __('Send photos or videos') }}</span></a></div>
@@ -33,7 +35,7 @@
                 $item = $open['items'][$index];
                 $count = count($open['items']);
             @endphp
-            <a href="{{ $link() }}" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-ink-2 hover:text-ink"><x-icon name="arrow-left" class="w-4 h-4" />{{ __('All albums') }}</a>
+            <a href="{{ $link() }}" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-ink-2 hover:text-ink" data-instant-top><x-icon name="arrow-left" class="w-4 h-4" />{{ __('All albums') }}</a>
             <div class="mt-4 grid lg:grid-cols-[minmax(0,1fr)_360px] gap-6 lg:gap-7 items-start">
                 <div class="min-w-0">
                     <div class="relative aspect-video bg-black rounded-xl overflow-hidden group/player">
@@ -45,7 +47,18 @@
                                 <p class="mt-1 text-white/80 text-[15px]">{{ __('The video file is not online yet. Ask at the club room to see it.') }}</p>
                             </div></div>
                         @else
-                            <x-photo :key="$item['photo']" :width="1600" class="absolute inset-0 w-full h-full object-contain" />
+                            <a href="{{ \App\Support\Photo::url($item['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $index }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" class="absolute inset-0 cursor-zoom-in" aria-label="{{ __('See full screen') }}">
+                                <x-photo :key="$item['photo']" :width="1600" class="absolute inset-0 w-full h-full object-contain" />
+                            </a>
+                            <span class="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-black/60 text-white text-[12.5px] font-semibold px-2 py-1"><x-icon name="maximize-2" class="w-3.5 h-3.5" />{{ __('Full screen') }}</span>
+                            {{-- The album's other photos, for moving through it full screen --}}
+                            <div hidden>
+                                @foreach ($open['items'] as $j => $x)
+                                    @if ($j !== $index && ! $isVideo($x))
+                                        <a href="{{ \App\Support\Photo::url($x['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $j }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" tabindex="-1"></a>
+                                    @endif
+                                @endforeach
+                            </div>
                         @endif
                         <span class="absolute left-3 top-3 rounded-md bg-black/60 text-white text-[12.5px] font-semibold px-2 py-0.5 num">{{ digits(($index + 1).' / '.$count) }}</span>
                         @if ($count > 1)
@@ -96,9 +109,9 @@
                 </aside>
             </div>
         @else
-            <div class="sticky top-[65px] z-20 -mx-5 px-5 py-3 bg-paper/95 backdrop-blur border-b border-rule">
+            <div class="sticky top-[65px] z-20 -mx-5 px-5 py-3 bg-paper/95 backdrop-blur border-b border-rule" data-instant-top>
                 <div class="flex items-center gap-2">
-                    <nav class="flex gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0" aria-label="{{ __('Show') }}">
+                    <nav class="flex gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0" aria-label="{{ __('Show') }}" data-scroll-fade>
                         <a href="{{ $link(['type' => '']) }}" class="{{ $chip }}" @if ($type === '') aria-current="page" @endif>{{ __('All') }}</a>
                         <a href="{{ $link(['type' => 'video']) }}" class="{{ $chip }}" @if ($type === 'video') aria-current="page" @endif>{{ __('Videos') }}</a>
                         <a href="{{ $link(['type' => 'photo']) }}" class="{{ $chip }}" @if ($type === 'photo') aria-current="page" @endif>{{ __('Photos') }}</a>
@@ -113,7 +126,7 @@
                             @if ($v !== '')<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endif
                         @endforeach
                         <label><span class="sr-only">{{ __('Year') }}</span>
-                            <select name="year" class="field h-8 w-auto pr-8 text-[14px] py-0" onchange="this.form.submit()">
+                            <select name="year" class="field h-8 w-auto pr-8 text-[14px] py-0" onchange="this.form.requestSubmit()">
                                 <option value="">{{ __('All years') }}</option>
                                 @foreach ($years as $y)
                                     <option value="{{ $y }}" @selected($year === $y)>{{ digits($y) }}</option>
@@ -138,7 +151,7 @@
             @elseif ($type === 'photo')
                 <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
                     @foreach ($photos as $row)
-                        <a href="{{ $link(['open' => $row['day']['id'], 'i' => $row['i']]) }}" class="group relative block aspect-square rounded-xl overflow-hidden bg-paper-2"><x-photo :key="$row['item']['photo']" :width="500" sizes="(min-width: 1024px) 25vw, 50vw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" /></a>
+                        <a href="{{ $link(['open' => $row['day']['id'], 'i' => $row['i']]) }}" data-lightbox="gallery-photos" data-src="{{ \App\Support\Photo::url($row['item']['photo'], 1800) }}" data-caption="{{ $title($row['day']) }} · {{ $when($row['day']) }}" class="group relative block aspect-square rounded-xl overflow-hidden bg-paper-2"><x-photo :key="$row['item']['photo']" :width="500" sizes="(min-width: 1024px) 25vw, 50vw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" /></a>
                     @endforeach
                 </div>
             @else
@@ -160,7 +173,7 @@
                         <section class="mt-8" aria-label="{{ __('Videos') }}">
                             <div class="flex items-center gap-2 mb-4"><x-icon name="clapperboard" class="w-5 h-5 text-sindoor" /><h2 class="text-[1.25rem] font-bold">{{ __('Videos') }}</h2>
                                 <a href="{{ $link(['type' => 'video']) }}" class="ml-auto text-[14px] font-semibold text-sindoor hover:underline">{{ __('See all') }}</a></div>
-                            <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x -mx-5 px-5 pb-1">
+                            <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x -mx-5 px-5 pb-1" data-scroll-fade>
                                 @foreach ($videoCards as $card)
                                     <div class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[31%] xl:w-[23.5%]">@include('site.partials.gallery-video', $card)</div>
                                 @endforeach
@@ -216,5 +229,6 @@
                 </form>
             </div>
         @endunless
+    </div>
     </div>
 </x-layouts.site>

@@ -3,6 +3,8 @@
     $minTabs = [1 => __('Any amount'), 3 => __('3+ months'), 6 => __('6+ months (lapsed)')];
 @endphp
 <x-layouts.admin :title="__('Dues & reminders')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="admin-dues" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Dues & reminders') }}</h1>
@@ -132,4 +134,5 @@
         </div>
         <div class="mt-6">{{ $dues->links() }}</div>
     @endif
+    </div>
 </x-layouts.admin>

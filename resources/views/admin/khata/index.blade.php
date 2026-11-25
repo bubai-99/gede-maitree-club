@@ -8,6 +8,8 @@
     ], fn ($v) => $v !== null && $v !== ''));
 @endphp
 <x-layouts.admin :title="__('Khata')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="admin-khata" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Khata') }}</h1>
@@ -139,4 +141,5 @@
     </div>
     @error('note')<p class="mt-3 field-error">{{ $message }}</p>@enderror
     <p class="text-sm text-ink-3 mt-3">{{ __('Entries cannot be deleted, only reversed with a note. Every change is logged for the auditor.') }}</p>
+    </div>
 </x-layouts.admin>

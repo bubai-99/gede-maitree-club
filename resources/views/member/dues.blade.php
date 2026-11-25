@@ -10,6 +10,8 @@
     ];
 @endphp
 <x-layouts.member :title="__('Statement')">
+    {{-- Filters and pages swap in place (resources/js/instant.js) --}}
+    <div id="member-dues" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Statement') }}</h1>
@@ -20,7 +22,7 @@
 
     <form method="GET" class="mt-5 flex flex-wrap items-center gap-2" data-no-print>
         <label for="fy" class="text-sm text-ink-2">{{ __('Financial year') }}</label>
-        <select id="fy" name="fy" class="field h-10 w-auto" onchange="this.form.submit()">
+        <select id="fy" name="fy" class="field h-10 w-auto" onchange="this.form.requestSubmit()">
             @foreach ($years as $year)
                 <option value="{{ $year }}" @selected($fy === $year)>{{ local_date(\Illuminate\Support\Carbon::create($year, 4, 1), 'M Y') }} – {{ local_date(\Illuminate\Support\Carbon::create($year + 1, 3, 1), 'M Y') }}</option>
             @endforeach
@@ -72,4 +74,5 @@
         <a href="{{ route('member.pay') }}" class="btn btn-primary w-full sm:w-auto h-12 mt-5" data-no-print><x-icon name="indian-rupee" /><span>{{ __('Pay :amount due', ['amount' => rupees($outstanding)]) }}</span></a>
     @endif
     <a href="{{ route('member.receipts.index') }}" class="mt-4 ml-1 inline-flex items-center gap-1 text-[14px] font-semibold text-sindoor hover:underline" data-no-print>{{ __('Receipts') }}<x-icon name="arrow-right" class="w-4 h-4" /></a>
+    </div>
 </x-layouts.member>

@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="mt-5 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
+        <div data-scroll-fade class="mt-5 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
             @foreach ($members as $i => $member)
                 <button type="button" role="tab" :aria-selected="(who === {{ $i }}).toString()" @click="who = {{ $i }}; back = false"
                     class="flex items-center gap-2 h-11 pl-1.5 pr-4 rounded-full whitespace-nowrap border border-rule bg-card text-[15px] font-semibold aria-selected:bg-ink aria-selected:text-paper aria-selected:border-ink">
