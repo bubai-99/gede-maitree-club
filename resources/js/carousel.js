@@ -24,15 +24,17 @@ async function lib() {
 }
 
 function buttons(wrap) {
-    let prev = wrap.querySelector(':scope > .carousel-prev');
-    let next = wrap.querySelector(':scope > .carousel-next');
+    // A row of cards puts its buttons in its section's header (data-nav="id"), clear of the cards
+    const host = (wrap.dataset.nav && document.getElementById(wrap.dataset.nav)) || wrap;
+    let prev = host.querySelector(':scope > .carousel-prev');
+    let next = host.querySelector(':scope > .carousel-next');
     if (!prev) {
         const w = words();
         prev = Object.assign(document.createElement('button'), { type: 'button', className: 'carousel-btn carousel-prev', innerHTML: svg('m15 18-6-6 6-6') });
         prev.setAttribute('aria-label', w.previous || 'Previous');
         next = Object.assign(document.createElement('button'), { type: 'button', className: 'carousel-btn carousel-next', innerHTML: svg('m9 18 6-6-6-6') });
         next.setAttribute('aria-label', w.next || 'Next');
-        wrap.append(prev, next);
+        host.append(prev, next);
     }
     return { prev, next };
 }
@@ -68,13 +70,19 @@ async function setup(wrap) {
     const speed = reduced() ? 0 : 350;
     let edge = bleed(wrap);
 
+    // Cards (data-cards): set columns that fill the container exactly on a computer (3, then 4 from 1280px),
+    // a card and a peek of the next on a phone; ‹ › move a whole set. Chips: their own widths, dragged freely.
+    const cards = el.hasAttribute('data-cards');
+    const gap = Number(el.dataset.gap || 8);
     const swiper = new Swiper(el, {
         modules,
-        slidesPerView: 'auto',
-        spaceBetween: Number(el.dataset.gap || 8),
+        slidesPerView: cards ? 1.18 : 'auto',
+        spaceBetween: cards ? 12 : gap,
         slidesOffsetBefore: edge.left,
         slidesOffsetAfter: edge.right,
-        freeMode: { enabled: true, momentumBounce: false },
+        ...(cards
+            ? { breakpoints: { 640: { slidesPerView: 2.15, spaceBetween: gap }, 1024: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: gap }, 1280: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: gap } } }
+            : { freeMode: { enabled: true, momentumBounce: false } }),
         watchOverflow: true,
         grabCursor: true,
         mousewheel: { forceToAxis: true },
@@ -86,6 +94,12 @@ async function setup(wrap) {
         prev.hidden = swiper.isLocked || swiper.translate >= swiper.minTranslate() - 1;
         next.hidden = swiper.isLocked || swiper.translate <= swiper.maxTranslate() + 1;
         wrap.classList.toggle('is-locked', swiper.isLocked);
+        // Buttons in a header: both always there, greyed when there is nothing that way; gone when every card fits
+        if (prev.parentElement?.classList.contains('carousel-nav')) {
+            prev.parentElement.hidden = swiper.isLocked;
+            prev.disabled = prev.hidden; next.disabled = next.hidden;
+            prev.hidden = false; next.hidden = false;
+        }
     };
     const moveTo = (t) => {
         swiper.translateTo(Math.max(swiper.maxTranslate(), Math.min(swiper.minTranslate(), t)), speed, true, true);
@@ -95,12 +109,14 @@ async function setup(wrap) {
     const box = () => { const r = el.getBoundingClientRect(); return { left: r.left + edge.left, right: r.right - edge.right, width: r.width - edge.left - edge.right }; };
 
     next.addEventListener('click', () => {
+        if (cards) { swiper.slideNext(speed); return; }
         const b = box();
         // The first item that doesn't fully show comes to the container's left edge
         const first = swiper.slides.find((s) => s.getBoundingClientRect().right > b.right + 1);
         if (first) moveTo(swiper.translate - (first.getBoundingClientRect().left - b.left));
     });
     prev.addEventListener('click', () => {
+        if (cards) { swiper.slidePrev(speed); return; }
         const b = box();
         // A page back, stopping with a whole item on the left edge
         const first = swiper.slides.find((s) => s.getBoundingClientRect().left + b.width >= b.left - 1);
@@ -109,6 +125,8 @@ async function setup(wrap) {
     });
 
     swiper.on('setTranslate', update);
+    swiper.on('slideChange', update);
+    swiper.on('breakpoint', () => requestAnimationFrame(update));
     swiper.on('transitionEnd', update);
     swiper.on('lock', update);
     swiper.on('unlock', update);

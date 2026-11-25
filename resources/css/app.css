@@ -723,6 +723,11 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 @media (hover: hover) and (min-width: 1024px) {
   .carousel.is-ready:not(.is-locked) > .carousel-btn:not([hidden]) { display: grid; }
 }
+/* A row of cards: ‹ › sit in the section's header, next to "See all" (computers only) */
+.carousel-nav { display: none; gap: 6px; }
+.carousel-nav > .carousel-btn { position: static; transform: none; display: grid; width: 34px; height: 34px; box-shadow: none; }
+.carousel-nav > .carousel-btn:disabled { opacity: .35; pointer-events: none; }
+@media (hover: hover) and (min-width: 1024px) { .carousel-nav:has(> .carousel-btn):not([hidden]) { display: inline-flex; } }
 
 /* Lightbox (resources/js/lightbox.js): Google Photos style. Black; top to bottom: counter and close, the photo
    with arrows at its sides, the caption, a strip of thumbnails */
