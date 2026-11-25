@@ -89,11 +89,32 @@ async function setup(wrap) {
         a11y: { enabled: true },
     });
 
+    // Chip rows on a computer, when they don't all fit: ‹ › together at the row's right end, in their own room
+    // (not over a chip), and only whole chips show. Phones: swiped, the next chip peeking in, no buttons.
+    const desktop = matchMedia('(hover: hover) and (min-width: 1024px)');
+    let laying = false;
     const update = () => {
         if (swiper.destroyed) return;
-        prev.hidden = swiper.isLocked || swiper.translate >= swiper.minTranslate() - 1;
-        next.hidden = swiper.isLocked || swiper.translate <= swiper.maxTranslate() + 1;
+        const navHere = !cards && desktop.matches && !swiper.isLocked;
+        if (navHere !== wrap.classList.contains('has-nav') && !laying) {
+            laying = true;
+            wrap.classList.toggle('has-nav', navHere);
+            swiper.update();
+            laying = false;
+        }
+        const atStart = swiper.isLocked || swiper.translate >= swiper.minTranslate() - 1;
+        const atEnd = swiper.isLocked || swiper.translate <= swiper.maxTranslate() + 1;
+        prev.hidden = atStart;
+        next.hidden = atEnd;
         wrap.classList.toggle('is-locked', swiper.isLocked);
+        if (wrap.classList.contains('has-nav')) {
+            // Both buttons stay, greyed at an end; chips cut by the row's edge are hidden
+            prev.disabled = atStart; next.disabled = atEnd; prev.hidden = false; next.hidden = false;
+            const r = el.getBoundingClientRect();
+            for (const sl of swiper.slides) { const b = sl.getBoundingClientRect(); sl.classList.toggle('is-hidden', b.left < r.left - 1 || b.right > r.right + 1); }
+        } else {
+            for (const sl of swiper.slides) sl.classList.remove('is-hidden');
+        }
         // Buttons in a header: both always there, greyed when there is nothing that way; gone when every card fits
         if (prev.parentElement?.classList.contains('carousel-nav')) {
             prev.parentElement.hidden = swiper.isLocked;
@@ -124,6 +145,7 @@ async function setup(wrap) {
         moveTo(swiper.translate + b.width + shift);
     });
 
+    desktop.addEventListener('change', update);
     swiper.on('setTranslate', update);
     swiper.on('slideChange', update);
     swiper.on('breakpoint', () => requestAnimationFrame(update));

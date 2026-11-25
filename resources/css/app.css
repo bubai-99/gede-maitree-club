@@ -726,9 +726,12 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 .carousel-btn:hover { background: var(--color-paper-2); box-shadow: 0 5px 16px -4px rgba(16,24,40,.45); }
 .carousel-prev { left: max(4px, calc(var(--edge-l, 0px) - 18px)); }
 .carousel-next { right: max(4px, calc(var(--edge-r, 0px) - 18px)); }
-@media (hover: hover) and (min-width: 1024px) {
-  .carousel.is-ready:not(.is-locked) > .carousel-btn:not([hidden]) { display: grid; }
-}
+/* Chip rows on a computer that don't all fit (.has-nav): ‹ › together after the row, whole chips only */
+.carousel.has-nav { display: flex; align-items: center; gap: 6px; }
+.carousel.has-nav > [data-carousel] { flex: 1; min-width: 0; margin-right: 4px; }
+.carousel.has-nav > .carousel-btn { position: static; transform: none; display: grid; flex-shrink: 0; width: 34px; height: 34px; box-shadow: none; }
+.carousel.has-nav > .carousel-btn:disabled { opacity: .35; pointer-events: none; }
+.carousel.has-nav .swiper-slide.is-hidden { opacity: 0; pointer-events: none; }
 /* A row of cards: ‹ › sit in the section's header, next to "See all" (computers only) */
 .carousel-nav { display: none; gap: 6px; }
 .carousel-nav > .carousel-btn { position: static; transform: none; display: grid; width: 34px; height: 34px; box-shadow: none; }
