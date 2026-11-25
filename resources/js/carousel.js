@@ -1,14 +1,14 @@
-// Sideways lists (filter chips, a row of videos) as Swiper carousels, Google style:
-//   <div class="carousel"><div class="swiper" data-carousel data-gap="8"><div class="swiper-wrapper">
-//     <a class="swiper-slide !w-auto">…</a> …
-// The row uses its full width; ‹ › sit over its ends and show only when there is more that way. Items are
-// whole or out of sight: one that doesn't fit fully between the buttons is hidden (so a button always sits
-// over clear space, never over half a chip). › moves the next hidden item to just past ‹, and ‹ goes back a
-// page the same way; a finger or a trackpad drags the row freely. A row of cards (data-cards) lets the arrows
-// sit on a card's edge instead, like YouTube's shelves. The selected chip starts in view.
+// Sideways lists (filter chips, a row of videos) as Swiper carousels, the usual modern way:
+//   <div class="carousel" data-bleed="both|left"><div class="swiper" data-carousel data-gap="8">
+//     <div class="swiper-wrapper"><a class="swiper-slide !w-auto">…</a> …
+// - Lined up with the page: the first item starts at the container's left edge and the last one ends at
+//   its right edge; on phones and tablets, while scrolling, items run on into the page margin up to the edge
+//   of the main area (data-bleed: "both" sides, or only the "left" one when something sits to the right of
+//   the row). On a computer the row stays inside the container, the next item peeking in at its edge.
+// - Phones: no buttons; the row is swiped, and the next item peeks in at the edge to say there is more.
+// - Computers (a mouse and a wide screen): ‹ › on the container's edges, each moving a page and stopping
+//   with an item lined up on the left edge again; they show only when there is more that way.
 // Swiper is loaded only on pages with a carousel. Words: <script type="application/json" id="carousel-words">.
-
-const BTN = 36; // the room a showing button (32px) takes at an end of the row
 
 const words = () => JSON.parse(document.getElementById('carousel-words')?.textContent || '{}');
 const svg = (d) => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
@@ -37,18 +37,43 @@ function buttons(wrap) {
     return { prev, next };
 }
 
+/**
+ * The page margins this row may run into: measured where the row sits in the page, then the row is
+ * widened over them (negative margins) and Swiper pads its first and last item by the same amounts,
+ * so items line up with the container but scroll to the screen's edge.
+ */
+function bleed(wrap) {
+    // Phones and tablets only: on a computer the row stays inside the container
+    const sides = matchMedia('(max-width: 1023px)').matches ? (wrap.dataset.bleed || '') : '';
+    wrap.style.marginLeft = '';
+    wrap.style.marginRight = '';
+    const r = wrap.getBoundingClientRect();
+    // Up to the edges of the page's main area (in the member app that stops at its sidebar)
+    const main = wrap.closest('main')?.getBoundingClientRect() ?? { left: 0, right: document.documentElement.clientWidth };
+    const left = /\b(both|left)\b/.test(sides) ? Math.max(0, Math.round(r.left - main.left)) : 0;
+    const right = /\b(both|right)\b/.test(sides) ? Math.max(0, Math.round(main.right - r.right)) : 0;
+    wrap.style.marginLeft = left ? `-${left}px` : '';
+    wrap.style.marginRight = right ? `-${right}px` : '';
+    wrap.style.setProperty('--edge-l', `${left}px`);
+    wrap.style.setProperty('--edge-r', `${right}px`);
+    return { left, right };
+}
+
 async function setup(wrap) {
     const el = wrap.querySelector(':scope > [data-carousel]');
     if (!el || el.swiper) return;
     const { Swiper, modules } = await lib();
     if (el.swiper) return;
     const { prev, next } = buttons(wrap);
-    const speed = reduced() ? 0 : 320;
+    const speed = reduced() ? 0 : 350;
+    let edge = bleed(wrap);
 
     const swiper = new Swiper(el, {
         modules,
         slidesPerView: 'auto',
         spaceBetween: Number(el.dataset.gap || 8),
+        slidesOffsetBefore: edge.left,
+        slidesOffsetAfter: edge.right,
         freeMode: { enabled: true, momentumBounce: false },
         watchOverflow: true,
         grabCursor: true,
@@ -56,75 +81,64 @@ async function setup(wrap) {
         a11y: { enabled: true },
     });
 
-    // Where the row is now: which ends have more, and which items fit whole between the showing buttons
     const update = () => {
         if (swiper.destroyed) return;
-        const locked = swiper.isLocked;
-        const atStart = locked || swiper.translate >= swiper.minTranslate() - 1;
-        const atEnd = locked || swiper.translate <= swiper.maxTranslate() + 1;
-        prev.hidden = atStart;
-        next.hidden = atEnd;
-        const left = atStart ? 0 : BTN;
-        const right = swiper.width - (atEnd ? 0 : BTN);
-        for (const slide of swiper.slides) {
-            const x = slide.offsetLeft + swiper.translate;
-            // A card too wide to fit between the buttons may sit under them (Google does the same with big cards)
-            const fits = (x >= left - 1 && x + slide.offsetWidth <= right + 1)
-                || (big(slide) && x >= -1 && x + slide.offsetWidth <= swiper.width + 1);
-            slide.classList.toggle('is-hidden', !locked && !fits);
-        }
-        wrap.classList.toggle('is-locked', locked);
+        prev.hidden = swiper.isLocked || swiper.translate >= swiper.minTranslate() - 1;
+        next.hidden = swiper.isLocked || swiper.translate <= swiper.maxTranslate() + 1;
+        wrap.classList.toggle('is-locked', swiper.isLocked);
     };
-    // A card wider than the room between the buttons lines up with the row's edge, under ‹
-    // Rows of cards (data-cards: the gallery's videos) let the arrows sit on a card's edge, like YouTube's shelves
-    const cards = el.hasAttribute('data-cards');
-    const big = (slide) => cards || slide.offsetWidth > swiper.width - 2 * BTN;
-    const lead = (slide) => (big(slide) ? 0 : BTN);
-    const moveTo = (translate) => {
-        const t = Math.max(swiper.maxTranslate(), Math.min(swiper.minTranslate(), translate));
-        swiper.translateTo(t, speed, true, true);
-        // translateTo doesn't fire setTranslate at the end for every browser; settle the state after
+    const moveTo = (t) => {
+        swiper.translateTo(Math.max(swiper.maxTranslate(), Math.min(swiper.minTranslate(), t)), speed, true, true);
         setTimeout(update, speed + 20);
     };
+    // The container's edges on screen (the row itself runs on past them)
+    const box = () => { const r = el.getBoundingClientRect(); return { left: r.left + edge.left, right: r.right - edge.right, width: r.width - edge.left - edge.right }; };
 
     next.addEventListener('click', () => {
-        const first = swiper.slides.find((s) => s.offsetLeft + swiper.translate + s.offsetWidth > swiper.width - (big(s) ? 0 : BTN) + 1);
-        if (first) moveTo(-(first.offsetLeft - lead(first)));
+        const b = box();
+        // The first item that doesn't fully show comes to the container's left edge
+        const first = swiper.slides.find((s) => s.getBoundingClientRect().right > b.right + 1);
+        if (first) moveTo(swiper.translate - (first.getBoundingClientRect().left - b.left));
     });
     prev.addEventListener('click', () => {
-        // Big cards: one card back
-        const shown = swiper.slides.findIndex((s) => s.offsetLeft + swiper.translate >= -1);
-        if (shown > 0 && big(swiper.slides[shown - 1])) {
-            const back = swiper.slides[shown - 1];
-            moveTo(shown - 1 === 0 ? 0 : -(back.offsetLeft - lead(back)));
-            return;
-        }
-        const page = swiper.width - 2 * BTN;
-        const from = -swiper.translate - page; // the row's offset a page back
-        const first = swiper.slides.find((s) => s.offsetLeft - BTN >= from - 1);
-        const target = first ? first.offsetLeft - BTN : 0;
-        moveTo(target <= BTN ? 0 : -target);
+        const b = box();
+        // A page back, stopping with a whole item on the left edge
+        const first = swiper.slides.find((s) => s.getBoundingClientRect().left + b.width >= b.left - 1);
+        const shift = first ? b.left - (first.getBoundingClientRect().left + b.width) : 0;
+        moveTo(swiper.translate + b.width + shift);
     });
 
     swiper.on('setTranslate', update);
     swiper.on('transitionEnd', update);
-    swiper.on('resize', update);
     swiper.on('lock', update);
     swiper.on('unlock', update);
+    // A new window size moves the container's edges: measure again
+    let timer = 0;
+    addEventListener('resize', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            if (swiper.destroyed) return;
+            edge = bleed(wrap);
+            swiper.params.slidesOffsetBefore = edge.left;
+            swiper.params.slidesOffsetAfter = edge.right;
+            swiper.update();
+            update();
+        }, 120);
+    }, { passive: true });
     wrap.classList.add('is-ready');
     update();
 
     // The selected chip in view
     const current = swiper.slides.find((s) => s.matches('[aria-current="page"], [aria-pressed="true"], [aria-selected="true"]'));
-    if (current && current.offsetLeft + current.offsetWidth > swiper.width) {
-        swiper.setTranslate(Math.max(swiper.maxTranslate(), -(current.offsetLeft - BTN)));
+    if (current && current.getBoundingClientRect().right > box().right) {
+        swiper.setTranslate(Math.max(swiper.maxTranslate(), swiper.translate - (current.getBoundingClientRect().left - box().left)));
         update();
     }
 }
 
 export function destroyCarousels(root = document) {
     root.querySelectorAll('[data-carousel]').forEach((el) => el.swiper?.destroy(true, true));
-    root.querySelectorAll('.carousel').forEach((w) => w.classList.remove('is-ready', 'is-locked'));
+    root.querySelectorAll('.carousel').forEach((w) => { w.classList.remove('is-ready', 'is-locked'); w.style.marginLeft = ''; w.style.marginRight = ''; });
 }
 
 export function carousels() {

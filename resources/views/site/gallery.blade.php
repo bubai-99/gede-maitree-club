@@ -115,7 +115,7 @@
                  :class="stuck && 'shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]'">
                 <div class="mx-auto max-w-[1160px] px-5">
                 <div class="flex items-center gap-2">
-                    <div class="carousel flex-1 min-w-0"><div class="swiper" data-carousel data-gap="8"><nav class="swiper-wrapper" aria-label="{{ __('Show') }}">
+                    <div class="carousel flex-1 min-w-0" data-bleed="left"><div class="swiper" data-carousel data-gap="8"><nav class="swiper-wrapper" aria-label="{{ __('Show') }}">
                         <a href="{{ $link(['type' => '']) }}" class="{{ $chip }}" @if ($type === '') aria-current="page" @endif>{{ __('All') }}</a>
                         <a href="{{ $link(['type' => 'video']) }}" class="{{ $chip }}" @if ($type === 'video') aria-current="page" @endif>{{ __('Videos') }}</a>
                         <a href="{{ $link(['type' => 'photo']) }}" class="{{ $chip }}" @if ($type === 'photo') aria-current="page" @endif>{{ __('Photos') }}</a>
@@ -181,7 +181,7 @@
                         <section class="mt-8" aria-label="{{ __('Videos') }}">
                             <div class="flex items-center gap-2 mb-4"><x-icon name="clapperboard" class="w-5 h-5 text-sindoor" /><h2 class="text-[1.25rem] font-bold">{{ __('Videos') }}</h2>
                                 <a href="{{ $link(['type' => 'video']) }}" class="ml-auto text-[14px] font-semibold text-sindoor hover:underline">{{ __('See all') }}</a></div>
-                            <div class="carousel"><div class="swiper" data-carousel data-cards data-gap="16"><div class="swiper-wrapper pb-1">
+                            <div class="carousel" data-bleed="both"><div class="swiper" data-carousel data-gap="16"><div class="swiper-wrapper pb-1">
                                 @foreach ($videoCards as $card)
                                     <div class="swiper-slide shrink-0 !w-[78%] sm:!w-[46%] lg:!w-[31%] xl:!w-[23.5%]">@include('site.partials.gallery-video', $card)</div>
                                 @endforeach

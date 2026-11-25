@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="carousel mt-5"><div class="swiper" data-carousel data-gap="8"><div class="swiper-wrapper" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
+        <div class="carousel mt-5" data-bleed="both"><div class="swiper" data-carousel data-gap="8"><div class="swiper-wrapper" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
             @foreach ($members as $i => $member)
                 <button type="button" role="tab" :aria-selected="(who === {{ $i }}).toString()" @click="who = {{ $i }}; back = false"
                     class="swiper-slide !w-auto shrink-0 flex items-center gap-2 h-11 pl-1.5 pr-4 rounded-full whitespace-nowrap border border-rule bg-card text-[15px] font-semibold aria-selected:bg-ink aria-selected:text-paper aria-selected:border-ink">
