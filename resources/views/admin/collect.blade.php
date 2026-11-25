@@ -3,6 +3,8 @@
     $initialMode = old('mode', 'cash');
 @endphp
 <x-layouts.admin :title="__('Collect payment')">
+    {{-- Filters and choices swap in place (resources/js/instant.js) --}}
+    <div id="admin-collect" data-instant class="instant-region">
     <h1 class="font-display text-[2rem] leading-tight">{{ __('Collect payment') }}</h1>
     <p class="mt-1 text-ink-2">{{ __('Cash in hand or UPI. The receipt goes to the member’s app at once.') }}</p>
 
@@ -122,5 +124,6 @@
                 </div>
             @endif
         </div>
+    </div>
     </div>
 </x-layouts.admin>

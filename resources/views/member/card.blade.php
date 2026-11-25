@@ -15,14 +15,14 @@
             </div>
         </div>
 
-        <div data-scroll-fade class="mt-5 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
+        <div class="carousel mt-5"><div class="swiper" data-carousel data-gap="8"><div class="swiper-wrapper" role="tablist" aria-label="{{ __('Family member') }}" data-no-print>
             @foreach ($members as $i => $member)
                 <button type="button" role="tab" :aria-selected="(who === {{ $i }}).toString()" @click="who = {{ $i }}; back = false"
-                    class="flex items-center gap-2 h-11 pl-1.5 pr-4 rounded-full whitespace-nowrap border border-rule bg-card text-[15px] font-semibold aria-selected:bg-ink aria-selected:text-paper aria-selected:border-ink">
+                    class="swiper-slide !w-auto shrink-0 flex items-center gap-2 h-11 pl-1.5 pr-4 rounded-full whitespace-nowrap border border-rule bg-card text-[15px] font-semibold aria-selected:bg-ink aria-selected:text-paper aria-selected:border-ink">
                     <span class="w-8 h-8 text-sm rounded-full bg-paper-2 text-ink grid place-items-center font-display" aria-hidden="true">{{ mb_substr((string) $member->tr('name'), 0, 1) }}</span>{{ \Illuminate\Support\Str::before((string) $member->tr('name'), ' ') ?: $member->tr('name') }}
                 </button>
             @endforeach
-        </div>
+        </div></div></div>
 
         @foreach ($members as $i => $member)
             <div class="mt-5 grid gap-6 lg:grid-cols-[minmax(0,480px)_1fr] items-start print:!grid" x-show="who === {{ $i }}" @if ($i) x-cloak @endif>

@@ -10,6 +10,8 @@
     ];
 @endphp
 <x-layouts.site seo="volunteer" :title="$content->text('volunteer', 'title')">
+    {{-- Filters and choices swap in place (resources/js/instant.js) --}}
+    <div id="volunteer-page" data-instant class="instant-region">
     <x-page-banner page="volunteer" :crumb="__('Get involved')">
         <div class="mt-6 flex flex-wrap gap-2 text-[14px]">
             @foreach ([__('No experience needed'), __('Members and non-members'), __('On your own time')] as $point)
@@ -111,5 +113,6 @@
                 <div class="sm:col-span-2"><button type="submit" class="btn btn-primary h-12 px-6"><span>{{ __('Sign up') }}</span></button></div>
             </form>
         </div>
+    </div>
     </div>
 </x-layouts.site>

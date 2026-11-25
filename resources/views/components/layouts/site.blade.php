@@ -368,6 +368,7 @@
             <button type="button" @click="$store.install.close()" class="mt-5 btn btn-line w-full">{{ __('Got it') }}</button>
         </div>
     </div>
-    <script type="application/json" id="lightbox-words">{!! json_encode(['title' => __('Photo'), 'close' => __('Close'), 'previous' => __('Previous photo'), 'next' => __('Next photo')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/json" id="lightbox-words">{!! json_encode(['title' => __('Photo'), 'photos' => __('Photos'), 'close' => __('Close'), 'previous' => __('Previous photo'), 'next' => __('Next photo')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/json" id="carousel-words">{!! json_encode(['previous' => __('Previous'), 'next' => __('Next')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
 </body>
 </html>

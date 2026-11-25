@@ -7,6 +7,8 @@
     ];
 @endphp
 <x-layouts.admin :title="__('Online payments')">
+    {{-- Filters and choices swap in place (resources/js/instant.js) --}}
+    <div id="admin-payments" data-instant class="instant-region">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="font-display text-[2rem] leading-tight">{{ __('Online payments') }}</h1>
@@ -83,4 +85,5 @@
     </div>
     @error('reason')<p class="mt-3 field-error">{{ $message }}</p>@enderror
     <div class="mt-6">{{ $payments->links() }}</div>
+    </div>
 </x-layouts.admin>

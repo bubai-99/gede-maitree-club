@@ -100,5 +100,6 @@
             </div>
         </nav>
     @endif
+    <script type="application/json" id="carousel-words">{!! json_encode(['previous' => __('Previous'), 'next' => __('Next')], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}</script>
 </body>
 </html>

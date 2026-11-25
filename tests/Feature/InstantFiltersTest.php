@@ -16,7 +16,7 @@ class InstantFiltersTest extends TestCase
 
     public function test_website_lists_mark_the_part_that_filters_in_place(): void
     {
-        foreach (['/gallery' => 'gallery-page', '/news' => 'news-page', '/notices' => 'notices-page'] as $path => $id) {
+        foreach (['/gallery' => 'gallery-page', '/news' => 'news-page', '/notices' => 'notices-page', '/events' => 'events-page', '/volunteer' => 'volunteer-page'] as $path => $id) {
             $this->get($path)->assertOk()->assertSee('id="'.$id.'" data-instant', false);
         }
     }
@@ -31,7 +31,7 @@ class InstantFiltersTest extends TestCase
         $this->get('/gallery?type=photo')->assertOk()
             ->assertSee('id="gallery-page" data-instant', false)
             ->assertSee('data-lightbox="gallery-photos"', false)
-            ->assertSee('data-scroll-fade', false);
+            ->assertSee('data-carousel', false);
         $this->get('/gallery?type=video')->assertOk();
         // The album page: the big photo opens full screen, with the album's other photos as next
         $this->get('/gallery?open=durga-26&i=0')->assertOk()->assertSee('data-lightbox="album-photos" data-order="1"', false);

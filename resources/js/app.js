@@ -1,11 +1,12 @@
 import Alpine from 'alpinejs';
+import morph from '@alpinejs/morph';
 import { drawIcons } from './icons';
 import { razorpayCheckout } from './pay';
 import { nursery } from './nursery';
 import { siteHeader, noticeBell } from './site-header';
 import { setupInstall } from './install';
 import { instantFilters } from './instant';
-import { scrollFades } from './scroll-fade';
+import { carousels } from './carousel';
 import { lightbox } from './lightbox';
 import { panjikaFill } from './panjika-fill';
 import { forgetThisDevice } from './forget';
@@ -13,6 +14,7 @@ import { enhanceForms } from './forms';
 import { imageLoader } from './images';
 
 window.Alpine = Alpine;
+Alpine.plugin(morph);
 
 Alpine.data('razorpayCheckout', razorpayCheckout);
 Alpine.data('nursery', nursery);
@@ -38,7 +40,7 @@ enhanceForms();
 imageLoader();
 lightbox();
 instantFilters();
-scrollFades();
+carousels();
 
 // Installable apps (member app, committee console): register the service worker named by the layout.
 const serviceWorker = document.body?.dataset.sw;

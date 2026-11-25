@@ -1,4 +1,6 @@
 <x-layouts.site seo="events" :title="app(\App\Support\PageContent::class)->text('events', 'title')">
+    {{-- Filters swap in place (resources/js/instant.js) --}}
+    <div id="events-page" data-instant class="instant-region">
     <x-page-banner page="events">
         <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[15px] text-white/85">
             <li class="flex items-center gap-2"><x-icon name="calendar-days" class="w-4 h-4 text-marigold" /><span>{{ trans_choice(':count event coming up|:count events coming up', $upcoming->count(), ['count' => digits($upcoming->count())]) }}</span></li>
@@ -10,7 +12,7 @@
     <div class="mx-auto max-w-[1160px] px-5 pt-12 pb-20">
         <div class="flex flex-wrap items-end justify-between gap-4">
             <h2 class="font-display leading-tight text-[clamp(1.9rem,4vw,2.6rem)]">{{ __('Coming up') }}</h2>
-            <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter events') }}">
+            <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter events') }}" data-instant-top>
                 <a href="{{ route('events.index') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if (! $kind) aria-current="page" @endif>{{ __('All') }}</a>
                 @foreach (\App\Enums\EventKind::cases() as $option)
                     <a href="{{ route('events.index', ['kind' => $option->value]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($kind === $option) aria-current="page" @endif>{{ $option->label() }}</a>
@@ -75,5 +77,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </x-layouts.site>

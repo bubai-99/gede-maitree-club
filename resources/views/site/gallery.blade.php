@@ -12,7 +12,7 @@
     $when = fn (array $day): string => local_date(\Illuminate\Support\Carbon::parse($day['date']), 'j M Y');
     $title = fn (array $day): string => local_text($day['title'], $day['title_bn'] ?? null);
     $isVideo = fn (array $item): bool => ($item['type'] ?? 'photo') === 'video';
-    $chip = 'shrink-0 h-8 px-3 rounded-lg text-[14px] font-medium whitespace-nowrap bg-paper-2 text-ink hover:bg-ink/10 aria-[current=page]:bg-ink aria-[current=page]:text-white inline-flex items-center';
+    $chip = 'swiper-slide !w-auto shrink-0 h-8 px-3 rounded-lg text-[14px] font-medium whitespace-nowrap bg-paper-2 text-ink hover:bg-ink/10 aria-[current=page]:bg-ink aria-[current=page]:text-white inline-flex items-center';
     $items = collect($days)->flatMap(fn ($day) => collect($day['items'])->map(fn ($item, $i) => ['item' => $item, 'day' => $day, 'i' => $i]));
     $photos = $items->filter(fn ($row) => ! $isVideo($row['item']));
     $videos = $items->filter(fn ($row) => $isVideo($row['item']));
@@ -47,7 +47,7 @@
                                 <p class="mt-1 text-white/80 text-[15px]">{{ __('The video file is not online yet. Ask at the club room to see it.') }}</p>
                             </div></div>
                         @else
-                            <a href="{{ \App\Support\Photo::url($item['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $index }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" class="absolute inset-0 cursor-zoom-in" aria-label="{{ __('See full screen') }}">
+                            <a href="{{ \App\Support\Photo::url($item['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $index }}" data-thumb="{{ \App\Support\Photo::url($item['photo'], 300) }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" class="absolute inset-0 cursor-zoom-in" aria-label="{{ __('See full screen') }}">
                                 <x-photo :key="$item['photo']" :width="1600" class="absolute inset-0 w-full h-full object-contain" />
                             </a>
                             <span class="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-black/60 text-white text-[12.5px] font-semibold px-2 py-1"><x-icon name="maximize-2" class="w-3.5 h-3.5" />{{ __('Full screen') }}</span>
@@ -55,7 +55,7 @@
                             <div hidden>
                                 @foreach ($open['items'] as $j => $x)
                                     @if ($j !== $index && ! $isVideo($x))
-                                        <a href="{{ \App\Support\Photo::url($x['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $j }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" tabindex="-1"></a>
+                                        <a href="{{ \App\Support\Photo::url($x['photo'], 1800) }}" data-lightbox="album-photos" data-order="{{ $j }}" data-thumb="{{ \App\Support\Photo::url($x['photo'], 300) }}" data-caption="{{ $title($open) }} · {{ $when($open) }}" tabindex="-1"></a>
                                     @endif
                                 @endforeach
                             </div>
@@ -109,24 +109,31 @@
                 </aside>
             </div>
         @else
-            <div class="sticky top-[65px] z-20 -mx-5 px-5 py-3 bg-paper/95 backdrop-blur border-b border-rule" data-instant-top>
+            {{-- Filters: full width and pinned under the header like the nursery's; a shadow while pinned --}}
+            <div class="sticky top-[65px] z-20 mx-[calc(50%-50vw)] py-3 bg-paper/95 backdrop-blur-sm transition-shadow duration-200" data-instant-top
+                 x-data="{ stuck: false }" x-init="stuck = $el.getBoundingClientRect().top <= 66" @scroll.window.passive="stuck = $el.getBoundingClientRect().top <= 66"
+                 :class="stuck && 'shadow-[0_8px_18px_-14px_rgba(43,47,54,.45)]'">
+                <div class="mx-auto max-w-[1160px] px-5">
                 <div class="flex items-center gap-2">
-                    <nav class="flex gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0" aria-label="{{ __('Show') }}" data-scroll-fade>
+                    <div class="carousel flex-1 min-w-0"><div class="swiper" data-carousel data-gap="8"><nav class="swiper-wrapper" aria-label="{{ __('Show') }}">
                         <a href="{{ $link(['type' => '']) }}" class="{{ $chip }}" @if ($type === '') aria-current="page" @endif>{{ __('All') }}</a>
                         <a href="{{ $link(['type' => 'video']) }}" class="{{ $chip }}" @if ($type === 'video') aria-current="page" @endif>{{ __('Videos') }}</a>
                         <a href="{{ $link(['type' => 'photo']) }}" class="{{ $chip }}" @if ($type === 'photo') aria-current="page" @endif>{{ __('Photos') }}</a>
-                        <span class="shrink-0 w-px my-1 bg-rule" aria-hidden="true"></span>
+                        <span class="swiper-slide !w-px !h-6 self-center shrink-0 bg-rule" aria-hidden="true"></span>
                         <a href="{{ $link(['album' => '']) }}" class="{{ $chip }}" @if ($album === '') aria-current="page" @endif>{{ __('Every album') }}</a>
                         @foreach ($albums as $option)
                             <a href="{{ $link(['album' => $option['key']]) }}" class="{{ $chip }}" @if ($album === $option['key']) aria-current="page" @endif>{{ local_text($option['title'], $option['title_bn'] ?? null) }}</a>
                         @endforeach
-                    </nav>
+                    </nav></div></div>
                     <form method="GET" action="{{ route('gallery') }}" class="shrink-0">
                         @foreach (['album' => $album, 'type' => $type] as $k => $v)
                             @if ($v !== '')<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endif
                         @endforeach
-                        <label><span class="sr-only">{{ __('Year') }}</span>
-                            <select name="year" class="field h-8 w-auto pr-8 text-[14px] py-0" onchange="this.form.requestSubmit()">
+                        {{-- Phones: a calendar button that opens the list of years (a dot when one is chosen); wider: the menu --}}
+                        <label class="relative block">
+                            <span class="sr-only">{{ __('Year') }}</span>
+                            <span class="sm:hidden pointer-events-none absolute inset-0 grid place-items-center text-ink" aria-hidden="true"><x-icon name="calendar-days" class="w-[18px] h-[18px]" />@if ($year)<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-sindoor"></span>@endif</span>
+                            <select name="year" class="field h-8 sm:pr-8 text-[14px] py-0 w-10 sm:w-auto max-sm:px-0 max-sm:appearance-none max-sm:text-transparent max-sm:cursor-pointer" onchange="this.form.requestSubmit()">
                                 <option value="">{{ __('All years') }}</option>
                                 @foreach ($years as $y)
                                     <option value="{{ $y }}" @selected($year === $y)>{{ digits($y) }}</option>
@@ -136,6 +143,7 @@
                         <noscript><button class="btn btn-line btn-sm">{{ __('Show') }}</button></noscript>
                     </form>
                 </div>
+            </div>
             </div>
             <div class="mt-5 flex items-center gap-3">
                 <span class="w-12 h-12 rounded-full bg-white border border-rule grid place-items-center shrink-0"><x-seal :size="44" :rotate="-6" aria-hidden="true" /></span>
@@ -173,11 +181,11 @@
                         <section class="mt-8" aria-label="{{ __('Videos') }}">
                             <div class="flex items-center gap-2 mb-4"><x-icon name="clapperboard" class="w-5 h-5 text-sindoor" /><h2 class="text-[1.25rem] font-bold">{{ __('Videos') }}</h2>
                                 <a href="{{ $link(['type' => 'video']) }}" class="ml-auto text-[14px] font-semibold text-sindoor hover:underline">{{ __('See all') }}</a></div>
-                            <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x -mx-5 px-5 pb-1" data-scroll-fade>
+                            <div class="carousel"><div class="swiper" data-carousel data-gap="16"><div class="swiper-wrapper pb-1">
                                 @foreach ($videoCards as $card)
-                                    <div class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[31%] xl:w-[23.5%]">@include('site.partials.gallery-video', $card)</div>
+                                    <div class="swiper-slide shrink-0 !w-[78%] sm:!w-[46%] lg:!w-[31%] xl:!w-[23.5%]">@include('site.partials.gallery-video', $card)</div>
                                 @endforeach
-                            </div>
+                            </div></div></div>
                         </section>
                     @endif
                     @foreach (collect($days)->groupBy(fn ($day) => substr((string) $day['date'], 0, 4)) as $y => $group)

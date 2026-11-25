@@ -6,6 +6,8 @@
     $editing = $errors->has('people') || request()->boolean('change');
 @endphp
 <x-layouts.member :title="$event->tr('title')">
+    {{-- Filters and choices swap in place (resources/js/instant.js) --}}
+    <div id="member-event" data-instant class="instant-region">
     <a href="{{ route('member.events.index') }}" class="inline-flex items-center gap-1 text-[14px] font-semibold text-ink-2 hover:text-ink"><x-icon name="arrow-left" class="w-4 h-4" />{{ __('Events & passes') }}</a>
 
     <div class="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] items-start">
@@ -98,5 +100,6 @@
                 <div class="flex gap-3 px-4 py-3"><dt><x-icon name="ticket" class="w-5 h-5 text-ink-3" /><span class="sr-only">{{ __('Entry') }}</span></dt><dd>{{ $event->pass_required ? __('Family pass at the gate') : ($event->members_only ? __('Members only') : __('Open to all, no pass')) }}</dd></div>
             </dl>
         </aside>
+    </div>
     </div>
 </x-layouts.member>
