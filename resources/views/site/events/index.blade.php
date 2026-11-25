@@ -13,9 +13,9 @@
         <div class="flex flex-wrap items-end justify-between gap-4">
             <h2 class="font-display leading-tight text-[clamp(1.9rem,4vw,2.6rem)]">{{ __('Coming up') }}</h2>
             <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter events') }}" data-instant-top>
-                <a href="{{ route('events.index') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if (! $kind) aria-current="page" @endif>{{ __('All') }}</a>
+                <a href="{{ route('events.index') }}" class="chip-filter" @if (! $kind) aria-current="page" @endif>{{ __('All') }}</a>
                 @foreach (\App\Enums\EventKind::cases() as $option)
-                    <a href="{{ route('events.index', ['kind' => $option->value]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($kind === $option) aria-current="page" @endif>{{ $option->label() }}</a>
+                    <a href="{{ route('events.index', ['kind' => $option->value]) }}" class="chip-filter" @if ($kind === $option) aria-current="page" @endif>{{ $option->label() }}</a>
                 @endforeach
             </nav>
         </div>

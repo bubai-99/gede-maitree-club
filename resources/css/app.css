@@ -121,10 +121,15 @@
 
   .chip { @apply inline-flex items-center gap-1.5 rounded-full px-2.5 h-7 text-[13px] font-medium; }
   .chip svg { width: 14px; height: 14px; }
+  /* Filter chips (events, news, notices, gallery, nursery, the member app): one look everywhere. The chosen one
+     fills with the section's colour: ink, or the nursery's green (--chip-on, set by .book-nursery) */
+  .chip-filter { @apply inline-flex items-center gap-1.5 rounded-full h-9 px-4 text-[15px] font-medium whitespace-nowrap
+    border border-rule bg-card text-ink transition-colors hover:border-ink; }
+  .chip-filter[aria-current="page"], .chip-filter[aria-pressed="true"] { background: var(--chip-on, var(--color-ink)); border-color: var(--chip-on, var(--color-ink)); color: #fff; }
 
   .book-club { --book: var(--color-sindoor); --book-wash: var(--color-sindoor-wash); }
   .book-catering { --book: var(--color-turmeric); --book-wash: var(--color-turmeric-wash); }
-  .book-nursery { --book: var(--color-tulsi); --book-wash: var(--color-tulsi-wash); }
+  .book-nursery { --book: var(--color-tulsi); --book-wash: var(--color-tulsi-wash); --chip-on: var(--color-tulsi); }
 
   /* Khata ruled paper: faint blue rules + double red margin */
   .khata {
@@ -713,7 +718,8 @@ html.js:not(.img-fallback) :is(main, [role="dialog"], aside) :has(> img:not(.is-
 /* Carousels (resources/js/carousel.js, Swiper): lined up with the container, running on to the screen's edge;
    the next item peeks in. ‹ › only with a mouse on a wide screen, on the container's edges. */
 .carousel { position: relative; }
-.carousel .swiper-slide { height: auto; }
+/* Swiper's own slide rules (display: block, height: 100%) give way to each item's own design */
+.carousel .swiper-slide { display: revert-layer; height: revert-layer; }
 .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 36px; height: 36px; border-radius: 99px;
   display: none; place-items: center; background: var(--color-card); color: var(--color-ink); border: 1px solid var(--color-rule);
   box-shadow: 0 3px 12px -3px rgba(16,24,40,.35); transition: background .15s, box-shadow .15s; }

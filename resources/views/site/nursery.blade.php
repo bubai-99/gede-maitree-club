@@ -75,13 +75,13 @@
                     <div class="mx-auto max-w-[1160px] px-5">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <div class="carousel flex-1 min-w-0" data-bleed="left"><div class="swiper" data-carousel data-gap="8"><div class="swiper-wrapper py-0.5" role="group" aria-label="{{ __('Plant types') }}">
-                                <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="swiper-slide !w-auto chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
+                                <a href="{{ route('nursery') }}" @click.prevent="cat = ''" :aria-pressed="(cat === '').toString()" aria-pressed="{{ $category ? 'false' : 'true' }}" class="swiper-slide !w-auto chip-filter">{{ __('All') }} <span class="opacity-60 num" x-text="num(count(''))">{{ digits($plants->count()) }}</span></a>
                                 @foreach (app(\App\Support\PlantLists::class)->options('category') as $option => $optionName)
                                     @php
                                         $n = $plants->where('category', $option)->count();
                                     @endphp
                                     @if ($n)
-                                        <a href="{{ route('nursery', ['category' => $option]) }}" @click.prevent="cat = '{{ $option }}'" :aria-pressed="(cat === '{{ $option }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="swiper-slide !w-auto chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink whitespace-nowrap aria-[pressed=true]:bg-tulsi aria-[pressed=true]:text-white aria-[pressed=true]:border-tulsi">{{ $optionName }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
+                                        <a href="{{ route('nursery', ['category' => $option]) }}" @click.prevent="cat = '{{ $option }}'" :aria-pressed="(cat === '{{ $option }}').toString()" aria-pressed="{{ $category === $option ? 'true' : 'false' }}" class="swiper-slide !w-auto chip-filter">{{ $optionName }} <span class="opacity-60 num">{{ digits($n) }}</span></a>
                                     @endif
                                 @endforeach
                             </div></div></div>

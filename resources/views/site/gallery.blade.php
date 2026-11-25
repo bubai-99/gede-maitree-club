@@ -12,7 +12,7 @@
     $when = fn (array $day): string => local_date(\Illuminate\Support\Carbon::parse($day['date']), 'j M Y');
     $title = fn (array $day): string => local_text($day['title'], $day['title_bn'] ?? null);
     $isVideo = fn (array $item): bool => ($item['type'] ?? 'photo') === 'video';
-    $chip = 'swiper-slide !w-auto shrink-0 h-8 px-3 rounded-lg text-[14px] font-medium whitespace-nowrap bg-paper-2 text-ink hover:bg-ink/10 aria-[current=page]:bg-ink aria-[current=page]:text-white inline-flex items-center';
+    $chip = 'swiper-slide !w-auto chip-filter';
     $items = collect($days)->flatMap(fn ($day) => collect($day['items'])->map(fn ($item, $i) => ['item' => $item, 'day' => $day, 'i' => $i]));
     $photos = $items->filter(fn ($row) => ! $isVideo($row['item']));
     $videos = $items->filter(fn ($row) => $isVideo($row['item']));

@@ -6,9 +6,9 @@
 
     @if ($tags->isNotEmpty())
         <div class="carousel mt-5" data-bleed="both"><div class="swiper" data-carousel data-gap="8"><nav class="swiper-wrapper" aria-label="{{ __('Filter notices') }}">
-            <a href="{{ route('member.notices.index') }}" @if ($tag === '') aria-current="page" @endif class="swiper-slide !w-auto shrink-0 chip h-9 px-4 text-[14.5px] whitespace-nowrap border border-rule bg-card aria-[current=page]:bg-ink aria-[current=page]:text-paper aria-[current=page]:border-ink">{{ __('All') }}</a>
+            <a href="{{ route('member.notices.index') }}" @if ($tag === '') aria-current="page" @endif class="swiper-slide !w-auto shrink-0 chip-filter">{{ __('All') }}</a>
             @foreach ($tags as $option)
-                <a href="{{ route('member.notices.index', ['tag' => $option['tag']]) }}" @if ($tag === $option['tag']) aria-current="page" @endif class="swiper-slide !w-auto shrink-0 chip h-9 px-4 text-[14.5px] whitespace-nowrap border border-rule bg-card aria-[current=page]:bg-ink aria-[current=page]:text-paper aria-[current=page]:border-ink">{{ $option['label'] }}</a>
+                <a href="{{ route('member.notices.index', ['tag' => $option['tag']]) }}" @if ($tag === $option['tag']) aria-current="page" @endif class="swiper-slide !w-auto shrink-0 chip-filter">{{ $option['label'] }}</a>
             @endforeach
         </nav></div></div>
     @endif

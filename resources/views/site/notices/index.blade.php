@@ -8,9 +8,9 @@
     <div class="mx-auto max-w-[1160px] px-5 pt-10 pb-20">
         @if ($tags->isNotEmpty())
             <nav class="flex flex-wrap gap-2" aria-label="{{ __('Filter notices') }}" data-instant-top>
-                <a href="{{ route('notices.index') }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($tag === '') aria-current="page" @endif>{{ __('All') }} <span class="opacity-60 num">{{ digits($total) }}</span></a>
+                <a href="{{ route('notices.index') }}" class="chip-filter" @if ($tag === '') aria-current="page" @endif>{{ __('All') }} <span class="opacity-60 num">{{ digits($total) }}</span></a>
                 @foreach ($tags as $option)
-                    <a href="{{ route('notices.index', ['tag' => $option['tag']]) }}" class="chip h-9 px-4 text-[15px] border border-rule bg-card hover:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-white aria-[current=page]:border-ink" @if ($tag === $option['tag']) aria-current="page" @endif>{{ $option['label'] }} <span class="opacity-60 num">{{ digits($option['count']) }}</span></a>
+                    <a href="{{ route('notices.index', ['tag' => $option['tag']]) }}" class="chip-filter" @if ($tag === $option['tag']) aria-current="page" @endif>{{ $option['label'] }} <span class="opacity-60 num">{{ digits($option['count']) }}</span></a>
                 @endforeach
             </nav>
         @endif
